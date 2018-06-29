@@ -1,0 +1,32 @@
+Jun-29 09:49:49.613 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/apps/bioapps/nextflow/nextflow-0.30.1.4844/nextflow /projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/testingStep1to6/templates/work/27/cbd849785b3f43c3d410d3956dc2e4/.command.sh
+Jun-29 09:49:49.676 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.30.1
+Jun-29 09:49:49.684 [main] INFO  nextflow.cli.CmdRun - Launching `/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/testingStep1to6/templates/work/27/cbd849785b3f43c3d410d3956dc2e4/.command.sh` [trusting_edison] - revision: ad2e0bc01a
+Jun-29 09:49:49.738 [main] DEBUG nextflow.Session - Session uuid: ccb99f26-75b4-4594-bf5c-78711cae5af8
+Jun-29 09:49:49.738 [main] DEBUG nextflow.Session - Run name: trusting_edison
+Jun-29 09:49:49.740 [main] DEBUG nextflow.Session - Executor pool size: 24
+Jun-29 09:49:49.751 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.30.1 build 4844
+  Modified: 11-06-2018 08:29 UTC (03:29 CDT)
+  System: Linux 2.6.32-696.23.1.el6.x86_64
+  Runtime: Groovy 2.4.15 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_131-b11
+  Encoding: UTF-8 (ANSI_X3.4-1968)
+  Process: 30056@iforge.ncsa.illinois.edu [141.142.166.1]
+  CPUs: 24 - Mem: 126.1 GB (84.4 GB) - Swap: 16 GB (16 GB)
+Jun-29 09:49:49.801 [main] DEBUG nextflow.Session - Work-dir: /projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/testingStep1to6/templates/work/27/cbd849785b3f43c3d410d3956dc2e4/work [gpfs]
+Jun-29 09:49:49.801 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/testingStep1to6/templates/work/27/cbd849785b3f43c3d410d3956dc2e4/bin
+Jun-29 09:49:49.879 [main] DEBUG nextflow.Session - Session start invoked
+Jun-29 09:49:49.885 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Jun-29 09:49:49.885 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Jun-29 09:49:50.033 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Jun-29 09:49:50.050 [main] DEBUG nextflow.Session - Session aborted -- Cause: No such property: resultsDir for class: _nf_script_843a8bc0
+Jun-29 09:49:50.106 [main] ERROR nextflow.cli.Launcher - @unknown
+groovy.lang.MissingPropertyException: No such property: resultsDir for class: _nf_script_843a8bc0
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.unwrap(ScriptBytecodeAdapter.java:66)
+	at org.codehaus.groovy.runtime.callsite.PogoGetPropertySite.getProperty(PogoGetPropertySite.java:51)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callGroovyObjectGetProperty(AbstractCallSite.java:310)
+	at _nf_script_843a8bc0.run(_nf_script_843a8bc0:8)
+	at nextflow.script.ScriptRunner.run(ScriptRunner.groovy:341)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:165)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:232)
+	at nextflow.cli.Launcher.run(Launcher.groovy:428)
+	at nextflow.cli.Launcher.main(Launcher.groovy:586)

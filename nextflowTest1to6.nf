@@ -1,278 +1,512 @@
 #!/usr/bin/env nextflow
 
-sampleDir = "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads"
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+//PREFLIGHT CHECKS -------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-resultsDir = "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/testingStep1to6/results"
+//Checks if at least one of Path Divergence or Bubble Caller is selected, if neither is selected, this script is terminated
 
-flagDir = resultsDir + "/flags"
+if ( params.PD == "n" && params.BC == "n" ) {
+	println "At least one of PD or BC have to be selected"
+	System.exit(0);
+}
+
+if (params.PD == "y") {
+	println "Path divergence variant calling method is selected"
+} else {
+	println "Path divergence variant calling method is not selected"
+}
+
+if (params.BC == "y") {
+	println "Bubble caller variant calling method is selected"
+} else {
+	println "Bubble caller variant calling method is not selected"
+}
 
 
 
-//---------------------------------------------------------------------------------------------------------------------------------------
-//CORTEX DIRECTORIES and VARIABLES
 
-numberOfSamples = 2
+
+
+
+
+
+
+
+//---------Checks for Paths------------
+
+
+//Checks if sampleDir path exists, if not the script stops
+
+sampleDirPathCheck = new File(params.sampleDir)
+if (sampleDirPathCheck.exists()) {
+	println "Sample directory exists!"
+}
+  else {
+
+	println "Sample directory does not exist..."
+	println "Terminating script..."
+	System.exit(0);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Assigns path to reference genome de Bruijn graph, depending on whether or not step 4 is selected
+
+if (params.runStep4 == "y") {
+
+	pathToRefBinary = params.resultsDir + "/productsOfStep4/" + "ref.ctx\n"
+
+} else if (params.runStep4 == "n") {
+	
+
+	//Checks if params.pathToRefCtx given by user exists
+	
+	givenPathToRefCtxCheck = new File(params.pathToRefCtx)
+	if (givenPathToRefCtxCheck.exists()) {
+
+		println "Path to reference binary file given exists!"
+		pathToRefBinary = params.pathToRefCtx
+
+	} else {
+
+		println "Path to reference binary file given does not exist!"
+		System.exit(0)
+
+	}
+	
+
+} else {
+
+	println "runStep4 parameter in nextflow.config needs to be either \"y\" or \"n\""
+	println "Terminating script..."
+	System.exit(0);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+//VARIABLES NOT LOCATED IN CONFIG, BUT DERIVED FROM NEXTFLOW.CONFIG FILE--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Note: if there a variable has param. prefix, it is located at nextflow.config file
+
+//Where flags and logs are located
+
+flagDir = params.resultsDir + "/flagsAndLogs"
+
+//Number of samples
+
+numberOfSamples = params.numberOfSamples
+
+//Number of color, this constitutes of number of samples, combined graph, and reference (that is why it is number of samples + 2)
+
 totalColor = numberOfSamples + 2
 
-cortexDirStep12and4 = "/projects/bioinformatics/builds/CORTEX_release_v1.0.5.21_matt_k/bin/cortex_var_63_c1"
-cortexDirStep3 = "/projects/bioinformatics/builds/CORTEX_release_v1.0.5.21_matt_k/bin/cortex_var_63_c" + numberOfSamples
-cortexDirStep5and6 = "/projects/bioinformatics/builds/CORTEX_release_v1.0.5.21_matt_k/bin/cortex_var_63_c" + (numberOfSamples + 2)
-cortexDirForVCF = "/projects/bioinformatics/builds/CORTEX_release_v1.0.5.21/scripts/analyse_variants/process_calls.pl"
 
-//Note To Fix = step 1,2,4 always 1 color (c1), step 3 color = number of samples, step 5 color = number of samples + 2
-//Implement this when making the config file
-
-cortexConfig = "--kmer_size 63 --mem_height 25 --mem_width 75"
-
-quality_score_threshold = 5
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-//STAMPY DIRECTORIES AND VARIABLES
-
-pathToRefDir = "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/stampyFolder/GCF_000004515.4_Glycine_max_v2.0_genomic.1.fna"
-
-refFileName = "GCF_000004515.4_Glycine_max_v2.0_genomic.1.fna"
-
-pathToStampy = "/projects/bioinformatics/builds/stampy-1.0.28/stampy.py"
-
-vcfToolsDir = "/projects/bioinformatics/builds/vcftools-0.1.14/vcftools-0.1.14"
-
-//---------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-samples = Channel.fromPath(sampleDir + "/*").toList()
+
+
+
+
+
+
+
+
+
+
+//Samples takes in all files in the sample directory, places it into array and into a channel called "samples"
+
+samples = Channel.fromPath(params.sampleDir + "/*").toList()
+
+
+
+
 
 // Step 0: make Files in the right format for Cortex step 1 and files for step 2
 
 process prepareFolderAndFilesForCortexNEXTFLOW {
 	
-	publishDir flagDir
+	// This directive can be hard coded, because this will be the sam everytime		
+
 	executor 'local'	
 
 	input:
-	val rawSampleList from samples
+		// Takes in the list of unprocessed sample list from samples Channel
+		val rawSampleList from samples
 
 	output:
-	val processedListOfSamples into CortexSampleListChannel
-	val dummyForStep6Prep into dummyFlagPrepFileFinish
+		val processedListOfSamples into CortexSampleListChannel
+		val preparingStepFinished into dummyFlagPrepFileFinish
 	
 	exec:
-	resultsDirFolder = new File(resultsDir)
-	resultsDirFolder.mkdirs()
+		//---------------------------------------------
+		// Makes the out directory and flag directory
+		//---------------------------------------------
+
+		resultsDirFolder = new File(params.resultsDir)
+		resultsDirFolder.mkdirs()
 
 
-	flagDirFolder = new File(flagDir)
-	flagDirFolder.mkdirs()
+		flagDirFolder = new File(flagDir)
+		flagDirFolder.mkdirs()
+		
+		// --------------------------------------------
 
 
-	processedListOfSamples = []
-	for (eachSample in rawSampleList) {
-		sampleString = eachSample.toString()
-		if (sampleString.contains("read1.fq")){
-		   sampleName = (sampleString - sampleDir - "_read1.fq" - "/" )
-		   processedListOfSamples.add(sampleName)
+
+
+
+		//----------------------------------------------------------------------------------------------------------------------------------------	
+		// Creates a new List and fills it with each sample name and sorts them
+		// e.g: from "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read1.fq"
+		// to "Sample_Magellan"
+		//----------------------------------------------------------------------------------------------------------------------------------------
+
+
+		processedListOfSamples = []
+		for (eachSample in rawSampleList) {
+			sampleString = eachSample.toString()
+			if (sampleString.contains("read1.fq")){
+			   sampleName = (sampleString - params.sampleDir - "_read1.fq" - "/" )
+			   processedListOfSamples.add(sampleName)
+			}
 		}
-	}
-	processedListOfSamples.sort()
+		processedListOfSamples.sort()
+
+		//----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 
-	//-------------------------------------------------------------------------------------------------------------
-	//Step 1 Folder and File Preparations--------------------------------------------------------------------------------------
 
 
-		
-	step1SupplyFolder = new File(resultsDir + "/samplesForStep1/")
-	step1SupplyFolder.mkdirs()
-	step1ProductsFolder = new File(resultsDir + "/productsOfStep1/")
-	step1ProductsFolder.mkdirs()
+
+
+		//-------------------------------------------------------------------------------------------------------------------------
+		//Step 1 Folder and File Preparations--------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------------------
+
+		// Makes the supply and product folder for/from step 1
 			
-	for (sampleName in processedListOfSamples) {
-		newFile = new File(resultsDir + "/samplesForStep1/" + sampleName)
+		step1SupplyFolder = new File(params.resultsDir + "/samplesForStep1/")
+		step1SupplyFolder.mkdirs()
+		step1ProductsFolder = new File(params.resultsDir + "/productsOfStep1/")
+		step1ProductsFolder.mkdirs()
+				
+		// Makes a file in supply folder called the sample name (e.g. Sample_Magellan) and writes the path to sample reads
+		// e.g "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read1.fq"
+		// and "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read2.fq"
+		// is written to the file "Sample_Magellan" inside supply folder
 
-		newFile.write (sampleDir + "/" + sampleName + "_read1.fq\n")
-		newFile.append (sampleDir + "/" + sampleName + "_read2.fq\n")
-	}
+		for (sampleName in processedListOfSamples) {
+			newFile = new File(params.resultsDir + "/samplesForStep1/" + sampleName)
+
+			newFile.write (params.sampleDir + "/" + sampleName + "_read1.fq\n")
+			newFile.append (params.sampleDir + "/" + sampleName + "_read2.fq\n")
+		}
 
 
 
 
 
 
-	//-------------------------------------------------------------------------------------------------------------
-	//Step 2 Folder and File Preparations ----------------------------------------------------------------------------------------	
 
-	step2SupplyFolder = new File(resultsDir + "/samplesForStep2/") 
-	step2SupplyFolder.mkdirs()
-	step2BinaryListFile = new File(resultsDir + "/samplesForStep2/" + "step2ColorListUncleanedBinaryList")
-	step2PathToBinaryListFile = new File (resultsDir + "/samplesForStep2/" + "step2PathToBinaryListFile")
-	step2ProductsFolder = new File(resultsDir +"/productsOfStep2/")
-	step2ProductsFolder.mkdirs()
+
+		//-------------------------------------------------------------------------------------------------------------
+		//Step 2 Folder and File Preparations -------------------------------------------------------------------------	
+		//-------------------------------------------------------------------------------------------------------------
 		
-	for (sampleName in processedListOfSamples) {
-		step2BinaryListFile.append(resultsDir + "/productsOfStep1/" + sampleName + ".ctx\n") 	
+		//Makes supply and product folder for step 2	
 
-	}
-	step2PathToBinaryListFile.write(resultsDir + "/samplesForStep2/" + "step2ColorListUncleanedBinaryList\n")
+		step2SupplyFolder = new File(params.resultsDir + "/samplesForStep2/") 
+		step2SupplyFolder.mkdirs()
+		step2ProductsFolder = new File(params.resultsDir +"/productsOfStep2/")
+		step2ProductsFolder.mkdirs()
 		
-	//REMEMBER THAT STEP2 ONLY APPENDS, SO EVERYTIME THIS IS RAN, THE FILE JUST KEEPS ADDING
 
+		//Makes 2 files:
+		//	1) File containing the list of path to the binary files outputted by step 1 Cortex
+		//	2) File containing the path to file 1)
 
-
-
-
-
-		
-	//------------------------------------------------------------------------------------------------------------
-	//Step 3 Folder and File Preparations --------------------------------------------------------------------------------------
-
-	step3SupplyFolder = new File(resultsDir + "/samplesForAndProductsOfStep3/")
-	step3SupplyFolder.mkdirs()
-	step3PathToStep2PooledResultFile = new File(resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep2CtxFile")
-	step3PathToStep2PooledResultFile.write(resultsDir + "/productsOfStep2/" + "step2PoolCleaned.ctx\n")
+		step2BinaryListFile = new File(params.resultsDir + "/samplesForStep2/" + "step2ColorListUncleanedBinaryList")
+		step2PathToBinaryListFile = new File (params.resultsDir + "/samplesForStep2/" + "step2PathToBinaryListFile")
 			
-		
-	for (sampleName in processedListOfSamples) {
-		step3PathToStep1CtxFile = new File(resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep1CtxFile" + sampleName)	
-		step3PathToStep1CtxFile.append(resultsDir + "/productsOfStep1/" + sampleName + ".ctx\n")
-		step3FiletoSubmitToCortex = new File(resultsDir + "/samplesForAndProductsOfStep3/" + "colorlist_step3FileToSubmitToCortex" + sampleName)
-		step3FiletoSubmitToCortex.write(resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep2CtxFile\n")
-		step3FiletoSubmitToCortex.append(resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep1CtxFile" + sampleName + "\n")
-	}
-		
+		for (sampleName in processedListOfSamples) {
+			step2BinaryListFile.append(params.resultsDir + "/productsOfStep1/" + sampleName + ".ctx\n") 	
 
-
-
-
-
-
-	//------------------------------------------------------------------------------------------------------------		
-	//Step 4 Folder and File Preparations ----------------------------------------------------------------------------------------
-		
-	//Note: no supply folder is needed, since the file is from sampleDir, remember that step 4 is like step 1 but with reference,
-	//Consequently, step 4 can be run in parallel with step 1 - 3.
-		
-	step4ProductsFolder = new File(resultsDir + "/productsOfStep4/")
-	step4ProductsFolder.mkdirs()
-
-
-
-
-
-
-
-	//------------------------------------------------------------------------------------------------------------
-	//Step 5 Folder and File Preparations ----------------------------------------------------------------------------------------
-		
-	step5SupplyFolder = new File(resultsDir + "/samplesForStep5/")
-	step5SupplyFolder.mkdirs()
-	step5PathToReferenceUncleanedFile = new File(resultsDir + "/samplesForStep5/" + "pathToRefCtxFile")
-	step5PathToReferenceUncleanedFile.write(resultsDir + "/productsOfStep4/" + "ref.ctx\n")
-		
-	step5PathToCleanedPoolFile = new File(resultsDir + "/samplesForStep5/" + "pathToCleanedPoolCtxFile")
-	step5PathToCleanedPoolFile.write(resultsDir + "/productsOfStep2/" + "step2PoolCleaned.ctx\n")
-		
-		
-	step5FileToSubmitToCortex = new File (resultsDir + "/samplesForStep5/" + "colorlist_step5FileToSubmitToCortex")
-	step5FileToSubmitToCortex.write(resultsDir + "/samplesForStep5/" + "pathToRefCtxFile\n")
-	step5FileToSubmitToCortex.append(resultsDir + "/samplesForStep5/" + "pathToCleanedPoolCtxFile\n")
-		
-	for (sampleName in processedListOfSamples) {
+		}
+		step2PathToBinaryListFile.write(params.resultsDir + "/samplesForStep2/" + "step2ColorListUncleanedBinaryList\n")
 			
-		step5PathToSamples = new File(resultsDir + "/samplesForStep5/" + "pathToCleaned" + sampleName)
-		step5PathToSamples.write(resultsDir + "/samplesForAndProductsOfStep3/" + sampleName + "_cleanedByComparisonToPool.ctx\n")
-		step5FileToSubmitToCortex.append(resultsDir + "/samplesForStep5/" + "pathToCleaned" + sampleName + "\n")
-	}
-
-	step5ProductsFolder = new File(resultsDir + "/productsOfStep5/")
-	step5ProductsFolder.mkdirs()
+		//STEP2 ONLY APPENDS, SO EVERYTIME THIS IS RAN WITHOUT DELETING, THE FILE JUST KEEPS ADDING
 
 
 
 
 
 
-	//-----------------------------------------------------------------------------------------------------------------------
-	// Step 6 Products Folder Preparation (The actual file preparation is after step 5, this is only to make products folder-
-	//-----------------------------------------------------------------------------------------------------------------------
+
+			
+		//------------------------------------------------------------------------------------------------------------
+		//Step 3 Folder and File Preparations --------------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
+
+		//Makes supply and product folder for step 3, in step3, cortex dumps the binary files into the same folder, so only 1 folder is created
+
+		step3SupplyAndProductsFolder = new File(params.resultsDir + "/samplesForAndProductsOfStep3/")
+		step3SupplyAndProductsFolder.mkdirs()
+
+		//Makes a file that contains the path to results of step 2 binary file
+
+		step3PathToStep2PooledResultFile = new File(params.resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep2CtxFile")
+		step3PathToStep2PooledResultFile.write(params.resultsDir + "/productsOfStep2/" + "step2PoolCleaned.ctx\n")
+				
 		
-		step6ProductsFolder = new File (resultsDir + "/productsOfStep6/")
+
+		for (sampleName in processedListOfSamples) {
+		
+		//Makes a file for each sample that contains the path to results of step 1 binary file
+
+			step3PathToStep1CtxFile = new File(params.resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep1CtxFile" + sampleName)	
+			step3PathToStep1CtxFile.append(params.resultsDir + "/productsOfStep1/" + sampleName + ".ctx\n")
+		
+		//Makes a file that contains:
+		// 	Line 1: The path to the file that contains to the path of step 2 binary file
+		// 	Line 2: The path to the file that contains the path to results of step 1 binary file (step3PathToStep1CtxFile)	
+		//Cortex requires nested file paths like what's being created here
+
+			step3FiletoSubmitToCortex = new File(params.resultsDir + "/samplesForAndProductsOfStep3/" + "colorlist_step3FileToSubmitToCortex" + sampleName)
+			step3FiletoSubmitToCortex.write(params.resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep2CtxFile\n")
+			step3FiletoSubmitToCortex.append(params.resultsDir + "/samplesForAndProductsOfStep3/" + "pathToStep1CtxFile" + sampleName + "\n")
+		}
+			
+		//-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+		//----------------------------------------------------------------------------------------------------------------------------
+		//Step 4 Folder and File Preparations ----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------------------------------------		
+
+		//Note: no supply folder is needed, since the file is from sampleDir, remember that step 4 is like step 1 but with reference,
+		//Consequently, step 4 can be run in parallel with step 1 - 3.
+			
+		step4ProductsFolder = new File(params.resultsDir + "/productsOfStep4/")
+		step4ProductsFolder.mkdirs()
+
+		//-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+		//----------------------------------------------------------------------------------------------------------------------------
+		//Step 5 Folder and File Preparations ----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------------------------------------
+		//Makes supply and product folder for step 5
+			
+		step5SupplyFolder = new File(params.resultsDir + "/samplesForStep5/")
+		step5SupplyFolder.mkdirs()
+		step5ProductsFolder = new File(params.resultsDir + "/productsOfStep5/")
+		step5ProductsFolder.mkdirs()
+
+
+		// Make a file that contains the path to product (binary file output) of step 4
+		
+		step5PathToReferenceUncleanedFile = new File(params.resultsDir + "/samplesForStep5/" + "pathToRefCtxFile")
+		step5PathToReferenceUncleanedFile.write(pathToRefBinary)
+
+
+		//Makes a file that contains the path to product (the binary file output) of step 2		
+		step5PathToCleanedPoolFile = new File(params.resultsDir + "/samplesForStep5/" + "pathToCleanedPoolCtxFile")
+		step5PathToCleanedPoolFile.write(params.resultsDir + "/productsOfStep2/" + "step2PoolCleaned.ctx\n")
+			
+		//Makes a file that will be submitted to Cortex, containing the path to the two files created above
+		step5FileToSubmitToCortex = new File (params.resultsDir + "/samplesForStep5/" + "colorlist_step5FileToSubmitToCortex")
+		step5FileToSubmitToCortex.write(params.resultsDir + "/samplesForStep5/" + "pathToRefCtxFile\n")
+		step5FileToSubmitToCortex.append(params.resultsDir + "/samplesForStep5/" + "pathToCleanedPoolCtxFile\n")
+		
+		//Goes through the sample list
+		for (sampleName in processedListOfSamples) {
+				
+			//Makes a file that contains the path to the cleaned sample binaries (output of step 3)
+			step5PathToSamples = new File(params.resultsDir + "/samplesForStep5/" + "pathToCleaned" + sampleName)
+			step5PathToSamples.write(params.resultsDir + "/samplesForAndProductsOfStep3/" + sampleName + "_cleanedByComparisonToPool.ctx\n")
+			
+			//Adds the path to the file containing the path to the cleaned sample binaries (path to file created right above this)
+			//into the file that will be submitted by cortex (step5FileToSubmitToCortex variable)
+			step5FileToSubmitToCortex.append(params.resultsDir + "/samplesForStep5/" + "pathToCleaned" + sampleName + "\n")
+		}
+
+		//-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+		//-----------------------------------------------------------------------------------------------------------------------
+		// Step 6 Products Folder Preparation (The actual file preparation is after step 5, this is only to make products folder-
+		//-----------------------------------------------------------------------------------------------------------------------
+			
+		//Products folder for step 6
+					
+		step6ProductsFolder = new File (params.resultsDir + "/productsOfStep6/")
 		step6ProductsFolder.mkdirs()
+
+		//-----------------------------------------------------------------------------------------------------------------------
 		
-		dummyForStep6Prep = "dummy"
+
+
+
+
+
+
+
+
+		//-------------------------------------------------------------------------------------------------------------------------------
+
+		//Makes a dummy variable to indicate this process ends, useful for control flow
 		
-}
+		preparingStepFinished = "dummy"
+
+		//-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+	}
 
 
 // Step 1: Run step 1 cortex, making de bruijn graphs
 
 
-process runStep1Cortex {
+process step1CreateSampleBinaryGraph {
 
 	publishDir flagDir
+	executor params.executor
+	queue params.mediumRamQueue
+	time params.wallTime
+	cpus params.cpusNeeded
+
+
+
 	input:
 	each samplePairFileName from CortexSampleListChannel
 
 	output:
 	file "runStep1CortexDone.flag" into flag1
-	stdout into step1StdoutChannel	
+	file "LogStep1_${samplePairFileName}.log"
+
 
 
 	script:
-	template 'step1Cortex.sh'
+	template 'step1CreateSampleBinaryGraph.sh'
 
 
 }
 
-step1StdoutChannel.subscribe {
-        step1LogFile = new File(resultsDir + "/productsOfStep1" + "/step1LogFile.log")
-        step1LogFile.write(it)
-}
 
 
 
 
 
 
-// Step 1+ : Make Files for step 2, combined graph
-// input must be flags to control flow, and sampleStringList to keep sample Names
+
+
+
+// flag1Mod is used to take only 1 value of flag, to make the process only run once
 
 flag1Mod = flag1.take(1)
 
-// Step 2: Make pooled Graph
 
 
-process runStep2Cortex {
+
+
+
+
+
+// Step 2: Make pooled de Bruijn Graph
+
+
+process Step2PoolAndCleanErrors {
+
 	publishDir flagDir
+	executor params.executor
+	queue params.mediumRamQueue
+	time params.wallTime
+	cpus params.cpusNeeded
+
 
 	input:
 	file flag from flag1Mod
 	
 	output:
 	file "runStep2CortexDone.flag" into flag2
-	stdout into step2StdoutChannel
+	file "LogStep2.log"
+
 
 	script:
-	template 'step2Cortex.sh'	
+	template 'step2CortexPoolAndCleanError.sh'	
 
 	
 }
 
-step2StdoutChannel.subscribe {
-        step2LogFile = new File(resultsDir + "/productsOfStep2" + "/step2LogFile.log")
-        step2LogFile.write(it)
-}
 
 
 
 
-// Step 3: Clean Graph per Sample
 
-process runStep3Cortex {
+
+
+
+// Step 3: Clean graph per sample using combined graph made in step 2
+
+process step3CleanGraphPerSample {
+
 	publishDir flagDir	
+	executor params.executor
+	queue params.mediumRamQueue
+	time params.wallTime
+	cpus params.cpusNeeded
+
 
 	input:
 	file flag from flag2
@@ -280,73 +514,115 @@ process runStep3Cortex {
 	
 	output:
 	file "runStep3CortexDone.flag" into flag3	
-	stdout into step3StdoutChannel
+	file "LogStep3_${samplePairFileName}.log"
+
 
 
 	script:
-	template 'step3Cortex.sh'	
+	template 'step3CleanGraphPerSample.sh'	
 
 }
 
+// This is used to make flag3 has only 1 value, so the next step will only be done once
 
 flag3Mod = flag3.take(1)
 
-step3StdoutChannel.subscribe {
-	step3LogFile = new File(resultsDir + "/samplesForAndProductsOfStep3" + "/step3LogFile.log")
-	step3LogFile.write(it)
-}
 
 
 
-// Step 4: Make reference de Bruijn Graph
 
-process runStep4Cortex {
-	publishDir flagDir
+
+// Optional: step 4 is only run when user asks for it
+
+if (params.runStep4 == "y") {
+
+	// Step 4: Make reference de Bruijn Graph
+
+	process step4MakeReferencedBGraph {
+
+		publishDir flagDir
+		executor params.executor
+		queue params.mediumRamQueue
+		time params.wallTime
+		cpus params.cpusNeeded
+
+
+		input:
+		val flag from dummyFlagPrepFileFinish
+			
+		output:
+		file "runStep4CortexDone.flag" into flag4	
+		file "LogStep4.log"
+
+
+		script:
+		template 'step4MakeReferencedBGraph.sh'
+	}
+
+
+	// Makes a log file of the standard out of step 4
+
+
+} else {
+	// Replacement for step 4 if it is not selected
+	process dummyProcessToReplaceStep4IfNotSelected {
 	
 	input:
-	val flag from dummyFlagPrepFileFinish
-		
+        val flag from dummyFlagPrepFileFinish	
+	
 	output:
-	file "runStep4CortexDone.flag" into flag4	
-	stdout into step4StdoutChannel
+	val dummyValue into flag4 
+	
+	exec:
+	dummyValue = "dummy"
+	
+	}
 
-	script:
-	template 'step4Cortex.sh'
 }
 
-step4StdoutChannel.subscribe {
-        step4LogFile = new File(resultsDir + "/productsOfStep4" + "/step4LogFile.log")
-        step4LogFile.write(it)
-}
+
+
+
+
+
+
 
 
 
 // Step 5: Combine reference graph with sample graph and cleaned pool
 
-process runStep5Cortex {
+process step5MakeCombinationGraph {
 	
 	publishDir flagDir
+	executor params.executor
+	queue params.mediumRamQueue
+	time params.wallTime
+	cpus params.cpusNeeded
+
 
 	input:
 	file flag from flag3Mod
-	file flagagain from flag4
+	val flagagain from flag4
 	
 	output:
-	file "runStep5CortexDone.flag" into flag5
-	stdout into step5StdoutChannel
+	file "runStep5CortexDone.flag" into flag5forPD
+	file "runStep5CortexDone.flag" into flag5forBC
+	file "LogStep5.log"
+
 	
 	script:
 
-	template 'step5Cortex.sh'
+	template 'step5MakeCombinationGraph.sh'
 
 
 
 }
 
-step5StdoutChannel.subscribe{
-	step5LogFile = new File(resultsDir + "/productsOfStep5" + "/step5LogFile.log")
-	step5LogFile.write(it)
-}
+
+
+
+
+
 
 
 
@@ -355,8 +631,13 @@ step5StdoutChannel.subscribe{
 //Step6 Preparation
 
 //Prepare step 6, make channels that pair each sample with its index / order like in the supply for step 5 for consistent colour
+//Example:
+//	if sample name is magellan, and located at index 2 (first, since index 0 is reference de bruijn graph and 1 is combined de bruijn graph according
+//	to step 5 colorlist_step5FileToSubmitToCortex)
+//	it is processed as "magellan+2"
 
-process prepareStep6 {
+process prepareStep6VariantCalling {
+
 	publishDir flagDir
 	executor 'local'	
 
@@ -371,17 +652,25 @@ process prepareStep6 {
 
 
 	exec:
-	step6FileList = file(resultsDir + "/samplesForStep5/colorlist_step5FileToSubmitToCortex").readLines()
+	
+	//Reads colorlist
 
+	step6FileList = file(params.resultsDir + "/samplesForStep5/colorlist_step5FileToSubmitToCortex").readLines()
+
+	
 	step6FileListReversed = []
 
+	//Adds each sample in the reverse order in the step6FileListReversed Array
+
 	for (int i = 0; i < step6FileList.size(); i++) {
-		step6FileListReversed[step6FileList.size() - 1 - i] = step6FileList[i] - resultsDir + "+" + i - "/samplesForStep5/pathToCleaned"
+		step6FileListReversed[step6FileList.size() - 1 - i] = step6FileList[i] - params.resultsDir + "+" + i - "/samplesForStep5/pathToCleaned"
 
 	}
 
 
 	step6FileListFiltered = []
+
+	//Only takes in the samples, not the reference or combination graph
 
 	for (int i = 0; i < numberOfSamples; i++) {
 	step6FileListFiltered[i] = step6FileListReversed[i]
@@ -399,109 +688,102 @@ process prepareStep6 {
 
 
 
-//Step 6: Path Divergence Caller
 
-process step6Cortex{
-	publishDir flagDir
-	queue 'super_mem'
-	time '10h'	
 
-	input:
-	each fileNameAndNumber from step6FileIndexFilteredChannel	
-	val flagnumber5 from flag5	
 
-	output:
-	file "runStep6CortexDone.flag" into flag6	
 
-	stdout into Step6StdoutChannel
+
+//Step 6 PD : When selected, cortex will use path divergence caller algorithm to identify variants.
+//Step6 also includes a renaming script, since nextflow-bash interaction is untidy.
+
+if (params.PD == "y") {
+	process step6aPDVariantCalling {
+
+		publishDir flagDir
+		executor params.executor
+		queue params.highRamQueue
+		time params.wallTime
+		cpus params.cpusNeeded
+
+
+		input:
+		each fileNameAndNumber from step6FileIndexFilteredChannel	
+		val flagnumber5 from flag5forPD	
+
+		output:
+		file "runStep6PDCortexDone.flag" into flag6PD	
+		file "${fileNameAndNumber}_PD.log" into PDLogFiles
+
+
+		
+		script:
+		template 'step6aPDVariantCalling.sh'	
+
+
+	}	
+
+
+	// This step renames the file from (sampleName)+(index)_PD.log to sampleName_PD.log
+
+	process step6PDRenameLogFiles {
 	
-	script:
-	template 'step6Cortex.sh'	
-
-
-}
-
-Step6StdoutChannel.subscribe{
-	step6LogFile = new File(resultsDir + "/productsOfStep6" + "/step6LogFile.log")
-	step6LogFile.write(it)
-}
-
-/**
-stdoutChannel.subscribe{println it}
-
-//INPUT COMMANDS LEFT 14 JUNE 2018
-//stdoutChannel.subscribe{println it}
-
-//Step 6: Bubble Caller
-
-process step6CortexBubbleCaller{
-	input:
-	each fileNameAndNumber from step6FileIndexFilteredChannel
+		input:
+		file logFile from PDLogFiles
 	
-	shell:
-	"""
-	FAN=${fileNameAndNumber}
-	!{cortexDirStep5and6} --kmer_size 63 --mem_height 29 --mem_width 55 --multicolour_bin !{resultsDir}/productsOfStep5/finalCombinationGraphWithRef.ctx --detect_bubbles1 \${FAN#*+}/\${FAN#*+} --output_bubbles1 !{resultsDir}/productsOfStep6/step6_BubbleCaller\${FAN%+*}.out --print_colour_coverages 
-	"""
-
-}
-
-
-
-//TRY RUNNING THIS AFTER PD CALLER DONE
-
-//Step 7 : make hash of reference chromosome and convert into VCF for PATHDIVERGENCE
-
-process step7Prep {
-
-	publishDir flagDir	
-
-	input:
-	val listAsFlag from CortexSampleListChannel
-	//each fileNameAndNumber from step6FileIndexFilteredChannel
-	
-	output:
-	file "runStep7PrepCortexDone.flag" into flag7Prep 
-
-	shell:
-	"""
-	module load python/2.7.9
-
-	echo !{pathToRefDir}
-	
-	!{pathToStampy} -G !{resultsDir}/samplesForStep7/stampyRefFile !{pathToRefDir}
-	!{pathToStampy} -g !{resultsDir}/samplesForStep7/stampyRefFile -H !{resultsDir}/samplesForStep7/stampyRefFile
+		script:
+		template 'step6PDRenameLogFiles.sh'
 		
 
-	echo "" > runStep7PrepCortexDone.flag 
-	"""
+	}	
 
 
 }
 
-//flag7PrepTaken = flag7Prep.take(1)
 
 
-process step7Exec{
+
+//Step 6 BC: When selected, cortex will use bubble caller algorithm to identiy variants.
+
+if (params.BC == "y") {
+
+	process step6bBCVariantCalling {
+		publishDir flagDir
+		executor params.executor
+		queue params.highRamQueue
+		time params.wallTime
+		cpus params.cpusNeeded
+
+
+		input:
+		each fileNameAndNumber from step6FileIndexFilteredChannel
+		val flagnumber5 from flag5forBC
+		
+		output:
+		file "runStep6BCCortexDone.flag" into flag6BC
+		file "${fileNameAndNumber}_BC.log" into BCLogFiles	
 	
-	input:
-	each fileNameAndNumber from step6FileIndexFilteredChannel
-	val flag from flag7Prep
+
+		
+		script:
+		template 'step6bBCVariantCalling.sh'
+
+	}
+
+	// This step renames the file from (sampleName)+(index)_PD.log to sampleName_BC.log
+
+	process step6BCRenameLogFiles {
+
+		input:
+		file logFile from BCLogFiles
+
+		script:
+		template 'step6BCRenameLogFiles.sh'
 
 
-	shell:
+        }
 
-	"""
-	module load python/2.7.9
-	
-	FAN=${fileNameAndNumber}
 
-	!{cortexDirForVCF} --callfile !{resultsDir}/productsOfStep6/step6_PathDivergence\${FAN%+*}.out_pd_calls --callfile_log !{resultsDir}/logs/S6_\${FAN%+*}_PD_Cortex.out --outvcf \${FAN%+*}VCF --outdir !{resultsDir}/productsOfStep7 --samplename_list !{resultsDir}/samplesForStep7/sampleListForStep7 --num_cols !{totalColor} --stampy_bin !{pathToStampy} --stampy_hash !{resultsDir}/samplesForStep7/stampyRefFile --vcftools_dir !{vcfToolsDir} --kmer 63 --refcol 0 --ploidy 2 --ref_fasta !{pathToRefDir} --caller PD 
-	"""
-	
 }
 
 
-//STEP 7 WORKS USING MATT'S LOG FILES!!!
-*/
 

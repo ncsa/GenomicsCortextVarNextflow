@@ -1,5 +1,0 @@
-N E X T F L O W  ~  version 0.30.1
-Launching `/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/testingStep1to6/templates/work/27/cbd849785b3f43c3d410d3956dc2e4/.command.sh` [trusting_edison] - revision: ad2e0bc01a
-ERROR ~ No such variable: resultsDir
-
- -- Check script '.command.sh' at line: 8 or see '.nextflow.log' file for more details

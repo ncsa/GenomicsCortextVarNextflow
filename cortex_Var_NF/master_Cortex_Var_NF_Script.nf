@@ -141,6 +141,5 @@ process step6VariantCalling {
 
 
 
-*/
 
 

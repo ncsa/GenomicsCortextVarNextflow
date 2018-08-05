@@ -16,7 +16,7 @@ sampleName=\${nameAndIndex%+*}
 
 # Renames initial logfile name to samplename_PD.log
 # Example: from Sample_Magellan+2_PD.log to SampleMagellan_PD.log
-mv ${params.flagAndLogDir}/${logFile} ${params.flagAndLogDir}/\${sampleName}_PD.log
+mv ${params.logDir}/${logFile} ${params.logDir}/\${sampleName}_PD.log
 
 
 

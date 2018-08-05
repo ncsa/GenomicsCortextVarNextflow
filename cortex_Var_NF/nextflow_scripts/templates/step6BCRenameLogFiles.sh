@@ -16,7 +16,7 @@ sampleName=\${nameAndIndex%+*}
 # Renames initial logfile name to samplename_BC.log
 # Example: from Sample_Magellan+2_BC.log to SampleMagellan_BC.log
 
-mv ${params.flagAndLogDir}/${logFile} ${params.flagAndLogDir}/\${sampleName}_BC.log
+mv ${params.logDir}/${logFile} ${params.logDir}/\${sampleName}_BC.log
 
 
 

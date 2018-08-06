@@ -18,7 +18,7 @@ git clone https://github.com/ncsa/GenomicsCortextVarNextflow.git
 
 ### How to use
 
-After cloning the repository, go to cortex_Var_NF/nextflow.config. Follow the instructions within the file and provided necessary directories.
+After cloning the repository, go to cortex_Var_NF/nextflow.config. Follow the instructions within the file and provide necessary directories.
 
 **Important note: the k-mer and color specific cortex have to be made before running this script. This script DOES NOT make the specific binary cortex files**
 

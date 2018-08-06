@@ -5,8 +5,8 @@ This nexflow-adapted workflow uses the tool [cortex_var](http://cortexassembler.
 
 ##### Dependencies
 
- - Nextflow (recommended 30.1.4844 or newer)
- - Cortex_var tool
+ - [Nextflow (recommended 30.1.4844 or newer)](https://www.nextflow.io/)
+ - [Cortex_var tool](http://cortexassembler.sourceforge.net/index_cortex_var.html)
 
 ### How to install
 

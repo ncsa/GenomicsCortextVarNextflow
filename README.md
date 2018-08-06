@@ -24,9 +24,9 @@ After cloning the repository, go to cortex_Var_NF/nextflow.config. Follow the in
 
 ### Test environment
 
-Executor : PBS
-Nextflow Version : 30.1.4844
-Genome source : Soybean
-Read Sizes : ~ 23 GB
+- Executor : PBS
+- Nextflow Version : 30.1.4844
+- Genome source : Soybean
+- Read Sizes : ~ 23 GB
 
 

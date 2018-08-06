@@ -10,9 +10,8 @@ process preflightCheck {
 
 	script:	
 		"""
-		module load nextflow/nextflow-0.30.1.4844 
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/preflightCheck.nf		
+		${params.nextflowDir} run ${nextflowFolder}/preflightCheck.nf		
 
 		"""
 }
@@ -28,9 +27,8 @@ process folderPrep {
 
 	script:	
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step0FileFolderPrep.nf
+		${params.nextflowDir} run ${nextflowFolder}/step0FileFolderPrep.nf
 		"""	
 
 }
@@ -45,9 +43,8 @@ process step1MakeSampleDBGraph {
 
 	script:
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step1MakeSampleBinaryGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/step1MakeSampleBinaryGraph.nf
 
 		"""
 }
@@ -62,9 +59,8 @@ process step2PoolAndCleanErrors {
 	
 	script:	
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step2PoolAndCleanErrors.nf
+		${params.nextflowDir} run ${nextflowFolder}/step2PoolAndCleanErrors.nf
 		"""
 
 }
@@ -78,9 +74,8 @@ process step3CleanGraphPerSample {
 
 	script:
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step3CleanGraphPerSample.nf	
+		${params.nextflowDir} run ${nextflowFolder}/step3CleanGraphPerSample.nf	
 		"""
 
 }
@@ -94,9 +89,8 @@ process step4MakeReferenceGraph {
 
 	script:
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step4MakeReferenceDBGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/step4MakeReferenceDBGraph.nf
 		"""
 
 }
@@ -110,9 +104,8 @@ process step5MakeCombinationGraph {
 	
 	script:
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step5MakeCombinationGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/step5MakeCombinationGraph.nf
 		"""
 
 
@@ -124,9 +117,8 @@ process step6VariantCalling {
 
 	script:
 		"""
-		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		nextflow run ${nextflowFolder}/step6VariantCalling.nf
+		${params.nextflowDir} run ${nextflowFolder}/step6VariantCalling.nf
 		"""
 
 }

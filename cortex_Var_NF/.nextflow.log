@@ -1,0 +1,30 @@
+Aug-05 22:40:49.272 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/apps/bioapps/nextflow/nextflow-0.30.1.4844/nextflow master_Cortex_Var_NF_Script.nf
+Aug-05 22:40:49.335 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.30.1
+Aug-05 22:40:49.343 [main] INFO  nextflow.cli.CmdRun - Launching `master_Cortex_Var_NF_Script.nf` [backstabbing_lalande] - revision: 4f00e0eacf
+Aug-05 22:40:49.352 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: nextflow.config
+Aug-05 22:40:49.354 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /ui/ncsa/istanto2/git_dev_folders/cortex_workflow_nextflow/cortex_Var_NF/nextflow.config
+Aug-05 22:40:49.372 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Aug-05 22:40:49.633 [main] DEBUG nextflow.Session - Session uuid: 2e65af8f-9242-4233-b1e9-ff1ccbaf1ebb
+Aug-05 22:40:49.633 [main] DEBUG nextflow.Session - Run name: backstabbing_lalande
+Aug-05 22:40:49.633 [main] DEBUG nextflow.Session - Executor pool size: 24
+Aug-05 22:40:49.654 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.30.1 build 4844
+  Modified: 11-06-2018 08:29 UTC (03:29 CDT)
+  System: Linux 2.6.32-696.23.1.el6.x86_64
+  Runtime: Groovy 2.4.15 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_131-b11
+  Encoding: UTF-8 (ANSI_X3.4-1968)
+  Process: 53369@iforge.ncsa.illinois.edu [141.142.166.1]
+  CPUs: 24 - Mem: 126.1 GB (86.6 GB) - Swap: 16 GB (16 GB)
+Aug-05 22:40:49.672 [main] DEBUG nextflow.Session - Work-dir: /ui/ncsa/istanto2/git_dev_folders/cortex_workflow_nextflow/cortex_Var_NF/work [gpfs]
+Aug-05 22:40:49.673 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /ui/ncsa/istanto2/git_dev_folders/cortex_workflow_nextflow/cortex_Var_NF/bin
+Aug-05 22:40:49.752 [main] DEBUG nextflow.Session - Session start invoked
+Aug-05 22:40:49.755 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Aug-05 22:40:49.755 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Aug-05 22:40:49.863 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Aug-05 22:40:49.865 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Aug-05 22:40:49.865 [main] DEBUG nextflow.Session - Session await
+Aug-05 22:40:49.865 [main] DEBUG nextflow.Session - Session await > all process finished
+Aug-05 22:40:49.865 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Aug-05 22:40:49.874 [main] DEBUG nextflow.trace.StatsObserver - Workflow completed > WorkflowStats[succeedCount=0; failedCount=0; ignoredCount=0; cachedCount=0; succeedDuration=0ms; failedDuration=0ms; cachedDuration=0ms]
+Aug-05 22:40:49.895 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Aug-05 22:40:49.906 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

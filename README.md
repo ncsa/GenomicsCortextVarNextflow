@@ -3,7 +3,7 @@
 ### Introduction
 This nexflow-adapted workflow uses the tool [cortex_var](http://cortexassembler.sourceforge.net/index_cortex_var.html) based on [cortex_var paper](https://www.nature.com/articles/ng.1028). The variant calls are reference free, but reference is needed to locate these variant in known genome.
 
-##### Dependencies
+### Dependencies
 
  - [Nextflow (recommended 30.1.4844 or newer)](https://www.nextflow.io/)
  - [Cortex_var tool](http://cortexassembler.sourceforge.net/index_cortex_var.html)

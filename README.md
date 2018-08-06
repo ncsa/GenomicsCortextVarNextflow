@@ -20,7 +20,9 @@ git clone https://github.com/ncsa/GenomicsCortextVarNextflow.git
 
 After cloning the repository, go to cortex_Var_NF/nextflow.config. Follow the instructions within the file and provide necessary directories.
 
-If there are difficulties in setting height and width in nextflow.config, go to cortex_Var_NF/usefulCalculators and run findHeightAndWidth.py
+If there are difficulties in setting height and width for each step in cortex in nextflow.config (such as the cortexConfigStep1), go to cortex_Var_NF/usefulCalculators and run findHeightAndWidth.py
+
+If there are difficulties in setting the params.queue in nextflow.config, go to cortex_Var_NF/usefulCalculators and run findHeightAndWidth.py 
 
 
 

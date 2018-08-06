@@ -20,7 +20,16 @@ git clone https://github.com/ncsa/GenomicsCortextVarNextflow.git
 
 After cloning the repository, go to cortex_Var_NF/nextflow.config. Follow the instructions within the file and provide necessary directories.
 
+If there are difficulties in setting height and width in nextflow.config, go to cortex_Var_NF/usefulCalculators and run findHeightAndWidth.py
+
+
+
 **Important note: the k-mer and color specific cortex have to be made before running this script. This script DOES NOT make the specific binary cortex files**
+
+
+When the nextflow.config parameters have been completed, please run cortex_Var_NF/master_Cortex_Var_NF_Script.nf
+
+
 
 ### Test environment
 

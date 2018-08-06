@@ -23,16 +23,16 @@ def findRightQueue ( height, width, kmerSize, numberOfSamples):
 	print ("Memory Required in TB: " + str(memoryRequiredInBytes/1000000000000))
 	
 	if memoryRequiredInBytes < 64000000000:
-		print ("Use Normal")
+		print ("FOR IFORGE USERS ONLY: Use normal")
 
 	elif memoryRequiredInBytes > 64000000000 and memoryRequiredInBytes < 256000000000:
-		print ("Use big_mem")
+		print ("FOR IFORGE USERS ONLY: Use big_mem")
 
 	elif memoryRequiredInBytes > 256000000000 and memoryRequiredInBytes < 1500000000000:
-		print ("Use super_mem")	
+		print ("FOR IFORGE USERS ONLY: Use super_mem")	
 
 	else:
-		print("too big! not enough memory")
+		print("FOR IFORGE USERS ONLY: too big! not enough memory")
 
 	return 	
 

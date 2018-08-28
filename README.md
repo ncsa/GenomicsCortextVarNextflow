@@ -1,4 +1,66 @@
-# Cortex_Var nextflow-based workflow
+# Structural Variant Calling with Cortex-Var on Nextflow
+
+This repo is a variant calling pipeline that uses [cortex_var](http://cortexassembler.sourceforge.net/index_cortex_var.html) written in [Nextflow](https://www.nextflow.io/), for use in detecting de-novo structural variance in whole-genome reads.
+
+You may use this README file to understand how the scripts are organized and how the codes are structured. Additionally, this README file also provides a brief explanation about how cortex-var behaves.
+
+Files in this repo are organized as follows:
+
+| Folder / Files | Contents |
+| --- | --- |
+| master_script.nf | Nextflow script to be run by user |
+| nextflow.config | Configuration file to be edited by user |
+| nextflow_scripts | Individual nextflow scripts for each step in cortex-var |
+| usefulCalculators | Tools to identify parameters for config file |
+
+## Installation
+
+### Dependencies
+
+- [cortex_var](http://cortexassembler.sourceforge.net/index_cortex_var.html)
+- [Nextflow](https://www.nextflow.io/) 0.30.1.4844 or newer is recommeded
+
+### Workflow Installation
+
+Clone this repository
+
+## User Guide
+
+The workflow is controlled by modifying nextflow.config file
+
+### Nextflow.config parameters
+
+**`nextflowDir`**
+
+Directory to nextflow executable should be specified here, for example: `path/to/nextflow/executable`
+
+**`PD`**
+
+Specify if user would like to run path-divergence variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run
+
+**`BC`**
+
+Specify if user would like to run bubble-caller variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Quick Start

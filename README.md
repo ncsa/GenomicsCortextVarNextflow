@@ -74,20 +74,24 @@ If user chooses not to run step 4 in cortex (making the reference graph), path t
 Example: `"/PATH/TO/STEP4/BINARY/FILE.ctx"`
 
 #### Sample_specific parameters
+
 This section will be a little tedious, as it involves strict formats for each sample reads.
 Given 2 sample pairs Sample_Maverick.read1.fq, Sample_Maverick.read2.fq, Sample_Magellan.read1.fq, Sample_Magellan.read2.fq, here are how the parameters should be filled.
 **`sampleList`**
+
 An array, with the sample names enclosed within quotation marks and separated by comma, all enclosed within `[]`
 
 Example: With examples given, the `sampleList` should be filled with: `["Sample_Maverick", "Sample_Magellan"]`
 
 **`sampleReadPattern`**
+
 A string, with how sample name is followed by the reads.
 Example: 
 - With example given, the `sampleReadPattern` should be filled with "\.read"
 - If the sample names are formatted as: Sample_name_read1.fq and Sample_name_read2.fq, `sampleReadPattern` should be filled with "\_read"
 
 **`sampleReadExtension`**
+
 A String, this variable should be filled with the extension of the sample
 In example given, `sampleReadExtension` should be filled with ".fq"
 

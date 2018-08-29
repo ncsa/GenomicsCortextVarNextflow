@@ -26,7 +26,7 @@ Clone this repository
 
 ## User Guide
 
-The workflow is controlled by modifying nextflow.config file
+The workflow is controlled by modifying nextflow.config file.
 
 ### Nextflow.config parameters
 
@@ -34,15 +34,62 @@ The workflow is controlled by modifying nextflow.config file
 
 Directory to nextflow executable should be specified here, for example: `path/to/nextflow/executable`
 
+#### Running Options
+
 **`PD`**
 
-Specify if user would like to run path-divergence variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run
+Specify if user would like to run path-divergence variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run.
 
 **`BC`**
 
-Specify if user would like to run bubble-caller variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run
+Specify if user would like to run bubble-caller variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run.
 
+**`referenceReadsProvided`**
 
+Specify if user has reference genome reads (like .fna files). Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run.
+
+**NOTE:** Path divergence variant calling can only be done when reference reads is available. So the workflow can only run when path divergence when reference reads are provided. However, Bubble caller variant calling method is idependent of the reference reads, so it is possible to conduct bubble caller variant calling without providing reference reads.
+
+#### Source, Config, and Destination Directory
+
+**`sampleDir`**
+
+Path to where samples are located, as a string. Example: `"/PATH/TO/SAMPLE/DIRECTORY"`
+
+**`configDir`**
+
+A String, path to the nextflow.config file, where these parameters will be filled and modified.
+
+**`resultsDir`**
+
+A String, path to where results of each step will be dumped. Example: `"/PATH/TO/RESULTS/DIRECTORY"`
+
+**`pathToReferenceList`**
+
+(FILL THIS TOMORROW)
+
+**`pathToRefCtx`**
+If user chooses not to run step 4 in cortex (making the reference graph), path to reference binary (.ctx file) must be specified within this parameter.
+
+Example: `"/PATH/TO/STEP4/BINARY/FILE.ctx"`
+
+#### Sample_specific parameters
+This section will be a little tedious, as it involves strict formats for each sample reads.
+Given 2 sample pairs Sample_Maverick.read1.fq, Sample_Maverick.read2.fq, Sample_Magellan.read1.fq, Sample_Magellan.read2.fq, here are how the parameters should be filled.
+**`sampleList`**
+An array, with the sample names enclosed within quotation marks and separated by comma, all enclosed within `[]`
+
+Example: With examples given, the `sampleList` should be filled with: `["Sample_Maverick", "Sample_Magellan"]`
+
+**`sampleReadPattern`**
+A string, with how sample name is followed by the reads.
+Example: 
+- With example given, the `sampleReadPattern` should be filled with "\.read"
+- If the sample names are formatted as: Sample_name_read1.fq and Sample_name_read2.fq, `sampleReadPattern` should be filled with "\_read"
+
+**`sampleReadExtension`**
+A String, this variable should be filled with the extension of the sample
+In example given, `sampleReadExtension` should be filled with ".fq"
 
 
 

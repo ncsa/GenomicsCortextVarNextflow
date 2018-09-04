@@ -12,6 +12,20 @@ Files in this repo are organized as follows:
 | nextflow.config | Configuration file to be edited by user |
 | nextflow_scripts | Individual nextflow scripts for each step in cortex-var |
 | usefulCalculators | Tools to identify parameters for config file |
+## Intended pipeline architecture and function
+This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
+
+The cortex-var workflow consists of the following steps:
+ 1. Create binary graphs for each sample (paired reads)
+ 2. Create pooled binary graph and clean sequencing errors
+ 3. Clean the errors in individual samples according to the pooled graph
+ 4. Create reference binary graph (optional step, can be done beforehand)
+ 5. Combine reference graph with sample graphs and cleaned pool
+ 6. Call variants by Bubble Caller and/or Path Divergence
+ 
+ 
+ 
+ 
 
 ## Installation
 

@@ -17,11 +17,14 @@ This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforg
 
 The cortex-var workflow consists of the following steps:
  1. Create binary graphs for each sample (paired reads)
- 2. Create pooled binary graph and clean sequencing errors
+ 2. Create pooled binary graph
  3. Clean the errors in individual samples according to the pooled graph
  4. Create reference binary graph (optional step, can be done beforehand)
  5. Combine reference graph with sample graphs and cleaned pool
  6. Call variants by Bubble Caller and/or Path Divergence
+ 
+ ![alt text](https://i.imgur.com/Sn3Yw6a.png)
+ **Figure 1:** Overview of Workflow Design
  
  
  

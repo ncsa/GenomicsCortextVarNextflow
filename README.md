@@ -23,10 +23,8 @@ The cortex-var workflow consists of the following steps:
  5. Combine reference graph with sample graphs and cleaned pool
  6. Call variants by Bubble Caller and/or Path Divergence
  
- ![alt text](https://i.imgur.com/Sn3Yw6a.png)
+ ![](https://i.imgur.com/Sn3Yw6a.png)
  **Figure 1:** Overview of Workflow Design
- 
- 
  
  
 
@@ -43,9 +41,28 @@ Clone this repository
 
 ## User Guide
 
-The workflow is controlled by modifying nextflow.config file.
+### Data Preparation
+Cortex_var requires two types of data input:
+- Sample pair reads
+- Reference fasta files
+ 
+#### Sample pair reads
+Sample pair reads are required to be placed in the same folder, and the path to this folder will later be the input for sampleDir parameter in nextflow.config.
+
+![](https://i.imgur.com/iuIxAqS.png)
+
+**Figure 2:** How sampleDir is organized
+
+#### Reference fasta files
+Cortex requires the user to input a list of path to the reference fasta files to run step 4: Creating reference graph. Creating reference graph is required to run path divergence variant calling, but optional for bubble caller. The reference fasta files should be listed as paths, separated by line break (\n) **within a text file** that will have its path specified in `pathToReferenceList` parameter in nextflow.config. Example of what the textfile should look like is as follows:
+
+![](https://i.imgur.com/sRE4wPZ.png)
+
+**Figure 3:** Example of reference fasta list textfile
+
 
 ### Nextflow.config parameters
+The workflow is controlled by modifying nextflow.config file.
 
 **`nextflowDir`**
 
@@ -63,9 +80,9 @@ Specify if user would like to run bubble-caller variant calling. Indicate using 
 
 **`referenceReadsProvided`**
 
-Specify if user has reference genome reads (like .fna files). Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run.
+Specify if user has reference genome reads (like .fna fpecificed, the workflow will not run.
 
-**NOTE:** Path divergence variant calling can only be done when reference reads is available. So the workflow can only run when path divergence when reference reads are provided. However, Bubble caller variant calling method is idependent of the reference reads, so it is possible to conduct bubble caller variant calling without providing reference reads.
+**NOTE:** Path divergence variant calling can only be diles). Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are sone when reference reads is available. So the workflow can only run when path divergence when reference reads are provided. However, Bubble caller variant calling method is idependent of the reference reads, so it is possible to conduct bubble caller variant calling without providing reference reads.
 
 #### Source, Config, and Destination Directory
 

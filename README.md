@@ -60,7 +60,6 @@ Cortex requires the user to input a list of path to the reference fasta files to
 
 **Figure 3:** Example of reference fasta list textfile
 
-
 ### Nextflow.config parameters
 The workflow is controlled by modifying nextflow.config file.
 
@@ -129,7 +128,9 @@ Example:
 A String, this variable should be filled with the extension of the sample
 In example given, `sampleReadExtension` should be filled with ".fq"
 
+### Executing nextflow application
 
+The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept **ADD LINK HERE** (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
 
 
 

@@ -60,8 +60,24 @@ Cortex requires the user to input a list of path to the reference fasta files to
 
 **Figure 3:** Example of reference fasta list textfile
 
+### Cortex_Var Binary Preparation
+This workflow requires the user to have some prior knowledge about cortex_var, so this section will be brief. Cortex_var requires the user to have cortex_var binaries already made, specific to color and k-mer. To do this, the user can refer to the [**`INSTALL`**](https://github.com/iqbal-lab/cortex/blob/master/INSTALL) file in the [cortex_var repository](https://github.com/iqbal-lab/cortex).
+
+For each step, here is the guide to how many colors is needed:
+**Note:** n is the number of samples (1 sample requires 2 reads). So in the case of 2 samples there would be 4 reads, and the value of n is 2.
+
+- Step 1: 1 color
+- Step 2: 1 color
+- Step 3: n color(s)
+- Step 4: 1 color
+- Step 5: n + 2 colors
+- Step 6 without reference: n + 1 colors
+- Step 6 with reference: n + 2 colors
+
 ### Nextflow.config parameters
+
 The workflow is controlled by modifying nextflow.config file.
+**Note:** String parameters **always** need quotation marks ("") in the beginning and end of the string.
 
 **`nextflowDir`**
 
@@ -99,7 +115,7 @@ A String, path to where results of each step will be dumped. Example: `"/PATH/TO
 
 **`pathToReferenceList`**
 
-(FILL THIS TOMORROW)
+A String, path to where the file containing reference fasta files are (Refer to figure 3 above). Example: `"/PATH/TO/REFERENCELIST.TXT"`
 
 **`pathToRefCtx`**
 If user chooses not to run step 4 in cortex (making the reference graph), path to reference binary (.ctx file) must be specified within this parameter.
@@ -110,6 +126,7 @@ Example: `"/PATH/TO/STEP4/BINARY/FILE.ctx"`
 
 This section will be a little tedious, as it involves strict formats for each sample reads.
 Given 2 sample pairs Sample_Maverick.read1.fq, Sample_Maverick.read2.fq, Sample_Magellan.read1.fq, Sample_Magellan.read2.fq, here are how the parameters should be filled.
+
 **`sampleList`**
 
 An array, with the sample names enclosed within quotation marks and separated by comma, all enclosed within `[]`
@@ -125,8 +142,54 @@ Example:
 
 **`sampleReadExtension`**
 
-A String, this variable should be filled with the extension of the sample
+A string, this variable should be filled with the extension of the sample
 In example given, `sampleReadExtension` should be filled with ".fq"
+
+#### Cortex Directories and Variables
+
+**`cortexBinDir`**
+
+A string, this should lead to the bin directory of cortex_var where all the executables for each step is located.
+
+**`cortexDirStep#`**
+
+For the step specific cortex directory parameter, as long as the color specific binary is made, there should be no need to change the variables. The default here is using 63 kmers, if there's variation, the user has the option to change the path to the desired executable.
+
+**`cortexConfigStep#`**
+
+Cortex_var requires flags `--kmer_size` `--mem_height` and `--mem_width` for each step. `kmer_size` indicates the length of each k-mer (nodes in the graph) and is required to be consistent with the cortex binary executables.
+
+`mem_height` indicates the height of the hash table, and `mem_width` indicates the width of hash table. If the user needs help in determining the mem_height and mem_width, executing **`/usefulCalculators/findHeightAndWidth.py`** can be of assistance. This script is written in python3 and will take in the size of genome in number of bases and returns the optimum mem_height and mem_width, according to the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 8.
+
+For example, soybean genome has about 1.15 gigabases:
+
+```
+#"Enter genome size in bases:" will be prompted when running the script.
+Enter genome size in bases: 1150000000 
+#Outputs below
+mem_height = 27
+mem_width = 18
+```
+If the `kmer_size` is 63:
+
+Based on this exmaple, the input for `cortexConfigStep#` should be:
+`"--kmer_size 63 --mem_height 27 --mem_width 18"`
+
+**`quality_score_threshold`**
+
+An integer, no quotation mark necessary. This parameter should be filled with the filter for quality score from the input file. Refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 3.
+
+#### Type of executor, queue names, etc.
+
+This category is filled with the system information and resource requirements for nextflow.
+
+**`executor`**
+A string, filled with the type of [executor](https://www.nextflow.io/docs/latest/executor.html). Examples include pbs, slurm, LSF, and so on.
+
+Example: 
+if pbs is the executor, the parameter should be filled with `"pbs"`
+
+
 
 ### Executing nextflow application
 

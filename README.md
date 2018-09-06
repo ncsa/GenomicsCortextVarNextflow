@@ -54,6 +54,7 @@ Sample pair reads are required to be placed in the same folder, and the path to 
 **Figure 2:** How sampleDir is organized
 
 #### Reference fasta files
+
 Cortex requires the user to input a list of path to the reference fasta files to run step 4: Creating reference graph. Creating reference graph is required to run path divergence variant calling, but optional for bubble caller. The reference fasta files should be listed as paths, separated by line break (\n) **within a text file** that will have its path specified in `pathToReferenceList` parameter in nextflow.config. Example of what the textfile should look like is as follows:
 
 ![](https://i.imgur.com/sRE4wPZ.png)
@@ -205,10 +206,28 @@ Example: `"10h"` for 10 hours walltime.
 A string, containing the number of cpus needed per process. Refer to [executor documentation](https://www.nextflow.io/docs/latest/executor.html) for details.
 
 
+### Resource Requirements
+
+The main resources cortex_var needs is memory and time. The amount of memory cortex_var require depends on the size of hash table specified in `cortexConfigStep#` parameters, color number, and kmers. To compute the approximate ram required, the python3 script `usefulCalculators/findMemoryRequired.py`. The script will calculate how much memory is required for the most memory-demanding step. Then, the user can specify the queue that would fulfill the memory requirement in the `highRamQueue` variable in the nextflow.config file.
+
+Example:
+```
+Enter height: 27
+Enter width: 18
+enter kmer size: 63
+enter number of samples: 2
+Most Memory Required in GB: 77.309411328
+Most Memory Required in TB: 0.077309411328
+```
+
+In this case, the queue selected in `highRamQueue` parameter needs to have at least 77.3 GB for the workflow to run successfully.
+
 
 ### Executing nextflow application
 
-The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept **ADD LINK HERE** (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
+The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
+
+
 
 
 
@@ -261,6 +280,11 @@ If there are difficulties in setting the params.queue in nextflow.config, go to 
 
 
 When the nextflow.config parameters have been completed, please run cortex_Var_NF/master_Cortex_Var_NF_Script.nf
+
+
+
+
+
 
 
 

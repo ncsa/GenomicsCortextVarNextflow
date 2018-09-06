@@ -118,6 +118,7 @@ A String, path to where results of each step will be dumped. Example: `"/PATH/TO
 A String, path to where the file containing reference fasta files are (Refer to figure 3 above). Example: `"/PATH/TO/REFERENCELIST.TXT"`
 
 **`pathToRefCtx`**
+
 If user chooses not to run step 4 in cortex (making the reference graph), path to reference binary (.ctx file) must be specified within this parameter.
 
 Example: `"/PATH/TO/STEP4/BINARY/FILE.ctx"`
@@ -184,16 +185,32 @@ An integer, no quotation mark necessary. This parameter should be filled with th
 This category is filled with the system information and resource requirements for nextflow.
 
 **`executor`**
+
 A string, filled with the type of [executor](https://www.nextflow.io/docs/latest/executor.html). Examples include pbs, slurm, LSF, and so on.
 
 Example: 
 if pbs is the executor, the parameter should be filled with `"pbs"`
+
+**`highRamQueue`**
+
+A string, containing the name of the queue for the system.
+
+**`walltime`**
+
+A string, containing the walltime allocated for the run. Refer to the [executor documentation](https://www.nextflow.io/docs/latest/executor.html) for more the format. The walltime should be enclosed in quotation mark as well.
+Example: `"10h"` for 10 hours walltime.
+
+**`cpusNeeded`**
+
+A string, containing the number of cpus needed per process. Refer to [executor documentation](https://www.nextflow.io/docs/latest/executor.html) for details.
 
 
 
 ### Executing nextflow application
 
 The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept **ADD LINK HERE** (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
+
+
 
 
 

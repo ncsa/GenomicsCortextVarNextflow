@@ -172,9 +172,7 @@ Enter genome size in bases: 1150000000
 mem_height = 27
 mem_width = 18
 ```
-If the `kmer_size` is 63:
-
-Based on this exmaple, the input for `cortexConfigStep#` should be:
+If the `kmer_size` is 63 combined with the exmaple above, the input for `cortexConfigStep#` should be:
 `"--kmer_size 63 --mem_height 27 --mem_width 18"`
 
 **`quality_score_threshold`**
@@ -226,6 +224,17 @@ In this case, the queue selected in `highRamQueue` parameter needs to have at le
 ### Executing nextflow application
 
 The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
+
+### Logging functionality
+
+Nextflow creates `work` folder where the command `nextflow (script.nf)` is run. Within the `work` folder, there will be nested folders, containing the log of individual processes. In the stdout of running script, there will be lines that is similar to this:
+
+`[73/a3f6d2] Submitted process > preflightCheck`
+
+`preflightCheck` is the process name. `[73/a3f6d2]` indicates the folder name within work folder when the user can locate the log for the specific process. More accurately, within `/work/73/` there might be several folders, and `a3f6d2` is the first 6 characters of the nested folder within `/work/73/`. Inside the folder specific to the process, such as `/work/73/a3f6d2...`, there are several log files that can be used for debugging or troubleshooting.
+
+The `work` folder for each specific process is located within the resultsDir specified in the `nextflow.config` parameter.
+
 
 
 

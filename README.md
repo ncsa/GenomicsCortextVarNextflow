@@ -129,7 +129,8 @@ Specify if user has reference genome reads (like .fna fpecificed, the workflow w
 
 **`sampleDir`**
 
-Path to where samples are located, as a string. Example: `"/PATH/TO/SAMPLE/DIRECTORY"`
+Path to where samples are located, as a string. Example: `"/PATH/TO/SAMPLE/DIRECTORY"`.
+
 Refer to [Sample pair reads](#sample-pair-reads).
 
 **`configDir`**
@@ -142,7 +143,8 @@ A String, path to where results of each step will be dumped. Example: `"/PATH/TO
 
 **`pathToReferenceList`**
 
-A String, path to where the file containing reference fasta files are (Refer to figure 3 above). Example: `"/PATH/TO/REFERENCELIST.TXT"`
+A String, path to where the file containing reference fasta files are (Refer to figure 3 above). Example: `"/PATH/TO/REFERENCELIST.TXT"`.
+
 Refer to [Reference Fasta Files](#reference-fasta-files)
 
 **`pathToRefCtx`**

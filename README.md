@@ -76,7 +76,7 @@ Sample pair reads are required to be placed in the same folder, and the path to 
 
 ![](https://i.imgur.com/iuIxAqS.png)
 
-**Figure 2:** How sampleDir is organized
+**Figure 2:** SampleDir Recommended Structure
 
 #### Reference Fasta Files
 
@@ -84,7 +84,7 @@ Cortex requires the user to input a list of path to the reference fasta files to
 
 ![](https://i.imgur.com/sRE4wPZ.png)
 
-**Figure 3:** Example of reference fasta list textfile
+**Figure 3:** Example of Reference Fasta List Textfile
 
 ### Cortex_Var Binary Preparation
 This workflow requires the user to have some prior knowledge about cortex_var, so this section will be brief. Cortex_var requires the user to have cortex_var binaries already made, specific to color and k-mer. To do this, the user can refer to the [**`INSTALL`**](https://github.com/iqbal-lab/cortex/blob/master/INSTALL) file in the [cortex_var repository](https://github.com/iqbal-lab/cortex).
@@ -130,6 +130,7 @@ Specify if user has reference genome reads (like .fna fpecificed, the workflow w
 **`sampleDir`**
 
 Path to where samples are located, as a string. Example: `"/PATH/TO/SAMPLE/DIRECTORY"`
+Refer to [Sample pair reads](#sample-pair-reads).
 
 **`configDir`**
 
@@ -142,6 +143,7 @@ A String, path to where results of each step will be dumped. Example: `"/PATH/TO
 **`pathToReferenceList`**
 
 A String, path to where the file containing reference fasta files are (Refer to figure 3 above). Example: `"/PATH/TO/REFERENCELIST.TXT"`
+Refer to [Reference Fasta Files](#reference-fasta-files)
 
 **`pathToRefCtx`**
 
@@ -262,7 +264,7 @@ The `work` folder for each specific process is located within the resultsDir spe
 
 ### Output Structure
 
-This workflow dumps the output of each process described in figure 1 in the results directory specified in `resultsDir` parameter in nextflow.config file. In addition to output folders, there are also `sampleForStep#` folders that do not contain significant products/output for the user. Additionally there is `log` folder containing cortex stdout for each sample for each step. Finally, there is a `work` folder that is described by "Logging functionality" section above.
+This workflow dumps the output of each process described in [figure 1](#intended-pipeline-architecture-and-function) in the results directory specified in `resultsDir` parameter in nextflow.config file. In addition to output folders, there are also `sampleForStep#` folders that do not contain significant products/output for the user. Additionally there is `log` folder containing cortex stdout for each sample for each step. Finally, there is a `work` folder that is described by "Logging functionality" section above.
 
 ![](https://i.imgur.com/2LNhORR.png)
 **Figure 4:** Complete output structure of resultsDir 

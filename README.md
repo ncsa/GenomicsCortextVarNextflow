@@ -12,6 +12,7 @@ Files in this repo are organized as follows:
 | nextflow.config | Configuration file to be edited by user |
 | nextflow_scripts | Individual nextflow scripts for each step in cortex-var |
 | usefulCalculators | Tools to identify parameters for config file |
+
 ## Intended pipeline architecture and function
 This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
 
@@ -26,6 +27,8 @@ The cortex-var workflow consists of the following steps:
  ![](https://i.imgur.com/Sn3Yw6a.png)
  **Figure 1:** Overview of Workflow Design
  
+ **Table of Contents**
+ - [Installation](#Installation)
  
 
 ## Installation

@@ -13,21 +13,7 @@ Files in this repo are organized as follows:
 | nextflow_scripts | Individual nextflow scripts for each step in cortex-var |
 | usefulCalculators | Tools to identify parameters for config file |
 
-## Intended pipeline architecture and function
-This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
-
-The cortex-var workflow consists of the following steps:
- 1. Create binary graphs for each sample (paired reads)
- 2. Create pooled binary graph
- 3. Clean the errors in individual samples according to the pooled graph
- 4. Create reference binary graph (optional step, can be done beforehand)
- 5. Combine reference graph with sample graphs and cleaned pool
- 6. Call variants by Bubble Caller and/or Path Divergence
- 
- ![](https://i.imgur.com/Sn3Yw6a.png)
- **Figure 1:** Overview of Workflow Design
- 
- **Table of Contents**
+**Table of Contents**
  - [Structural Variant Calling with Cortex-Var on Nextflow](#structural-variant-calling-with-cortex-var-on-nextflow)
    - [Intended pipeline architecture and function](#intended-pipeline-architecture-and-function)
      * [Installation](#installation)
@@ -55,6 +41,21 @@ The cortex-var workflow consists of the following steps:
      * [How to Use](#how-to-use)
      * [Test Environment](#test-environment)
     
+## Intended pipeline architecture and function
+This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
+
+The cortex-var workflow consists of the following steps:
+ 1. Create binary graphs for each sample (paired reads)
+ 2. Create pooled binary graph
+ 3. Clean the errors in individual samples according to the pooled graph
+ 4. Create reference binary graph (optional step, can be done beforehand)
+ 5. Combine reference graph with sample graphs and cleaned pool
+ 6. Call variants by Bubble Caller and/or Path Divergence
+ 
+ ![](https://i.imgur.com/Sn3Yw6a.png)
+ **Figure 1:** Overview of Workflow Design
+ 
+ 
  
 
 ## Installation

@@ -27,8 +27,8 @@ The cortex-var workflow consists of the following steps:
  ![](https://i.imgur.com/Sn3Yw6a.png)
  **Figure 1:** Overview of Workflow Design
  
- **Table of Contents**
- - [Installation](#Installation)
+**Table of Contents**
+ - [Structural Variant Calling with Cortex-Var on Nextflow](#Structural Variant Calling with Cortex-Var on Nextflow)
  
 
 ## Installation

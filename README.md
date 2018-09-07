@@ -29,6 +29,32 @@ The cortex-var workflow consists of the following steps:
  
  **Table of Contents**
  - [Structural Variant Calling with Cortex-Var on Nextflow](#structural-variant-calling-with-cortex-var-on-nextflow)
+  - [Intended pipeline architecture and function](#intended-pipeline-architecture-and-function)
+  - [Installation](#installation)
+   - [Dependencies](#dependencies)
+   - [Workflow Installation](#workflow-installation)
+  - [User Guide](#user-guide)
+   - [Data Preparation](#data-preparation)
+    - [Sample Pair Reads](#sample-pair-reads)
+    - [Reference Fasta Files](#reference-fasta-files)
+   - [Cortex_Var Binary Preparation](#cortex_var-binary-preparation)
+   - [Nextflow.config Parameters](#nextflow.config-parameters)
+    - [Running Options](#running-options)
+    - [Source, Config, and Destination Directory](#source,-config,-and-destination-directory)
+    - [Sample-specific Parameters](#sample-specific-parameters)
+    - [Cortex Directories and Variables](#cortex-directories-and-variables)
+    - [Type of executor, queue names, etc.](#type-of-executor,-queue-names,-etc.)
+   - [Resource Requirements](#resource-requirements)
+   - [Executing nextflow application](#executing-nextflow-application)
+   - [Logging functionality](#logging-functionality)
+   - [Output Structure](#output-structure)
+  - [Quick Start](#quick-start)
+   - [Introduction](#introduction)
+   - [Dependencies](#dependencies)
+   - [How to Install](#how-to-install)
+   - [How to Use](#how-to-use)
+   - [Test Environment](#test-environment)
+    
  
 
 ## Installation
@@ -49,14 +75,14 @@ Cortex_var requires two types of data input:
 - Sample pair reads
 - Reference fasta files
  
-#### Sample pair reads
+#### Sample Pair Reads
 Sample pair reads are required to be placed in the same folder, and the path to this folder will later be the input for sampleDir parameter in nextflow.config.
 
 ![](https://i.imgur.com/iuIxAqS.png)
 
 **Figure 2:** How sampleDir is organized
 
-#### Reference fasta files
+#### Reference Fasta Files
 
 Cortex requires the user to input a list of path to the reference fasta files to run step 4: Creating reference graph. Creating reference graph is required to run path divergence variant calling, but optional for bubble caller. The reference fasta files should be listed as paths, separated by line break (\n) **within a text file** that will have its path specified in `pathToReferenceList` parameter in nextflow.config. Example of what the textfile should look like is as follows:
 
@@ -78,7 +104,7 @@ For each step, here is the guide to how many colors is needed:
 - Step 6 without reference: n + 1 colors
 - Step 6 with reference: n + 2 colors
 
-### Nextflow.config parameters
+### Nextflow.config Parameters
 
 The workflow is controlled by modifying nextflow.config file.
 **Note:** String parameters **always** need quotation marks ("") in the beginning and end of the string.
@@ -127,7 +153,7 @@ If user chooses not to run step 4 in cortex (making the reference graph), path t
 
 Example: `"/PATH/TO/STEP4/BINARY/FILE.ctx"`
 
-#### Sample_specific parameters
+#### Sample-specific Parameters
 
 This section will be a little tedious, as it involves strict formats for each sample reads.
 Given 2 sample pairs Sample_Maverick.read1.fq, Sample_Maverick.read2.fq, Sample_Magellan.read1.fq, Sample_Magellan.read2.fq, here are how the parameters should be filled.
@@ -182,7 +208,7 @@ If the `kmer_size` is 63 combined with the exmaple above, the input for `cortexC
 
 An integer, no quotation mark necessary. This parameter should be filled with the filter for quality score from the input file. Refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 3.
 
-#### Type of executor, queue names, etc.
+#### Type of Executor, Queue Names, etc.
 
 This category is filled with the system information and resource requirements for nextflow.
 
@@ -224,11 +250,11 @@ Most Memory Required in TB: 0.077309411328
 In this case, the queue selected in `highRamQueue` parameter needs to have at least 77.3 GB for the workflow to run successfully.
 
 
-### Executing nextflow application
+### Executing Nextflow Application
 
 The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
 
-### Logging functionality
+### Logging Functionality
 
 Nextflow creates `work` folder where the command `nextflow (script.nf)` is run. Within the `work` folder, there will be nested folders, containing the log of individual processes. In the stdout of running script, there will be lines that is similar to this:
 
@@ -275,7 +301,7 @@ This nexflow-adapted workflow uses the tool [cortex_var](http://cortexassembler.
  - [Nextflow (recommended 30.1.4844 or newer)](https://www.nextflow.io/)
  - [Cortex_var tool](http://cortexassembler.sourceforge.net/index_cortex_var.html)
 
-### How to install
+### How to Install
 
 ```
 cd {desired directory}
@@ -283,7 +309,7 @@ cd {desired directory}
 git clone https://github.com/ncsa/GenomicsCortextVarNextflow.git
 ```
 
-### How to use
+### How to Use
 
 After cloning the repository, go to cortex_Var_NF/nextflow.config. Follow the instructions within the file and provide necessary directories.
 
@@ -305,7 +331,7 @@ When the nextflow.config parameters have been completed, please run cortex_Var_N
 
 
 
-### Test environment
+### Test Environment
 
 - Executor : PBS
 - Nextflow Version : 30.1.4844

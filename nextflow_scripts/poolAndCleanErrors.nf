@@ -4,9 +4,9 @@
 
 //Makes supply and product folder for pooled graph
 
-supplyFolder = new File(params.resultsDir + "/poolAndCleanErrorInputs/") 
+supplyFolder = new File(params.resultsDir + "/poolAndCleanErrorInput/") 
 supplyFolder.mkdirs()
-productsFolder = new File(params.resultsDir +"/poolAndCleanErrorOutputs/")
+productsFolder = new File(params.resultsDir +"/poolAndCleanErrorOutput/")
 productsFolder.mkdirs()
 
 

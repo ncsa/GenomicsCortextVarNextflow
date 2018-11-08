@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
+nextflowFolder =  "nextflow.config" + "nextflow_scripts"
 
 /**
 process preflightCheck {
@@ -28,8 +28,9 @@ process makeSampleDBGraph {
 
 	script:
 		"""
+		module load nextflow/nextflow-0.30.1.4844
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeSampleBinaryGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
 
 		"""
 }

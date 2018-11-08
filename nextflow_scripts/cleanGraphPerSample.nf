@@ -10,7 +10,7 @@ cleanGraphPerSampleFolder.mkdirs()
 
 //Makes a file that contains the path to results of step 2 binary file
 
-pathToPooledResultFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder" + "pathToPooledCtxFile")
+pathToPooledResultFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "pathToPooledCtxFile")
 pathToPooledResultFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "pooledAndCleanedGraph.ctx\n")
 		
 
@@ -44,7 +44,7 @@ process cleanGraphPerSampleLowCoverage {
 
 	publishDir params.logDir	
 	executor params.executor
-	queue params.mediumRamQueue
+	queue params.cleanGraphPerErrorQueue
 	time params.wallTime
 	cpus params.cpusNeeded
 

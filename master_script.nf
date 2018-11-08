@@ -2,7 +2,7 @@
 
 nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
 
-
+/**
 process preflightCheck {
 	
 	output:
@@ -15,26 +15,11 @@ process preflightCheck {
 
 		"""
 }
+*/
 
 
-process folderPrep {
 
-	input:
-		val preflightFlag from preflightStdout
-
-	output:
-		stdout into folderPrepStdout
-
-	script:	
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/step0FileFolderPrep.nf
-		"""	
-
-}
-
-
-process step1MakeSampleDBGraph {
+process makeSampleDBGraph {
 	input:
 		val folderPrepFlag from folderPrepStdout
 
@@ -49,7 +34,7 @@ process step1MakeSampleDBGraph {
 		"""
 }
 
-
+/**
 process step2PoolAndCleanErrors {
 	input:
 		val step1Flag from makeSampleDBGraphStdout
@@ -122,7 +107,7 @@ process step6VariantCalling {
 		"""
 
 }
-
+*/
 
 
 

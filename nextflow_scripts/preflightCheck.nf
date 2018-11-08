@@ -101,15 +101,15 @@ process preflightCheck {
 
 		}		
 	
-              	if (!sampleRead2.exists()) {    
-                        println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " does not exist!")
-                        System.exit(1)
-                } else {
-                       println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " exists!")
+		if (!sampleRead2.exists()) {    
+				println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " does not exist!")
+				System.exit(1)
+		} else {
+				println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " exists!")
 
-                }
+		}
 
-}
+	}
 		
 }
 

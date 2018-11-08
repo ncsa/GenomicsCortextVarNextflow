@@ -2,9 +2,15 @@
 
 if (params.runStep4 == "y") {
 
+		//Prepare for referenceDBGraph folder
+
+		step4ProductsFolder = new File(params.resultsDir + "/referenceGraphOutput/")
+		step4ProductsFolder.mkdirs()
+
+
 	// Step 4: Make reference de Bruijn Graph
 
-	process step4MakeReferenceDBGraph {
+	process makeReferenceGraph {
 
 		publishDir params.logDir
 		executor params.executor
@@ -13,11 +19,11 @@ if (params.runStep4 == "y") {
 		cpus params.cpusNeeded
 
 		output:
-			file "step4MakeReferenceDBGraph.log"
+			file "makeReferenceGraph.log"
 
 
 		script:
-			template 'step4MakeReferenceDBGraph.sh'
+			template 'makeReferenceGraph.sh'
 	}
 
 
@@ -25,6 +31,6 @@ if (params.runStep4 == "y") {
 
 
 } else {
-	println "Step 4 was not run as requested by user"
+	println "Make reference graph was not run as requested by user"
 	System.exit(0)
 }

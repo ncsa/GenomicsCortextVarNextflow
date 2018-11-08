@@ -13,7 +13,7 @@ SAMPLENUMBER=\${FAN#*+}
 
 # Cortex command
 
-${params.cortexDirStep6WithRef} ${params.cortexConfigStep6} --max_var_len 50000 --multicolour_bin ${params.resultsDir}/productsOfStep5/finalCombinationGraph.ctx --detect_bubbles1 0/\${SAMPLENUMBER} --output_bubbles ${params.resultsDir}/productsOfStep6/step6_BubbleCaller\${SAMPLENAME}.out --print_colour_coverages > step6_${fileNameAndNumber}_BC.log 
+${params.cortexDirStep6WithRef} ${params.cortexConfigStep6} --max_var_len 50000 --multicolour_bin ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph.ctx --detect_bubbles1 0/\${SAMPLENUMBER} --output_bubbles ${params.resultsDir}/variantCallingOutput/bubbleCaller\${SAMPLENAME}.out --print_colour_coverages > ${fileNameAndNumber}_BC.log 
 
 
 

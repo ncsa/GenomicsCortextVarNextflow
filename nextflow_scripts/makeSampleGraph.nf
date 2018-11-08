@@ -29,7 +29,7 @@ process makeSampleDeBruijnGraph {
 
 	publishDir params.logDir
 	executor params.executor
-	queue params.mediumRamQueue
+	queue params.makeGraphQueue
 	time params.wallTime
 	cpus params.cpusNeeded
 

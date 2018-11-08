@@ -20,8 +20,8 @@ for (sampleName in params.sampleList) {
 	newFile = new File(params.resultsDir + "/makeSampleGraphInput/" + sampleName)
 
 	// Writes directory to each fastq files
-	newFile.write (params.sampleDir + "/" + sampleName + params.sampleReadPattern + "1" + params.sampleReadExtension + "\n")
-	newFile.append (params.sampleDir + "/" + sampleName + params.sampleReadPattern + "2" + params.sampleReadExtension + "\n")
+	newFile.write(params.sampleDir + "/" + sampleName + params.sampleReadPattern + "1" + params.sampleReadExtension + "\n")
+	newFile.append(params.sampleDir + "/" + sampleName + params.sampleReadPattern + "2" + params.sampleReadExtension + "\n")
 }
 
 // Construct de Bruijn graphs

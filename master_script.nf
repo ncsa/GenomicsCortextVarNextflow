@@ -18,7 +18,7 @@ process preflightCheck {
 */
 
 
-
+/**
 process makeSampleDBGraph {
 	//input:
 		//val folderPrepFlag from folderPrepStdout
@@ -34,11 +34,12 @@ process makeSampleDBGraph {
 
 		"""
 }
+*/
 
-/**
-process step2PoolAndCleanErrors {
-	input:
-		val step1Flag from makeSampleDBGraphStdout
+
+process poolAndCleanErrors {
+	//input:
+	//	val step1Flag from makeSampleDBGraphStdout
 
 	output:
 		stdout into poolAndCleanErrorStdout
@@ -46,11 +47,12 @@ process step2PoolAndCleanErrors {
 	script:	
 		"""
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/step2PoolAndCleanErrors.nf
+		${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
 		"""
 
 }
 
+/**
 process step3CleanGraphPerSample {
 	input:
 		val step2Flag from poolAndCleanErrorStdout

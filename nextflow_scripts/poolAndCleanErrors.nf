@@ -33,7 +33,7 @@ process poolAndCleanErrors {
 
 	publishDir params.logDir
 	executor params.executor
-	queue params.mediumRamQueue
+	queue params.poolAndCleanErrorQueue
 	time params.wallTime
 	cpus params.cpusNeeded
 
@@ -43,7 +43,7 @@ process poolAndCleanErrors {
 
 
 	script:
-	template 'poolAndCleanError.sh'	
+		template 'poolAndCleanError.sh'	
 
 
 }

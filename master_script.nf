@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-nextflowFolder =  "nextflow.config" + "nextflow_scripts"
+nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
 
 /**
 process preflightCheck {

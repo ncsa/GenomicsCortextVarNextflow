@@ -29,7 +29,7 @@ process makeSampleDBGraph {
 	script:
 		"""
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/step1MakeSampleBinaryGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/makeSampleBinaryGraph.nf
 
 		"""
 }

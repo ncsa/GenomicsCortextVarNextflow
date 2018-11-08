@@ -20,8 +20,8 @@ process preflightCheck {
 
 
 process makeSampleDBGraph {
-	input:
-		val folderPrepFlag from folderPrepStdout
+	//input:
+		//val folderPrepFlag from folderPrepStdout
 
 	output:
 		stdout into makeSampleDBGraphStdout

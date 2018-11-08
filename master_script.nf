@@ -79,7 +79,7 @@ process makeReferenceGraph {
 	script:
 		"""
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeReferenceDBGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
 		"""
 
 }

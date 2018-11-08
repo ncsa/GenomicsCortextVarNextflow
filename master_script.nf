@@ -34,7 +34,7 @@ process makeSampleDBGraph {
 
 		"""
 }
-*/
+
 
 
 process poolAndCleanErrors {
@@ -52,10 +52,10 @@ process poolAndCleanErrors {
 
 }
 
-/**
-process step3CleanGraphPerSample {
-	input:
-		val step2Flag from poolAndCleanErrorStdout
+*/
+process cleanGraphPerSample {
+	//input:
+	//	val step2Flag from poolAndCleanErrorStdout
 
 	output:
 		stdout into cleanGraphPerSampleStdout
@@ -63,11 +63,11 @@ process step3CleanGraphPerSample {
 	script:
 		"""
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/step3CleanGraphPerSample.nf	
+		${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSample.nf	
 		"""
 
 }
-
+/**
 process step4MakeReferenceGraph {
 	input:
 		val step3Flag from cleanGraphPerSampleStdout

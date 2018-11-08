@@ -1,26 +1,25 @@
 #!/usr/bin/env nextflow
 
-if (params.runStep4 == "y") {
+if (params.makeRefGraph == "y") {
 
-		//Prepare for referenceDBGraph folder
+	//Prepare for referenceDBGraph folder
 
-		step4ProductsFolder = new File(params.resultsDir + "/referenceGraphOutput/")
-		step4ProductsFolder.mkdirs()
+	productsFolder = new File(params.resultsDir + "/referenceGraphOutput")
+	productsFolder.mkdirs()
 
 
-	// Step 4: Make reference de Bruijn Graph
+	// Make reference de Bruijn Graph
 
 	process makeReferenceGraph {
 
 		publishDir params.logDir
 		executor params.executor
-		queue params.mediumRamQueue
+		queue params.makeReferenceGraphQueue
 		time params.wallTime
 		cpus params.cpusNeeded
 
 		output:
 			file "makeReferenceGraph.log"
-
 
 		script:
 			template 'makeReferenceGraph.sh'
@@ -31,6 +30,8 @@ if (params.runStep4 == "y") {
 
 
 } else {
+
 	println "Make reference graph was not run as requested by user"
 	System.exit(0)
+
 }

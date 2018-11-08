@@ -14,17 +14,17 @@ productsFolder.mkdirs()
 //	1) File containing the list of path to the binary files outputted by step 1 Cortex
 //	2) File containing the path to file 1)
 
-binaryListFile = new File(params.resultsDir + "/poolAndCleanErrorInputs/" + "colorListUncleanedBinaryList")
-pathToBinaryListFile = new File (params.resultsDir + "/poolAndCleanErrorInputs/" + "pathToBinaryListFile")
+binaryListFile = new File(params.resultsDir + "/poolAndCleanErrorInput/" + "colorListUncleanedBinaryList")
+pathToBinaryListFile = new File (params.resultsDir + "/poolAndCleanErrorInput/" + "pathToBinaryListFile")
 
 // File containing the list of path to the binary files outputted by step 1 Cortex
 for (sampleName in params.sampleList) {
-	binaryListFile.append(params.resultsDir + "/makeSampleGraphInputs/" + sampleName + ".ctx\n") 	
+	binaryListFile.append(params.resultsDir + "/makeSampleGraphOutput/" + sampleName + ".ctx\n") 	
 
 }
 
 // File containing path to file 1)
-pathToBinaryListFile.write(params.resultsDir + "/poolAndCleanErrorInputs/" + "colorListUncleanedBinaryList\n")
+pathToBinaryListFile.write(params.resultsDir + "/poolAndCleanErrorInput/" + "colorListUncleanedBinaryList\n")
 	
 //STEP2 ONLY APPENDS, SO EVERYTIME THIS IS RAN WITHOUT DELETING, THE FILE JUST KEEPS ADDING
 

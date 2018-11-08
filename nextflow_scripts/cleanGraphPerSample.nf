@@ -10,7 +10,7 @@ cleanGraphPerSampleFolder.mkdirs()
 
 //Makes a file that contains the path to results of step 2 binary file
 
-pathToPooledResultFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "pathToPooledCtxFile")
+pathToPooledResultFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "pathToPooledGraph")
 pathToPooledResultFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "pooledAndCleanedGraph.ctx\n")
 		
 

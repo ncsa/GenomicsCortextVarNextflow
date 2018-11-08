@@ -12,5 +12,5 @@ ${params.cortexBinCleanGraphPerSample} ${params.cortexConfigCleanGraphPerSample}
  
 # Renames the produced file, makes it more intuitive
 
-#mv ${params.resultsDir}/cleanGraphPerSampleFolder/pathToStep1CtxFile${samplePairFileName}_cleanedByComparisonToPool.ctx ${params.resultsDir}/cleanGraphPerSampleFolder/${samplePairFileName}_cleanedByComparisonToPool.ctx
+mv ${params.resultsDir}/cleanGraphPerSampleFolder/pathToSampleBinaryCtxFile${samplePairFileName}_cleanedByComparisonToPool.ctx ${params.resultsDir}/cleanGraphPerSampleFolder/${samplePairFileName}_cleanedByComparisonToPool.ctx
 

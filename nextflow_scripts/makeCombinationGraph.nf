@@ -43,7 +43,7 @@ for (sampleName in params.sampleList) {
 //-------------------------------------------------------------------------------------------------------------------------------
 
 // Step 5: Combine reference graph with sample graph and cleaned pool
-/**
+
 process makeCombinationGraph {
 	
 	publishDir params.logDir
@@ -62,4 +62,4 @@ process makeCombinationGraph {
 
 
 }
-*/
+

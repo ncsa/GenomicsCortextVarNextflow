@@ -43,12 +43,12 @@ for (sampleName in params.sampleList) {
 //-------------------------------------------------------------------------------------------------------------------------------
 
 // Step 5: Combine reference graph with sample graph and cleaned pool
-
-process step5MakeCombinationGraph {
+/**
+process makeCombinationGraph {
 	
 	publishDir params.logDir
 	executor params.executor
-	queue params.mediumRamQueue
+	queue params.makeCombinationGraphQueue
 	time params.wallTime
 	cpus params.cpusNeeded
 
@@ -62,4 +62,4 @@ process step5MakeCombinationGraph {
 
 
 }
-
+*/

@@ -67,7 +67,7 @@ process cleanGraphPerSample {
 		"""
 
 }
-*/
+
 
 process makeReferenceGraph {
 	//input:
@@ -83,11 +83,11 @@ process makeReferenceGraph {
 		"""
 
 }
+*/
 
-/**
-process step5MakeCombinationGraph {
-	input:
-		val step4Flag from makeReferenceGraphStdout
+process makeCombinationGraph {
+	//input:
+	//	val step4Flag from makeReferenceGraphStdout
 		
 	output:
 		stdout into makeCombinationGraph
@@ -95,12 +95,12 @@ process step5MakeCombinationGraph {
 	script:
 		"""
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/step5MakeCombinationGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraph.nf
 		"""
-
 
 }
 
+/**
 process step6VariantCalling {
 	input:
 		val step5Flag from makeCombinationGraph

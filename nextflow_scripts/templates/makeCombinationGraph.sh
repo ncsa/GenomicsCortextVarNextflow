@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ######################################################################################################################################################################################
-# Script to run step 5 make combination graph Cortex #
+# Script make combination graph Cortex #
 ######################################################################################################################################################################################
 
 # Cortex command
 
-${params.cortexDirStep5} ${params.cortexConfigStep5} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph.ctx --colour_list ${params.resultsDir}/makeCombinationGraphInput/colorlistFileToSubmit > makeCombinationGraph.log
+${params.cortexDirMakeCombinationGraph} ${params.cortexConfigStep5} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph.ctx --colour_list ${params.resultsDir}/makeCombinationGraphInput/colorlistFileToSubmit > makeCombinationGraph.log
 
 

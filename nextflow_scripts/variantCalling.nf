@@ -99,7 +99,7 @@ if (params.PD == "y") {
 
 if (params.BC == "y") {
 
-		process BCVariantCallingWithRef {
+		process BCVariantCalling {
 			publishDir params.logDir
 			executor params.executor
 			queue params.variantCallingQueue

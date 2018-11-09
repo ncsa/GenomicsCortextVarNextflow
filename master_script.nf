@@ -3,112 +3,115 @@
 nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
 
 /**
-process preflightCheck {
-	
+process preflightCheck {	
 	output:
 		stdout into preflightStdout	
 
 	script:	
 		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/preflightCheck.nf		
+		echo "preflight"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/preflightCheck.nf		
 
 		"""
 }
 */
 
-
-/**
 process makeSampleDBGraph {
 	//input:
-		//val folderPrepFlag from folderPrepStdout
+	//	val preflightFlag from preflightStdout
 
 	output:
 		stdout into makeSampleDBGraphStdout
 
 	script:
 		"""
-		module load nextflow/nextflow-0.30.1.4844
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
+		echo "makeDbGraph"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
 
 		"""
 }
 
 
-
 process poolAndCleanErrors {
-	//input:
-	//	val step1Flag from makeSampleDBGraphStdout
+	input:
+		val makeSampleDBGraphFlag from makeSampleDBGraphStdout
 
 	output:
 		stdout into poolAndCleanErrorStdout
 	
 	script:	
 		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
+		echo "pool and clean"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
 		"""
 
 }
 
 
 process cleanGraphPerSample {
-	//input:
-	//	val step2Flag from poolAndCleanErrorStdout
+	input:
+		val poolCleanStdout from poolAndCleanErrorStdout
 
 	output:
 		stdout into cleanGraphPerSampleStdout
 
 	script:
 		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSample.nf	
+		echo "clean graph"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSample.nf	
 		"""
 
 }
 
 
 process makeReferenceGraph {
-	//input:
-	//	val step3Flag from cleanGraphPerSampleStdout
+	input:
+		val preflightFlag from preflightStdout
 
 	output:
 		stdout into makeReferenceGraphStdout
 
 	script:
 		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
+		echo "make ref graph"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
 		"""
 
 }
-*/
-/**
+
+
 process makeCombinationGraph {
-	//input:
-	//	val step4Flag from makeReferenceGraphStdout
+	input:
+		val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
+		val makeRefGraphFlag from makeReferenceGraphStdout
 		
 	output:
-		stdout into makeCombinationGraph
+		stdout into makeCombinationGraphStdout
 	
 	script:
 		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraph.nf
+		echo "make combo graph"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraph.nf
 		"""
 
 }
-*/
+
 
 process variantCalling {
-	//input:
-	//	val step5Flag from makeCombinationGraph
+	input:
+		val makeCombinationGraphFlag from makeCombinationGraphStdout
 
 	script:
 		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
+		echo "variant calling"
+		#cd ${params.resultsDir}
+		#${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
 		"""
 
 }

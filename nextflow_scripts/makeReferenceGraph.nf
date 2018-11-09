@@ -4,7 +4,7 @@ if (params.makeRefGraph == "y") {
 
 	//Prepare for referenceDBGraph folder
 
-	productsFolder = new File(params.resultsDir + "/referenceGraphOutput")
+	productsFolder = new File(params.resultsDir + "/makeReferenceGraphOutput")
 	productsFolder.mkdirs()
 
 

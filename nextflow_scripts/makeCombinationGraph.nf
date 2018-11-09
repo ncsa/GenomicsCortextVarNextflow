@@ -13,7 +13,14 @@ makeCombinationOutputFolder.mkdirs()
 // Make a file that contains the path to reference graph from step 4
 
 pathToReferenceGraph = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToRefCtxFile")
-pathToReferenceGraph.write(params.pathToRefCtx)
+
+//If empty use reference graph created in the process, else use given path in config file parameter pathToRefCtx
+if (params.pathToRefCtx.size() == 0) {
+	pathToRefGraph = params.resultsDir + "/makeReferenceGraphOutput/ref.ctx"
+} else {
+	pathToRefGraph = params.pathToRefCtx
+}
+pathToReferenceGraph.write(pathToRefGraph)
 
 
 //Makes a file that contains the path to product (the binary file output) of step 2		

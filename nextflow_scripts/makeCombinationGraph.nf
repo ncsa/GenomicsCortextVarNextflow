@@ -25,7 +25,7 @@ pathToReferenceGraph.write(pathToRefGraph)
 
 //Makes a file that contains the path to product (the binary file output) of step 2		
 pathToCleanedPoolFile = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleanedPoolCtxFile")
-pathToCleanedPoolFile.write(params.resultsDir + "/poolAndCleanErrorOutputs/" + "pooledAndCleanedGraph.ctx\n")
+pathToCleanedPoolFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "pooledAndCleanedGraph.ctx\n")
 	
 //Makes a file that will be submitted to Cortex, containing the path to the two files created above
 fileToSubmitToCortex = new File (params.resultsDir + "/makeCombinationGraphInput/" + "colorlistFileToSubmit")

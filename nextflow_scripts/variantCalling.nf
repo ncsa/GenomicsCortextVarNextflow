@@ -21,28 +21,27 @@ process prepareVariantCalling {
 	executor 'local'
 
 	output:
-		val step6FileListFiltered into step6FileIndexFilteredChannel
+		val fileListFiltered into fileIndexFilteredChannel
 
 	exec:	
 		//Reads colorlist
 		fileList = file(params.resultsDir + "/makeCombinationGraphInput/colorlistFileToSubmit").readLines()
 
-
 		//Adds each sample in the reverse order in the step6FileListReversed Array
-		step6FileListReversed = []
+		fileListReversed = []
 
-		for (int i = 0; i < step6FileList.size(); i++) {
-			step6FileListReversed[step6FileList.size() - 1 - i] = step6FileList[i] - params.resultsDir + "+" + (i-1) - "/samplesForStep5/pathToCleaned"
+		for (int i = 0; i < fileList.size(); i++) {
+			fileListReversed[fileList.size() - 1 - i] = fileList[i] - params.resultsDir + "+" + (i - 1) - "/makeCombinationGraphInput/pathToCleaned"
 		}
 
 	
 
 		//Only takes in the samples, not the reference or combination graph
-		step6FileListFiltered = []
+		fileListFiltered = []
 
 		for (int i = 0; i < params.numberOfSamples; i++) {
-			step6FileListFiltered[i] = step6FileListReversed[i]
-
+			fileListFiltered[i] = fileListReversed[i]
+			
 		}
 
 
@@ -60,13 +59,13 @@ if (params.PD == "y") {
 
 		publishDir params.logDir
 		executor params.executor
-		queue params.highRamQueue
+		queue params.variantCallingQueue
 		time params.wallTime
 		cpus params.cpusNeeded
 
 
 		input:
-			each fileNameAndNumber from step6FileIndexFilteredChannel	
+			each fileNameAndNumber from fileIndexFilteredChannel	
 
 
 		output:
@@ -103,13 +102,13 @@ if (params.BC == "y") {
 		process BCVariantCallingWithRef {
 			publishDir params.logDir
 			executor params.executor
-			queue params.highRamQueue
+			queue params.variantCallingQueue
 			time params.wallTime
 			cpus params.cpusNeeded
 
 
 			input:
-				each fileNameAndNumber from step6FileIndexFilteredChannel
+				each fileNameAndNumber from fileIndexFilteredChannel
 			
 			output:
 				file "${fileNameAndNumber}_BC.log" into BCLogFiles	

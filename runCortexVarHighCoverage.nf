@@ -64,9 +64,9 @@ process makeReferenceGraph {
 */
 
 process makeCombinationGraph {
-	input:
-		val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
-		val makeRefGraphFlag from makeReferenceGraphStdout
+	//input:
+	//	val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
+	//	val makeRefGraphFlag from makeReferenceGraphStdout
 		
 	output:
 		stdout into makeCombinationGraphStdout

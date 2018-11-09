@@ -69,8 +69,8 @@ process cleanGraphPerSample {
 
 
 process makeReferenceGraph {
-	input:
-		val preflightFlag from preflightStdout
+	//input:
+	//	val preflightFlag from preflightStdout
 
 	output:
 		stdout into makeReferenceGraphStdout

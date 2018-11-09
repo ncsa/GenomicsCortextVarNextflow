@@ -30,7 +30,7 @@ process makeSampleDBGraph {
 
 		"""
 }
-*/
+
 process cleanGraphPerSample {
 	//input:
 	//	val makeSampleDBGraphFlag from makeSampleDBGraphStdout
@@ -46,7 +46,7 @@ process cleanGraphPerSample {
 
 }
 
-/**
+
 process makeReferenceGraph {
 	input:
 		val preflightFlag from preflightStdout
@@ -61,7 +61,7 @@ process makeReferenceGraph {
 		"""
 
 }
-
+*/
 
 process makeCombinationGraph {
 	input:
@@ -78,7 +78,7 @@ process makeCombinationGraph {
 		"""
 
 }
-
+/*
 
 process variantCalling {
 	input:

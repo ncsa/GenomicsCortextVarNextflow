@@ -116,7 +116,7 @@ if (params.BC == "y") {
 
 			
 			script:
-				template 'BCVariantCallingWithRef.sh'
+				template 'BCVariantCalling.sh'
 
 		}
 

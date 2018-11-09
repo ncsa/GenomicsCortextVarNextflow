@@ -21,25 +21,19 @@ if (params.pathToRefCtx.size() == 0) {
 	pathToRefGraph = params.pathToRefCtx
 }
 pathToReferenceGraph.write(pathToRefGraph)
-
-
-//Makes a file that contains the path to product (the binary file output) of step 2		
-pathToCleanedPoolFile = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleanedPoolCtxFile")
-pathToCleanedPoolFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "pooledAndCleanedGraph.ctx\n")
 	
 //Makes a file that will be submitted to Cortex, containing the path to the two files created above
 fileToSubmitToCortex = new File (params.resultsDir + "/makeCombinationGraphInput/" + "colorlistFileToSubmit")
 
 //Writes path to ref ctx file
 fileToSubmitToCortex.write(params.resultsDir + "/makeCombinationGraphInput/" + "pathToRefCtxFile\n")
-fileToSubmitToCortex.append(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleanedPoolCtxFile\n")
 
 //Goes through the sample list
 for (sampleName in params.sampleList) {
 		
 	//Makes a file that contains the path to the cleaned sample binaries
 	pathToSamples = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleaned" + sampleName)
-	pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedByComparisonToPool.ctx\n")
+	pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedIndividually.ctx\n")
 	
 	//Adds the path to the file containing the path to the cleaned sample binaries (path to file created right above this)
 	//into the file that will be submitted by cortex (fileToSubmitToCortex variable)
@@ -64,7 +58,7 @@ process makeCombinationGraph {
 
 	
 	script:
-		template 'makeCombinationGraphLowCoverage.sh'
+		template 'makeCombinationGraphHighCoverage.sh'
 
 
 

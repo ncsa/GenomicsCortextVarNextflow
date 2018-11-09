@@ -9,9 +9,8 @@ process preflightCheck {
 
 	script:	
 		"""
-		echo "preflight"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/preflightCheck.nf		
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/preflightCheck.nf		
 
 		"""
 }
@@ -26,9 +25,8 @@ process makeSampleDBGraph {
 
 	script:
 		"""
-		echo "makeDbGraph"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
 
 		"""
 }
@@ -43,9 +41,8 @@ process poolAndCleanErrors {
 	
 	script:	
 		"""
-		echo "pool and clean"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
 		"""
 
 }
@@ -60,9 +57,8 @@ process cleanGraphPerSample {
 
 	script:
 		"""
-		echo "clean graph"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSample.nf	
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSampleLowCoverage.nf
 		"""
 
 }
@@ -77,9 +73,8 @@ process makeReferenceGraph {
 
 	script:
 		"""
-		echo "make ref graph"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
 		"""
 
 }
@@ -95,9 +90,8 @@ process makeCombinationGraph {
 	
 	script:
 		"""
-		echo "make combo graph"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraph.nf
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraph.nf
 		"""
 
 }
@@ -109,9 +103,8 @@ process variantCalling {
 
 	script:
 		"""
-		echo "variant calling"
-		#cd ${params.resultsDir}
-		#${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
+		cd ${params.resultsDir}
+		${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
 		"""
 
 }

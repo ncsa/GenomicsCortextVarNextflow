@@ -55,6 +55,6 @@ process cleanGraphPerSampleLowCoverage {
 		file "cleanGraphPerSample${samplePairFileName}.log"
 
 	script:
-		template 'cleanGraphPerSample.sh'	
+		template 'cleanGraphPerSampleHighCoverage.sh'	
 
 }

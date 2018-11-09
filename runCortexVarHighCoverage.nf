@@ -2,7 +2,7 @@
 
 nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
 
-/**
+
 process preflightCheck {	
 	output:
 		stdout into preflightStdout	
@@ -32,8 +32,8 @@ process makeSampleDBGraph {
 }
 
 process cleanGraphPerSample {
-	//input:
-	//	val makeSampleDBGraphFlag from makeSampleDBGraphStdout
+	input:
+		val makeSampleDBGraphFlag from makeSampleDBGraphStdout
 
 	output:
 		stdout into cleanGraphPerSampleStdout
@@ -61,12 +61,12 @@ process makeReferenceGraph {
 		"""
 
 }
-*/
+
 
 process makeCombinationGraph {
-	//input:
-	//	val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
-	//	val makeRefGraphFlag from makeReferenceGraphStdout
+	input:
+		val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
+		val makeRefGraphFlag from makeReferenceGraphStdout
 		
 	output:
 		stdout into makeCombinationGraphStdout
@@ -78,7 +78,7 @@ process makeCombinationGraph {
 		"""
 
 }
-/*
+
 
 process variantCalling {
 	input:
@@ -91,16 +91,5 @@ process variantCalling {
 		"""
 
 }
-
-
-
-
-
-
-
-
-
-
-*/
 
 

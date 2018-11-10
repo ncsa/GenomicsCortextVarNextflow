@@ -27,10 +27,12 @@ for (sampleName in params.sampleList) {
 //Partition handling
 sampleListCollated = (params.sampleList).collate(params.makeSampleGraphPartition)
 
+println(sampleListCollated)
 for (batch in sampleListCollated) {
-
+	println(batch)
 	batchSampleList = Channel.from(batch)
 	// Construct de Bruijn graphs
+	/**
 	process makeSampleDeBruijnGraph {
 
 		publishDir params.logDir
@@ -52,4 +54,5 @@ for (batch in sampleListCollated) {
 			template 'makeSampleGraph.sh'
 
 	}
+	*/
 }

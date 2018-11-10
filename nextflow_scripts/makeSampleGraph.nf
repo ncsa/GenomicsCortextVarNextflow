@@ -32,7 +32,6 @@ for (batch in sampleListCollated) {
 	println(batch)
 	batchSampleList = Channel.from(batch)
 	// Construct de Bruijn graphs
-	/**
 	process makeSampleDeBruijnGraph {
 
 		publishDir params.logDir
@@ -51,8 +50,12 @@ for (batch in sampleListCollated) {
 
 
 		script:
-			template 'makeSampleGraph.sh'
+			"""
+			echo ${samplePairFileName}
+			"""
+			//template 'makeSampleGraph.sh'
 
 	}
-	*/
+	println(batch + "is done")
+
 }

@@ -29,7 +29,7 @@ sampleListCollated = (params.sampleList).collate(params.makeSampleGraphPartition
 
 for (batch in sampleListCollated) {
 
-	batchSampleList = Channel.from(sampleListCollated)
+	batchSampleList = Channel.from(batch)
 	// Construct de Bruijn graphs
 	process makeSampleDeBruijnGraph {
 
@@ -50,7 +50,6 @@ for (batch in sampleListCollated) {
 
 		script:
 			template 'makeSampleGraph.sh'
-
 
 	}
 }

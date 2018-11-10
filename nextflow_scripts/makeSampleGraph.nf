@@ -24,27 +24,33 @@ for (sampleName in params.sampleList) {
 	newFile.append(params.sampleDir + "/" + sampleName + params.sampleReadPattern + "2" + params.sampleReadExtension + "\n")
 }
 
-// Construct de Bruijn graphs
-process makeSampleDeBruijnGraph {
+//Partition handling
+sampleListCollated = (params.sampleList).collate(params.makeSampleGraphPartition)
 
-	publishDir params.logDir
-	executor params.executor
-	queue params.makeGraphQueue
-	time params.wallTime
-	cpus params.cpusNeeded
+for (batch in sampleListCollated) {
 
+	batchSampleList = Channel.from(sampleListCollated)
+	// Construct de Bruijn graphs
+	process makeSampleDeBruijnGraph {
 
-	input:
-		each samplePairFileName from sampleListChannel
-
-
-	output:
-		file "makeSampleDeBruijnGraph_${samplePairFileName}.log"
+		publishDir params.logDir
+		executor params.executor
+		queue params.makeGraphQueue
+		time params.wallTime
+		cpus params.cpusNeeded
 
 
-	script:
-		template 'createSampleBinaryGraph.sh'
+		input:
+			each samplePairFileName from batchSampleList
 
 
+		output:
+			file "makeSampleDeBruijnGraph_${samplePairFileName}.log"
+
+
+		script:
+			template 'makeSampleGraph.sh'
+
+
+	}
 }
-

@@ -24,38 +24,31 @@ for (sampleName in params.sampleList) {
 	newFile.append(params.sampleDir + "/" + sampleName + params.sampleReadPattern + "2" + params.sampleReadExtension + "\n")
 }
 
-//Partition handling
-sampleListCollated = (params.sampleList).collate(params.makeSampleGraphPartition)
 
-println(sampleListCollated)
-for (batch in sampleListCollated) {
-	println(batch)
-	batchSampleList = Channel.from(batch)
-	// Construct de Bruijn graphs
-	process makeSampleDeBruijnGraph {
+process makeSampleDeBruijnGraph {
 
-		publishDir params.logDir
-		executor params.executor
-		queue params.makeGraphQueue
-		time params.wallTime
-		cpus params.cpusNeeded
+	publishDir params.logDir
+	executor params.executor
+	maxForks params.makeGraphMaxNodes
+	queue params.makeGraphQueue
+	time params.wallTime
+	cpus params.cpusNeeded
 
 
-		input:
-			each samplePairFileName from batchSampleList
+
+	input:
+		each samplePairFileName from batchSampleList
 
 
-		output:
-			file "makeSampleDeBruijnGraph_${samplePairFileName}.log"
+	output:
+		file "makeSampleDeBruijnGraph_${samplePairFileName}.log"
 
 
-		script:
-			"""
-			echo ${samplePairFileName}
-			"""
-			//template 'makeSampleGraph.sh'
-
-	}
-	println(batch + "is done")
+	script:
+		"""
+		echo ${samplePairFileName}
+		"""
+		//template 'makeSampleGraph.sh'
 
 }
+

@@ -60,6 +60,7 @@ if (params.PD == "y") {
 		publishDir params.logDir
 		executor params.executor
 		queue params.variantCallingQueue
+		maxForks params.variantCallingMaxNodes
 		time params.wallTime
 		cpus params.cpusNeeded
 
@@ -103,6 +104,7 @@ if (params.BC == "y") {
 			publishDir params.logDir
 			executor params.executor
 			queue params.variantCallingQueue
+			maxForks params.variantCallingMaxNodes
 			time params.wallTime
 			cpus params.cpusNeeded
 

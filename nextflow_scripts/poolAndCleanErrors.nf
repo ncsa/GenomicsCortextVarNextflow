@@ -33,6 +33,7 @@ process poolAndCleanErrors {
 
 	publishDir params.logDir
 	executor params.executor
+	maxForks params.poolAndCleanErrorMaxNodes
 	queue params.poolAndCleanErrorQueue
 	time params.wallTime
 	cpus params.cpusNeeded

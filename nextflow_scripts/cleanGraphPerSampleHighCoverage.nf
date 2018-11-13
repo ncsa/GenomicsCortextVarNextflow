@@ -45,6 +45,7 @@ process cleanGraphPerSampleLowCoverage {
 	publishDir params.logDir	
 	executor params.executor
 	queue params.cleanGraphPerErrorQueue
+	maxForks params.cleanGraphPerErrorMaxNodes
 	time params.wallTime
 	cpus params.cpusNeeded
 

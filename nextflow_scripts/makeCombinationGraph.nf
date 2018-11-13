@@ -32,7 +32,6 @@ fileToSubmitToCortex = new File (params.resultsDir + "/makeCombinationGraphInput
 
 //Writes path to ref ctx file
 fileToSubmitToCortex.write(params.resultsDir + "/makeCombinationGraphInput/" + "pathToRefCtxFile\n")
-fileToSubmitToCortex.append(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleanedPoolCtxFile\n")
 
 //Goes through the sample list
 for (sampleName in params.sampleList) {
@@ -56,6 +55,7 @@ process makeCombinationGraph {
 	publishDir params.logDir
 	executor params.executor
 	queue params.makeCombinationGraphQueue
+	maxForks params.makeCombinationGraphMaxNodes
 	time params.wallTime
 	cpus params.cpusNeeded
 

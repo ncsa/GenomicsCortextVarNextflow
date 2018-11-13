@@ -30,7 +30,7 @@ for (sampleName in params.sampleList) {
 	pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedIndividually.ctx\n")
 }
 
-collatedList = sampleList.collate(1)
+collatedList = params.sampleList.collate(1)
 
 for (index in 1..collatedList.size()) {
 

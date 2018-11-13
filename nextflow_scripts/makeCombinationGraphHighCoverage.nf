@@ -22,7 +22,16 @@ if (params.pathToRefCtx.size() == 0) {
 }
 pathToReferenceGraph.write(pathToRefGraph)
 
+// Make a file containing path to cleaned graphs
+for (sampleName in params.sampleList) {
+		
+	//Makes a file that contains the path to the cleaned sample binaries
+	pathToSamples = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleaned" + sampleName)
+	pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedIndividually.ctx\n")
+}
+
 collatedList = sampleList.collate(1)
+
 for (index in 1..collatedList.size()) {
 
 	//Makes a file that will be submitted to Cortex, containing the path to the two files created above
@@ -31,18 +40,12 @@ for (index in 1..collatedList.size()) {
 	//Writes path to ref ctx file
 	fileToSubmitToCortex.write(params.resultsDir + "/makeCombinationGraphInput/" + "pathToRefCtxFile\n")
 
-	//Goes through the sample list
 	for (sampleName in collatedList[index]) {
-			
-		//Makes a file that contains the path to the cleaned sample binaries
-		pathToSamples = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleaned" + sampleName)
-		pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedIndividually.ctx\n")
-		
 		//Adds the path to the file containing the path to the cleaned sample binaries (path to file created right above this)
 		//into the file that will be submitted by cortex (fileToSubmitToCortex variable)
 		fileToSubmitToCortex.append(params.resultsDir + "/makeCombinationGraphInput/" + "pathToCleaned" + sampleName + "\n")
-
 	}
+
 }
 //-------------------------------------------------------------------------------------------------------------------------------
 

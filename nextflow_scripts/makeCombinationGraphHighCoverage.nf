@@ -22,7 +22,7 @@ if (params.pathToRefCtx.size() == 0) {
 }
 pathToReferenceGraph.write(pathToRefGraph)
 
-collatedList = sampleList.collate(params.numberOfSamples/(variantCallingMaxNodes*5))
+collatedList = sampleList.collate(1)
 for (index in 1..collatedList.size()) {
 
 	//Makes a file that will be submitted to Cortex, containing the path to the two files created above

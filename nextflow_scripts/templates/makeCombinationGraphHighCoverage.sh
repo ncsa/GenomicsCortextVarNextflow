@@ -6,6 +6,6 @@
 
 # Cortex command
 
-${params.cortexDirMakeCombinationGraphHighCoverage} ${params.cortexConfigMakeCombinationGraph} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph.ctx --colour_list ${params.resultsDir}/makeCombinationGraphInput/colorlistFileToSubmit > makeCombinationGraph.log
+${params.cortexDirMakeCombinationGraphHighCoverage} ${params.cortexConfigMakeCombinationGraph} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph${index}.ctx --colour_list ${params.resultsDir}/makeCombinationGraphInput/colorlistFileToSubmit${index} > makeCombinationGraph.log
 
 

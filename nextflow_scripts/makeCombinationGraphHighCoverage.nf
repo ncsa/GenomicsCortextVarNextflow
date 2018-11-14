@@ -49,24 +49,26 @@ for (index in 1..collatedList.size()) {
 }
 //-------------------------------------------------------------------------------------------------------------------------------
 
+//CONTINUE SCRIPT FOR PROCESS
 // Step 5: Combine reference graph with sample graph and cleaned pool
 
-process makeCombinationGraph {
-	
-	publishDir params.logDir
-	executor params.executor
-	queue params.makeCombinationGraphQueue
-	time params.wallTime
-	cpus params.cpusNeeded
+for (index in 1..collatedList.size()) {
 
-	output:
-		file "makeCombinationGraph.log"
+	process makeCombinationGraph {
+		
+		publishDir params.logDir
+		executor params.executor
+		queue params.makeCombinationGraphQueue
+		time params.wallTime
+		cpus params.cpusNeeded
 
-	
-	script:
-		template 'makeCombinationGraphHighCoverage.sh'
+		output:
+			file "makeCombinationGraph.log"
 
+		
+		script:
+			template 'makeCombinationGraphHighCoverage.sh'
 
+	}
 
 }
-

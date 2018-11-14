@@ -65,7 +65,6 @@ for (index in 1..collatedList.size()) {
 		output:
 			file "makeCombinationGraph.log"
 
-		
 		script:
 			template 'makeCombinationGraphHighCoverage.sh'
 

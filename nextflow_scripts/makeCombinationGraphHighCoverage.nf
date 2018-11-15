@@ -49,25 +49,26 @@ for (index in 1..collatedList.size()) {
 }
 //-------------------------------------------------------------------------------------------------------------------------------
 
-//CONTINUE SCRIPT FOR PROCESS
+//CONTINUE SCRIPT FOR PROCESS, need to be dy namic
 // Step 5: Combine reference graph with sample graph and cleaned pool
+makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
+inputListChannel = Channel.fromPath(makeCombinationGraphInputDir + 'colorlistFileToSubmit*')
 
-for (index in 1..collatedList.size()) {
+process makeCombinationGraph {
+	
+	publishDir params.logDir
+	executor params.executor
+	queue params.makeCombinationGraphQueue
+	time params.wallTime
+	cpus params.cpusNeeded
 
-	process makeCombinationGraph {
-		
-		publishDir params.logDir
-		executor params.executor
-		queue params.makeCombinationGraphQueue
-		time params.wallTime
-		cpus params.cpusNeeded
+	input:
+		each colorList from inputListChannel
 
-		output:
-			file "makeCombinationGraph.log"
+	output:
+		file "makeCombinationGraph.log"
 
-		script:
-			template 'makeCombinationGraphHighCoverage.sh'
-
-	}
+	script:
+		template 'makeCombinationGraphHighCoverage.sh'
 
 }

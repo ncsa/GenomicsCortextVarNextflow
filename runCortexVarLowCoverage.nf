@@ -91,7 +91,7 @@ process makeCombinationGraph {
 	script:
 		"""
 		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraph.nf
+		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraphLowCoverage.nf
 		"""
 
 }

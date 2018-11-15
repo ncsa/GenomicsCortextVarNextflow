@@ -54,7 +54,6 @@ for (index in 1..collatedList.size()) {
 makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
 inputListChannel = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
 
-inputListChannel.subscribe{println "value: $it"}
 process makeCombinationGraph {
 	
 	publishDir params.logDir

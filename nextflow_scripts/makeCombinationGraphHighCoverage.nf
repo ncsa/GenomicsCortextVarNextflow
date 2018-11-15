@@ -52,7 +52,7 @@ for (index in 1..collatedList.size()) {
 //CONTINUE SCRIPT FOR PROCESS, need to be dy namic
 // Step 5: Combine reference graph with sample graph and cleaned pool
 makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
-inputListChannel = Channel.fromPath(makeCombinationGraphInputDir + 'colorlistFileToSubmit*')
+inputListChannel = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
 
 inputListChannel.subscribe{println "value: $it"}
 process makeCombinationGraph {

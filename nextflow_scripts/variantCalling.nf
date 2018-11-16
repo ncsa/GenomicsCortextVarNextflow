@@ -46,7 +46,7 @@ if (params.BC == "y") {
 			executor params.executor
 			queue params.variantCallingQueue
 			maxForks params.variantCallingMaxNodes
-			time params.variantCallingWalltime
+			time '3h'
 			cpus params.cpusNeeded
 
 

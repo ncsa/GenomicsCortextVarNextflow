@@ -22,7 +22,7 @@ if (params.PD == "y") {
 		executor params.executor
 		queue params.variantCallingQueue
 		maxForks params.variantCallingMaxNodes
-		time params.wallTime
+		time params.variantCallingWalltime
 		cpus params.cpusNeeded
 
 
@@ -46,7 +46,7 @@ if (params.BC == "y") {
 			executor params.executor
 			queue params.variantCallingQueue
 			maxForks params.variantCallingMaxNodes
-			time '3h'
+			time params.variantCallingWalltime
 			cpus params.cpusNeeded
 
 

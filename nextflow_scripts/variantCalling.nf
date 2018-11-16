@@ -8,48 +8,7 @@ productsFolder.mkdirs()
 //-----------------------------------------------------------------------------------------------------------------------
 
 
-//Step6 Preparation
-
-//Prepare step 6, make channels that pair each sample with its index / order like in the supply for step 5 for consistent colour
-//Example:
-//	if sample name is magellan, and located at index 2 (first, since index 0 is reference de bruijn graph and 1 is combined de bruijn graph according
-//	to step 5 colorlist_step5FileToSubmitToCortex)
-//	it is processed as "magellan+2"
-
-process prepareVariantCalling {
-
-	executor 'local'
-
-	output:
-		val fileListFiltered into fileIndexFilteredChannel
-
-	exec:	
-		//Reads colorlist
-		fileList = file(params.resultsDir + "/makeCombinationGraphInput/colorlistFileToSubmit").readLines()
-
-		//Adds each sample in the reverse order in the step6FileListReversed Array
-		fileListReversed = []
-
-		for (int i = 0; i < fileList.size(); i++) {
-			fileListReversed[fileList.size() - 1 - i] = fileList[i] - params.resultsDir + "+" + (i - 1) - "/makeCombinationGraphInput/pathToCleaned"
-		}
-
-	
-
-		//Only takes in the samples, not the reference or combination graph
-		fileListFiltered = []
-
-		for (int i = 0; i < params.numberOfSamples; i++) {
-			fileListFiltered[i] = fileListReversed[i]
-			
-		}
-
-
-}
-
-
-
-
+combinationGraphChannel = Channel.fromPath(params.resultsDir + '/makeCombinationGraphOutput/finalCombinationGraph*.ctx')
 //Step 6 PD : When selected, cortex will use path divergence caller algorithm to identify variants.
 //Step6 also includes a renaming script, since nextflow-bash interaction is untidy.
 
@@ -66,11 +25,11 @@ if (params.PD == "y") {
 
 
 		input:
-			each fileNameAndNumber from fileIndexFilteredChannel	
+			each combinationGraph from combinationGraphChannel
 
 
 		output:
-			file "${fileNameAndNumber}_PD.log" into PDLogFiles
+			file "${combinationGraph}_PD.log" into PDLogFiles
 
 
 		script:
@@ -78,21 +37,6 @@ if (params.PD == "y") {
 
 
 	}	
-
-
-	// This step renames the file from sampleName+index_PD.log to sampleName_PD.log
-
-	process PDRenameLogFiles {
-	
-		input:
-			file logFile from PDLogFiles
-	
-		script:
-			template 'PDRenameLogFiles.sh'
-		
-
-	}	
-
 
 }
 

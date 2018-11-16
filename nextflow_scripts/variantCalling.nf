@@ -9,6 +9,8 @@ productsFolder.mkdirs()
 
 
 combinationGraphChannel = Channel.fromPath(params.resultsDir + '/makeCombinationGraphOutput/finalCombinationGraph*.ctx')
+
+
 //Step 6 PD : When selected, cortex will use path divergence caller algorithm to identify variants.
 //Step6 also includes a renaming script, since nextflow-bash interaction is untidy.
 
@@ -26,11 +28,6 @@ if (params.PD == "y") {
 
 		input:
 			each combinationGraph from combinationGraphChannel
-
-
-		output:
-			file "${combinationGraph}_PD.log" into PDLogFiles
-
 
 		script:
 			template 'PDVariantCalling.sh'	

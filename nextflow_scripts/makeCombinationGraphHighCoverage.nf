@@ -30,7 +30,7 @@ for (sampleName in params.sampleList) {
 	pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedIndividually.ctx\n")
 }
 
-collatedList = params.sampleList.collate(1)
+collatedList = params.sampleList.collate(params.finalCombinationGraphMaxColor)
 
 for (index in 1..collatedList.size()) {
 

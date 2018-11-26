@@ -10,6 +10,6 @@ fileIndex=\${filePath: -1}
 
 # Cortex command
 
-${params.cortexDirMakeCombinationGraphHighCoverage} ${params.cortexConfigMakeCombinationGraph} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph\${fileIndex}.ctx --colour_list ${colorList} > makeCombinationGraph\${fileIndex}.log
+${params.cortexDirMakeCombinationGraphHighCoverage} ${params.cortexConfigMakeCombinationGraph} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph\${fileIndex}.ctx --colour_list ${colorList} > ${params.logDir}/makeCombinationGraph\${fileIndex}.log
 
 

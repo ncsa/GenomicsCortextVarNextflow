@@ -9,10 +9,12 @@ productsFolder.mkdirs()
 
 
 combinationGraphChannel = Channel.fromPath(params.resultsDir + '/makeCombinationGraphOutput/finalCombinationGraph*.ctx')
-
+makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
+combinationGraphColorListChannel = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
+colorListAndComboGraph = combinationGraphColorListChannel.merge(combinationGraphChannel)
 
 //Step 6 PD : When selected, cortex will use path divergence caller algorithm to identify variants.
-//Step6 also includes a renaming script, since nextflow-bash interaction is untidy.
+
 
 if (params.PD == "y") {
 
@@ -27,7 +29,7 @@ if (params.PD == "y") {
 
 
 		input:
-			each combinationGraph from combinationGraphChannel
+			val colorListGraph from colorListAndComboGraph
 
 		script:
 			template 'PDVariantCalling.sh'	

@@ -30,9 +30,9 @@ for (sampleName in params.sampleList) {
 	pathToSamples.write(params.resultsDir + "/cleanGraphPerSampleFolder/" + sampleName + "_cleanedIndividually.ctx\n")
 }
 
-collatedList = params.sampleList.collate(params.finalCombinationGraphMaxColor)
+collatedList = params.sampleList.collate(params.finalCombinationGraphMaxColor - 1)
 
-for (index in 1..collatedList.size()) {
+for (index in 0..(collatedList.size() - 1)) {
 
 	//Makes a file that will be submitted to Cortex, containing the path to the two files created above
 	fileToSubmitToCortex = new File (params.resultsDir + "/makeCombinationGraphInput/" + "colorlistFileToSubmit" + index)
@@ -56,17 +56,13 @@ inputListChannel = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFi
 
 process makeCombinationGraph {
 	
-	publishDir params.logDir
 	executor params.executor
 	queue params.makeCombinationGraphQueue
-	time params.wallTime
+	time params.makeCombinationGraphWalltime
 	cpus params.cpusNeeded
 
 	input:
 		each colorList from inputListChannel
-
-	output:
-		file "makeCombinationGraph.log"
 
 	script:
 		template 'makeCombinationGraphHighCoverage.sh'

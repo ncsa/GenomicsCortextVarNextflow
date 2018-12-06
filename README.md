@@ -21,18 +21,21 @@ Files in this repo are organized as follows:
    - [Intended pipeline architecture and function](#intended-pipeline-architecture-and-function)
      * [Installation](#installation)
        - [Dependencies](#dependencies)
+       - [Cortex_var Installation](#Cortex_var-installation)
        - [Workflow Installation](#workflow-installation)
    - [User Guide](#user-guide)
      * [Data Preparation](#data-preparation)
        - [Sample Pair Reads](#sample-pair-reads)
        - [Reference Fasta Files](#reference-fasta-files)
-     * [Cortex_Var Binary Preparation](#cortex_var-binary-preparation)
+     * [Cortex_Var Executable Preparation](#cortex_var-Executable-preparation)
      * [Nextflow.config Parameters](#nextflow.config-parameters)
-       - [Running Options](#running-options)
-       - [Source, Config, and Destination Directory](#source,-config,-and-destination-directory)
-       - [Sample-specific Parameters](#sample-specific-parameters)
-       - [Cortex Directories and Variables](#cortex-directories-and-variables)
-       - [Type of executor, queue names, etc.](#type-of-executor,-queue-names,-etc.)
+       - [Executables](#executables)
+       - [Sample, Result, and Config Directory](#sample,-Result,-and-Config-Directory)
+       - [Sample Management](#Sample-Management)
+       - [Executor](#executor)
+       - [Cortex_var Individual Process Parameters](#Cortex_var-Individual-Process-Parameters)
+         * [Generic process parameters](#Generic-process-parameters)
+         * [Specific process parameters](#Specific-process-parameters)
      * [Resource Requirements](#resource-requirements)
      * [Executing nextflow application](#executing-nextflow-application)
      * [Logging functionality](#logging-functionality)
@@ -314,9 +317,9 @@ Walltime for individual process runs, refer to nextflow walltime [documentation]
 Number of cores per node for each process, refer to nextflow cpus [documentation](https://www.nextflow.io/docs/latest/process.html#cpus)
 
 
-#### Specific process parameters
+##### Specific process parameters
 
-##### Make sample de Bruijn graph specific parameters
+###### Make sample de Bruijn graph specific parameters
 
 **`quality_score_threshold`**
 
@@ -325,7 +328,7 @@ Number of cores per node for each process, refer to nextflow cpus [documentation
 Initial quality filter for making de Bruijn graph, refer to section 6.2 of cortex_var user manual and page 3 in cortex_var user manual
 
 
-##### Clean sample graph specific parameters
+###### Clean sample graph specific parameters
 
 **`remove_low_coverage_supernodes`**
 
@@ -336,7 +339,7 @@ Initial quality filter for making de Bruijn graph, refer to section 6.2 of corte
 How stringent should the cleaning be, (1 or 2) refer to manual chapter 9.1 and supplementary methods 6
 
 
-#### Make combination graph specific parameters
+###### Make combination graph specific parameters
 
 **`pathToRefCtx`**
 
@@ -357,7 +360,7 @@ To identify how much memory the process needs, the user can refer to [cortex_var
 If the finalCombinationGraphMaxColor is not N+1, then this pipeline will automatically parition the graphs, and make the total of N %(modulo) (`finalCombinationGraphMaxColor` - 1) combination graphs.
 
 
-#### Variant Calling specific parameters
+###### Variant Calling specific parameters
  
 
 **`BC`**
@@ -379,7 +382,7 @@ For more information regarding Path Divergence variant calling method, refer to 
 
 ### Resource Requirements
 
-The main resources cortex_var needs is memory and time. The amount of memory cortex_var require depends on the size of hash table specified in `cortexConfig(PROCESSNAME)` parameters, color number, and kmers. To compute the approximate ram required, the python3 script `usefulCalculators/findMemoryRequired.py` is available.
+The main resources cortex_var needs are memory and time. The amount of memory cortex_var require depends on the size of hash table specified in `cortexConfig(PROCESSNAME)` parameters, color number, and kmer size. To compute the approximate ram required, the python3 script `usefulCalculators/findMemoryRequired.py` is available.
 
 Example:
 ```
@@ -407,9 +410,9 @@ Nextflow will create a `work` folder, where all logs and temporary files are kep
 
 Nextflow creates `work` folder where the command `nextflow (script.nf)` is run. Within the `work` folder, there will be nested folders, containing the log of individual processes. In the stdout of running script, there will be lines that is similar to this:
 
-`[73/a3f6d2] Submitted process > preflightCheck`
+`[73/a3f6d2] Submitted process > test`
 
-`preflightCheck` is the process name. `[73/a3f6d2]` indicates the folder name within work folder when the user can locate the log for the specific process. More accurately, within `/work/73/` there might be several folders, and `a3f6d2` is the first 6 characters of the nested folder within `/work/73/`. Inside the folder specific to the process, such as `/work/73/a3f6d2...`, there are several log files that can be used for debugging or troubleshooting.
+`test` is the process name. `[73/a3f6d2]` indicates the folder name within work folder when the user can locate the log for the specific process. More accurately, within `/work/73/` there might be several folders, and `a3f6d2` is the first 6 characters of the nested folder within `/work/73/`. Inside the folder specific to the process, such as `/work/73/a3f6d2...`, there are several log files that can be used for debugging or troubleshooting.
 
 The `work` folder for each specific process is located within the resultsDir specified in the `nextflow.config` parameter.
 

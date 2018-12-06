@@ -284,7 +284,7 @@ The `work` folder for each specific process is located within the resultsDir spe
 
 This workflow dumps the output of each process described in [figure 1](#intended-pipeline-architecture-and-function) in the results directory specified in `resultsDir` parameter in nextflow.config file. In addition to output folders, there are also `sampleForStep#` folders that do not contain significant products/output for the user. Additionally there is `log` folder containing cortex stdout for each sample for each step. Finally, there is a `work` folder that is described by "Logging functionality" section above.
 
-![](https://i.imgur.com/2LNhORR.png)
+
 **Figure 4:** Complete output structure of resultsDir 
 
 

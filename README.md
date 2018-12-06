@@ -283,7 +283,7 @@ mem_height = 27
 mem_width = 18
 ```
 If the `kmer_size` is 63 combined with the example above, the input for `cortexConfig(PROCESSNAME)` should be:
-`"--kmer_size " + kmerSize + " --mem_height 20 --mem_width 20"`
+`"--kmer_size " + kmerSize + " --mem_height 27 --mem_width 18"`
 
 
 **`(PROCESSNAME)Queue`**

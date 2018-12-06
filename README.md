@@ -8,10 +8,11 @@ Files in this repo are organized as follows:
 
 | Folder / Files | Contents |
 | --- | --- |
-| master_script.nf | Nextflow script to be run by user |
+| runCortexVarHighCoverage | Nextflow script to be run by user |
+| runCortexVarLowCoverage | Nextflow script to be run by user |
 | nextflow.config | Configuration file to be edited by user |
 | nextflow_scripts | Individual nextflow scripts for each step in cortex-var |
-| usefulCalculators | Tools to identify parameters for config file |
+| usefulCalculators | Tools to help finding some parameters in the config file |
 
 **Table of Contents**
  - [Structural Variant Calling with Cortex-Var on Nextflow](#structural-variant-calling-with-cortex-var-on-nextflow)
@@ -39,12 +40,13 @@ Files in this repo are organized as follows:
 ## Intended pipeline architecture and function
 This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
 
+##ADD DIFFERENT PIPELINES FOR HIGH AND LOW COVERAGE
 The cortex-var workflow consists of the following steps:
- 1. Create binary graphs for each sample (paired reads)
- 2. Create pooled binary graph
- 3. Clean the errors in individual samples according to the pooled graph
- 4. Create reference binary graph (optional step, can be done beforehand)
- 5. Combine reference graph with sample graphs and cleaned pool
+ 1. Create de Bruijn graph for each sample (paired reads)
+ 2. Create pooled de Bruijn graph (**for low coverage samples only**)
+ 3. Clean individual sample de Bruijn graph
+ 4. Create reference de Bruijn graph
+ 5. Create multi-color graph, consisting of reference de Bruijn graph and cleaned sample de Bruijn graphs
  6. Call variants by Bubble Caller and/or Path Divergence
  
  ![](https://i.imgur.com/Sn3Yw6a.png)
@@ -52,7 +54,6 @@ The cortex-var workflow consists of the following steps:
  
  
  
-
 ## Installation
 
 ### Dependencies
@@ -76,11 +77,11 @@ Sample pair reads are required to be placed in the same folder, and the path to 
 
 ![](https://i.imgur.com/iuIxAqS.png)
 
-**Figure 2:** SampleDir Recommended Structure
+**Figure 2:** sampleDir Recommended Structure
 
 #### Reference Fasta Files
 
-Cortex requires the user to input a list of path to the reference fasta files to run step 4: Creating reference graph. Creating reference graph is required to run path divergence variant calling, but optional for bubble caller. The reference fasta files should be listed as paths, separated by line break (\n) **within a text file** that will have its path specified in `pathToReferenceList` parameter in nextflow.config. Example of what the textfile should look like is as follows:
+Cortex requires the user to input a list of path to the reference fasta files, separated by chromosomes to make reference de Bruijn graphs and Path Divergence variant calling. The reference fasta files of each chromosome should be listed as paths, separated by line break (\n) that will have its path specified in `pathToReferenceList` parameter in nextflow.config. Example of what the textfile should look like is as follows:
 
 ![](https://i.imgur.com/sRE4wPZ.png)
 
@@ -92,9 +93,9 @@ This workflow requires the user to have some prior knowledge about cortex_var, s
 For each step, here is the guide to how many colors is needed:
 **Note:** n is the number of samples (1 sample requires 2 reads). So in the case of 2 samples there would be 4 reads, and the value of n is 2.
 
-- Step 1: 1 color
-- Step 2: 1 color
-- Step 3: n color(s)
+- makeSampleGraph: 1 color
+- poolAndCleanErrors: 1 color
+- cleanGraphPerSampleHighCoverage: 1 color
 - Step 4: 1 color
 - Step 5: n + 2 colors
 - Step 6 without reference: n + 1 colors

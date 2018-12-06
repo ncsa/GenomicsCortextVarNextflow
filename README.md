@@ -28,9 +28,9 @@ Files in this repo are organized as follows:
        - [Sample Pair Reads](#sample-pair-reads)
        - [Reference Fasta Files](#reference-fasta-files)
      * [Cortex_Var Executable Preparation](#cortex_var-Executable-Preparation)
-     * [Nextflow.config Parameters](#nextflow.config-Parameters)
+     * [Nextflow.config Parameters](#nextflow-config-Parameters)
        - [Executables](#executables)
-       - [Sample, Result, and Config Directory](#sample,-Result,-and-Config-Directory)
+       - [Sample, Result, and Config Directory](#sample,-result,-and-config-directory)
        - [Sample Management](#Sample-Management)
        - [Executor](#executor)
        - [Cortex_var Individual Process Parameters](#Cortex_var-Individual-Process-Parameters)
@@ -145,7 +145,7 @@ After running the "make" commands, within the cortexDir/bin directory, the execu
 
 finalCombinationGraphMaxColor is a parameter to be filled by the user, this indicates the color required by makeCombinationGraph and variantCalling step. Further explanation on how to fill this parameter will be provided in the Nextflow.config Parameters section below.
 
-### Nextflow.config Parameters
+### Nextflow config Parameters
 
 The workflow is controlled by modifying nextflow.config file.
 **Note:** String parameters **always** need quotation marks ("") in the beginning and end of the string.

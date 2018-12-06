@@ -42,7 +42,7 @@ Files in this repo are organized as follows:
 ## Intended pipeline architecture and function
 This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
 
-Cortex suggests to use high coverage reads, as suggested by section 9.2 of the cortex_var manual, using the principle of ("things which happen rarely are more likely to be errors than real")
+Cortex suggests to use high coverage reads, as suggested by section 9.2 of the cortex_var manual, using the principle of ("things which happen rarely are more likely to be errors than real"), and according section 6.2 of the cortex_var manual, the threshold considered as "high" or "low" coverage samples is about above or below 20x coverage for diploid and 10x for above or below 10x for haploid.
 
 The standard pipeline for cortex using high coverage is as such:
  1. Create de Bruijn graph for each sample (paired reads)
@@ -87,7 +87,7 @@ Clone this repository
 ### Data Preparation
 Cortex_var requires two types of data input:
 - Sample pair reads
-- Reference fasta files
+- Reference fasta files, separated by chromosome
  
 #### Sample Pair Reads
 Sample pair reads are required to be placed in the same folder, and the path to this folder will later be the input for sampleDir parameter in nextflow.config.
@@ -102,111 +102,176 @@ Cortex requires the user to input a list of path to the reference fasta files, s
 
 **Figure 3:** Example of Reference Fasta List Textfile
 
-### Cortex_Var Binary Preparation
-This workflow requires the user to have some prior knowledge about cortex_var, so this section will be brief. Cortex_var requires the user to have cortex_var binaries already made, specific to color and k-mer. To do this, the user can refer to the [**`INSTALL`**](https://github.com/iqbal-lab/cortex/blob/master/INSTALL) file in the [cortex_var repository](https://github.com/iqbal-lab/cortex).
+### Cortex_Var Executable Preparation
+This workflow requires the user to have some prior knowledge about cortex_var, so this section will be brief. Cortex_var requires the user to have cortex_var executable already made, specific to color and k-mer. To do this, the user can refer to the [**`INSTALL`**](https://github.com/iqbal-lab/cortex/blob/master/INSTALL) file in the [cortex_var repository](https://github.com/iqbal-lab/cortex).
+
+"Color" in cortex simply means how many de Bruijn Graph files (.ctx extensions) will be loaded to the cortex executable. A simple way of thinking about "color" is how many genomes are loaded in the executable to be processed.
 
 For each step, here is the guide to how many colors is needed:
-**Note:** n is the number of samples (1 sample requires 2 reads). So in the case of 2 samples there would be 4 reads, and the value of n is 2.
+**Note:** n is the number of samples (1 sample requires 2 reads). For example: if there are 2 samples there would be 4 reads, and the value of n is 2.
+
+For standard, high coverage samples:
+
+- makeSampleGraph: 1 color
+- cleanGraphPerSampleHighCoverage: 1 color
+- makeReferenceGraph: 1 color
+- makeCombinationGraph: finalCombinationGraphMaxColor
+- variantCalling: finalCombinationGraphMaxColor
+
+For low coverage, pooled base pipeline:
 
 - makeSampleGraph: 1 color
 - poolAndCleanErrors: 1 color
-- cleanGraphPerSampleHighCoverage: 1 color
+- cleanGraphPerSampleLowCoverage: 2 colors
 - makeReferenceGraph: 1 color
-- makeCombinationGraph: n + 2 colors
-- Step 6 without reference: n + 1 colors
-- Step 6 with reference: n + 2 colors
+- makeCombinationGraph: finalCombinationGraphMaxColor
+- variantCalling: finalCombinationGraphMaxColor
+
+"Kmer size" in cortex dictates the number of bases to be used to construct the node in the de Bruijn graph made. The Kmer size is required to be consistent throughout the process.
+
+Cortex_var also requires a specific kmer size to be specified by user. To choose the appropriate kmer size, refer to chapter 8 of the cortex_var user manual.
+
+After choosing the kmer and color for each cortex executable each of them much be made and compiled in the cortex bin directory specified, refer to chapter 4 of cortex_var user manual.
+
+For example, if color chosen is 1 and kmer size chosen is 63:
+
+ 1. cd to installed cortex_var directory (bash install.sh has already been run)
+ 2. make NUM_COLS=1 MAXK=63 cortex_var
+
+After running the "make" commands, within the cortexDir/bin directory, the executable cortex_var_63_c1 will be made, "63" being the kmer size, and "c1" indicates the number of colors.
+
+finalCombinationGraphMaxColor is a parameter to be filled by the user, this indicates the color required by makeCombinationGraph and variantCalling step. Further explanation on how to fill this parameter will be provided in the Nextflow.config Parameters section below.
 
 ### Nextflow.config Parameters
 
 The workflow is controlled by modifying nextflow.config file.
 **Note:** String parameters **always** need quotation marks ("") in the beginning and end of the string.
 
+#### Executables
+
 **`nextflowDir`**
 
-Directory to nextflow executable should be specified here, for example: `path/to/nextflow/executable`
+**STRING** 
 
-#### Running Options
-
-**`PD`**
-
-Specify if user would like to run path-divergence variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run.
-
-**`BC`**
-
-Specify if user would like to run bubble-caller variant calling. Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are specificed, the workflow will not run.
-
-**`referenceReadsProvided`**
-
-Specify if user has reference genome reads (like .fna fpecificed, the workflow will not run.
-
-**NOTE:** Path divergence variant calling can only be diles). Indicate using literal characters "n" or "y" (quotation marks needed). If something other than these two inputs are sone when reference reads is available. So the workflow can only run when path divergence when reference reads are provided. However, Bubble caller variant calling method is idependent of the reference reads, so it is possible to conduct bubble caller variant calling without providing reference reads.
-
-#### Source, Config, and Destination Directory
-
-**`sampleDir`**
-
-Path to where samples are located, as a string. Example: `"/PATH/TO/SAMPLE/DIRECTORY"`.
-
-Refer to [Sample pair reads](#sample-pair-reads).
-
-**`configDir`**
-
-A String, path to the nextflow.config file, where these parameters will be filled and modified.
-
-**`resultsDir`**
-
-A String, path to where results of each step will be dumped. Example: `"/PATH/TO/RESULTS/DIRECTORY"`
-
-**`pathToReferenceList`**
-
-A String, path to where the file containing reference fasta files are (Refer to figure 3 above). Example: `"/PATH/TO/REFERENCELIST.TXT"`.
-
-Refer to [Reference Fasta Files](#reference-fasta-files)
-
-**`pathToRefCtx`**
-
-If user chooses not to run step 4 in cortex (making the reference graph), path to reference binary (.ctx file) must be specified within this parameter.
-
-Example: `"/PATH/TO/STEP4/BINARY/FILE.ctx"`
-
-#### Sample-specific Parameters
-
-This section will be a little tedious, as it involves strict formats for each sample reads.
-Given 2 sample pairs Sample_Maverick.read1.fq, Sample_Maverick.read2.fq, Sample_Magellan.read1.fq, Sample_Magellan.read2.fq, here are how the parameters should be filled.
-
-**`sampleList`**
-
-An array, with the sample names enclosed within quotation marks and separated by comma, all enclosed within `[]`
-
-Example: With examples given, the `sampleList` should be filled with: `["Sample_Maverick", "Sample_Magellan"]`
-
-**`sampleReadPattern`**
-
-A string, with how sample name is followed by the reads.
-Example: 
-- With example given, the `sampleReadPattern` should be filled with "\.read"
-- If the sample names are formatted as: Sample_name_read1.fq and Sample_name_read2.fq, `sampleReadPattern` should be filled with "\_read"
-
-**`sampleReadExtension`**
-
-A string, this variable should be filled with the extension of the sample
-In example given, `sampleReadExtension` should be filled with ".fq"
-
-#### Cortex Directories and Variables
+Path to nextflow executable
 
 **`cortexBinDir`**
 
-A string, this should lead to the bin directory of cortex_var where all the executables for each step is located.
+**STRING**
 
-**`cortexDirStep#`**
+Path to bin directory of cortex, where executables for each process is located.
 
-For the step specific cortex directory parameter, as long as the color specific binary is made, there should be no need to change the variables. The default here is using 63 kmers, if there's variation, the user has the option to change the path to the desired executable.
+#### Sample, Result, and Config Directory
 
-**`cortexConfigStep#`**
+**`sampleDir`**
+
+**STRING**
+
+Path to directory where samples are located.
+
+**`resultsDir`**
+
+**STRING**
+
+Path to directory where results of each process will be dumped.
+
+**`logDir`**
+
+**STRING**
+
+Path to directory where logs of each process will be dumped, default is inside the resultsDir
+
+#### Sample Management
+
+All samples are organized as referred to figure 2, the fastq filenames should be organized as: "(sampleName)(sampleReadPattern)(readNumber)(sampleReadExtension)"
+
+For instance, for the following samples:
+sampleDir/sample1_read1.fq.gz
+sampleDir/sample1_read2.fq.gz
+sampleDir/sample2_read1.fq.gz
+sampleDir/sample2_read2.fq.gz
+
+sampleName is sample1 and sample2
+sampleReadPattern is \_read
+readNumber is 1 and 2 for each sample
+sampleReadExtension is .fq.gz
+
+**`sampleList`**
+
+**ARRAYLIST OF STRING**
+
+ArrayList containing the sample names enclosed within quotation marks and separated by comma, all enclosed within `[]`
+
+With examples given, the `sampleList` should be filled with: `["Sample_1", "Sample_2"]`
+
+**Note:** Quotation marks are required to indicate that the element is a string.
+
+**`sampleReadPattern`**
+
+**STRING**
+
+The string after the sample name, but before the read number.
+
+With examples given, the `sampleReadPattern` should be filled with: "\_read"
+
+
+**`sampleReadExtension`**
+
+**STRING**
+
+The string after the read number, cortex supports both raw .fq and gzipped .fq.gz
+
+In example given, `sampleReadExtension` should be filled with ".fq.gz"
+
+
+**`pathToReferenceList`**
+
+**STRING**
+
+Path to where the file containing reference fasta files paths.
+Example: `"/PATH/TO/REFERENCELIST.TXT"`.
+
+Refer to [Reference Fasta Files](#reference-fasta-files)
+
+#### Executor
+
+**`executor`**
+
+**STRING**
+
+The type of executor that will be used by user. refer to nextflow executors [documentation](https://www.nextflow.io/docs/latest/executor.html)
+
+#### Cortex_var Individual Process Parameters
+
+##### Generic process parameters
+
+**`kmerSize`**
+
+**STRING**
+
+kmerSize chosen for the whole cortex_var process, refer to [Cortex_Var Executable Preparation](#Cortex_Var Executable Preparation)
+
+**`run(PROCESSNAME)`**
+
+**STRING**
+
+Indicate if user is willing to run that specific process. ("y"/"n")
+
+**`cortexBin(PROCESSNAME)`**
+
+**STRING**
+
+Executable to where the executable will be used for the process. Default is in the bin directory specificied by `cortexBinDir`
+
+**`cortexConfig(PROCESSNAME)`**
+
+**STRING**
 
 Cortex_var requires flags `--kmer_size` `--mem_height` and `--mem_width` for each step. `kmer_size` indicates the length of each k-mer (nodes in the graph) and is required to be consistent with the cortex binary executables.
 
-`mem_height` indicates the height of the hash table, and `mem_width` indicates the width of hash table. If the user needs help in determining the mem_height and mem_width, executing **`/usefulCalculators/findHeightAndWidth.py`** can be of assistance. This script is written in python3 and will take in the size of genome in number of bases and returns the optimum mem_height and mem_width, according to the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 8.
+By default, the kmer size will be derived from kmerSize parameter above, but the memory height and width should be specified here.
+
+`mem_height` indicates the height of the hash table, and `mem_width` indicates the width of hash table. If the user needs help in determining the mem_height and mem_width, executing `/usefulCalculators/findHeightAndWidth.py` can be of assistance. This script is written in python3 and will take in the size of genome in number of bases and returns the optimum mem_height and mem_width, according to the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 8.
 
 For example, soybean genome has about 1.15 gigabases:
 
@@ -217,58 +282,126 @@ Enter genome size in bases: 1150000000
 mem_height = 27
 mem_width = 18
 ```
-If the `kmer_size` is 63 combined with the exmaple above, the input for `cortexConfigStep#` should be:
-`"--kmer_size 63 --mem_height 27 --mem_width 18"`
+If the `kmer_size` is 63 combined with the example above, the input for `cortexConfig(PROCESSNAME)` should be:
+`"--kmer_size " + kmerSize + " --mem_height 20 --mem_width 20"`
+
+
+**`(PROCESSNAME)Queue`**
+
+**STRING**
+
+Queue name in the cluster, refer to nextflow executor [documentation](https://www.nextflow.io/docs/latest/executor.html)
+
+
+**`(PROCESSNAME)MaxNodes`**
+
+**INT**
+
+Maximum number of nodes to be used in parallel, refer to nextflow maxForks [documentation]('https://www.nextflow.io/docs/latest/process.html?highlight=maxforks#maxforks')
+
+
+**`(PROCESSNAME)Walltime`**
+
+**STRING**
+
+Walltime for individual process runs, refer to nextflow walltime [documentation](https://www.nextflow.io/docs/latest/process.html#process-time)
+
+
+**`(PROCESSNAME)CpusNeeded`**
+
+**STRING**
+
+Number of cores per node for each process, refer to nextflow cpus [documentation](https://www.nextflow.io/docs/latest/process.html#cpus)
+
+
+#### Specific process parameters
+
+##### Make sample de Bruijn graph specific parameters
 
 **`quality_score_threshold`**
 
-An integer, no quotation mark necessary. This parameter should be filled with the filter for quality score from the input file. Refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 3.
+**INT**
 
-#### Type of Executor, Queue Names, etc.
+Initial quality filter for making de Bruijn graph, refer to section 6.2 of cortex_var user manual and page 3 in cortex_var user manual
 
-This category is filled with the system information and resource requirements for nextflow.
 
-**`executor`**
+##### Clean sample graph specific parameters
 
-A string, filled with the type of [executor](https://www.nextflow.io/docs/latest/executor.html). Examples include pbs, slurm, LSF, and so on.
+**`remove_low_coverage_supernodes`**
 
-Example: 
-if pbs is the executor, the parameter should be filled with `"pbs"`
+**INT**
 
-**`highRamQueue`**
+**ONLY FOR STANDARD HIGH COVERAGE PROCESS, WILL NOT BE USED FOR LOW COVERAGE PIPELINE**
 
-A string, containing the name of the queue for the system.
+How stringent should the cleaning be, (1 or 2) refer to manual chapter 9.1 and supplementary methods 6
 
-**`walltime`**
 
-A string, containing the walltime allocated for the run. Refer to the [executor documentation](https://www.nextflow.io/docs/latest/executor.html) for more the format. The walltime should be enclosed in quotation mark as well.
-Example: `"10h"` for 10 hours walltime.
+#### Make combination graph specific parameters
 
-**`cpusNeeded`**
+**`pathToRefCtx`**
 
-A string, containing the number of cpus needed per process. Refer to [executor documentation](https://www.nextflow.io/docs/latest/executor.html) for details.
+**STRING**
+
+Path to reference de Bruijn graph, usually having .ctx extension (default is path to where it would be made by makeReferenceGraph)
+
+**`finalCombinationGraphMaxColor`**
+
+**INT**
+
+The largest number of colors of graph to run the node can handle, given kmer size, memory height and memory width.
+
+This process creates multi-colored deBruijn graph, stacking reference de Bruijn graph with one or more cleaned sample de Bruijn graph(s). Thus, the number can range from 2 to N+1 (total number of samples), depending on the memory capability of the node. 
+
+To identify how much memory the process needs, the user can refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 8. However, this repository also provides a script to calculate memory required, `/usefulCalculators/findMemoryRequired.py`. For more information, refer to Resource Requirement section [below](#Resource Requirement)
+
+If the finalCombinationGraphMaxColor is not N+1, then this pipeline will automatically parition the graphs, and make the total of N %(modulo) (`finalCombinationGraphMaxColor` - 1) combination graphs.
+
+
+#### Variant Calling specific parameters
+ 
+
+**`BC`**
+
+**STRING**
+
+Indicate if user wants to run Bubble Caller variant calling method ("y"/"n").
+
+For more information regarding Bubble Caller, refer to Section 10 of [cortex_var manual (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+**`PD`**
+
+**STRING**
+
+Indicate if user wants to run Path Divergence variant calling method ("y"/"n")
+
+For more information regarding Path Divergence variant calling method, refer to Section 11 of [cortex_var manual (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
 
 ### Resource Requirements
 
-The main resources cortex_var needs is memory and time. The amount of memory cortex_var require depends on the size of hash table specified in `cortexConfigStep#` parameters, color number, and kmers. To compute the approximate ram required, the python3 script `usefulCalculators/findMemoryRequired.py`. The script will calculate how much memory is required for the most memory-demanding step. Then, the user can specify the queue that would fulfill the memory requirement in the `highRamQueue` variable in the nextflow.config file.
+The main resources cortex_var needs is memory and time. The amount of memory cortex_var require depends on the size of hash table specified in `cortexConfig(PROCESSNAME)` parameters, color number, and kmers. To compute the approximate ram required, the python3 script `usefulCalculators/findMemoryRequired.py` is available.
 
 Example:
 ```
+enter kmer size: 63
 Enter height: 27
 Enter width: 18
-enter kmer size: 63
-enter number of samples: 2
-Most Memory Required in GB: 77.309411328
-Most Memory Required in TB: 0.077309411328
+enter number of colors: 2
+Memory Required in GB: 77.309411328
+Memory Required in TB: 0.077309411328
+FOR IFORGE USERS ONLY: Use big_mem
 ```
 
-In this case, the queue selected in `highRamQueue` parameter needs to have at least 77.3 GB for the workflow to run successfully.
+With this example, this means that the user should fill `(PROCESSNAME)Queue` with a queue that have at least 77.3 GB of RAM (more is recommended).
 
 
 ### Executing Nextflow Application
 
-The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file. Since nextflow will create a `work` folder, where all logs and temporary files are kept (refer to logging functionality), it is suggested (not mandatory) to avoid running `nextflow master_script.nf` in some other directory to keep the script directory clean.
+The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file.
+
+There are two master scripts available: `runCortexVarHighCoverage.nf` and `runCortexVarLowCoverage.nf`, as its respective names suggest, if the sample read coverage is high, running the standard pipeline `nextflow run runCortexVarHighCoverage` will be appropriate. Respectively, with low sample read coverage, but coming from similar population, running low-coverage pipeline `nextflow run runCortexVarLowCoverage.nf` will be more appropriate. To determine what is a 'high' or 'low' coverage samples, the user can refer to section 6.2 of cortex_var user manual.
+
+Nextflow will create a `work` folder, where all logs and temporary files are kept (refer to [logging functionality](# Logging Functionality), therefore it is suggested (not mandatory) to avoid running the master control scripts `runCortexVarHighCoverage.nf` and/or `runCortexVarLowCoverage.nf` in some other directory, like the resultsDir, to keep the script directory clean.
 
 ### Logging Functionality
 
@@ -293,6 +426,7 @@ This workflow dumps the output of each process described in [figure 1](#intended
 - Executor : PBS
 - Nextflow Version : 30.1.4844
 - Genome source : Soybean
-- Read Sizes : ~ 23 GB
+- Read Sizes : 90bp - 100bp
+- Read Coverage: ~17x
 
 

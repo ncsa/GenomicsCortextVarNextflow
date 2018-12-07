@@ -362,15 +362,6 @@ If the finalCombinationGraphMaxColor is not N+1, then this pipeline will automat
 
 ###### Variant Calling specific parameters
  
-
-**`BC`**
-
-**STRING**
-
-Indicate if user wants to run Bubble Caller variant calling method ("y"/"n").
-
-For more information regarding Bubble Caller, refer to Section 10 of [cortex_var manual (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
-
 **`PD`**
 
 **STRING**

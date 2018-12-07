@@ -1,7 +1,6 @@
 #!/usr/bin/env nextflow
 
-nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
-
+nextflowFolder = new File("nextflow_scripts").getAbsolutePath()
 
 process preflightCheck {	
 	output:
@@ -15,80 +14,117 @@ process preflightCheck {
 		"""
 }
 
+if (params.runMakeSampleGraph == "y") {
 
-process makeSampleDBGraph {
-	input:
-		val preflightFlag from preflightStdout
+	process makeSampleDBGraph {
+		input:
+			val preflightFlag from preflightStdout
 
-	output:
-		stdout into makeSampleDBGraphStdout
+		output:
+			stdout into makeSampleDBGraphStdout
 
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
 
-		"""
-}
+			"""
+	}
 
-process cleanGraphPerSample {
-	input:
-		val makeSampleDBGraphFlag from makeSampleDBGraphStdout
+} else {
 
-	output:
-		stdout into cleanGraphPerSampleStdout
-
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSampleHighCoverage.nf
-		"""
+	makeSampleDBGraphStdout = Channel.from('DummyFlag')
 
 }
 
 
-process makeReferenceGraph {
-	input:
-		val preflightFlag from preflightStdout
+if (params.runCleanSampleGraph == "y") {
 
-	output:
-		stdout into makeReferenceGraphStdout
+	process cleanGraphPerSample {
+		input:
+			val makeSampleDBGraphFlag from makeSampleDBGraphStdout
 
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
-		"""
+		output:
+			stdout into cleanGraphPerSampleStdout
+
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSampleHighCoverage.nf
+			"""
+
+	}
+
+} else {
+
+	cleanGraphPerSampleStdout = Channel.from('DummyFlag')
 
 }
 
+if (params.runMakeReferenceGraph == "y") {
 
-process makeCombinationGraph {
-	input:
-		val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
-		val makeRefGraphFlag from makeReferenceGraphStdout
+	process makeReferenceGraph {
+		input:
+			val preflightFlag from preflightStdout
+
+		output:
+			stdout into makeReferenceGraphStdout
+
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
+			"""
+
+	}
+
+} else {
+
+	makeReferenceGraphStdout == Channel.from('DummyFlag')
+
+}
+
+if (params.runMakeCombinationGraph == "y") {
+
+	process makeCombinationGraph {
+		input:
+			val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
+			val makeRefGraphFlag from makeReferenceGraphStdout
+			
+		output:
+			stdout into makeCombinationGraphStdout
 		
-	output:
-		stdout into makeCombinationGraphStdout
-	
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraphHighCoverage.nf
-		"""
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraphHighCoverage.nf
+			"""
+
+	}
+
+} else {
+
+	makeCombinationGraphStdout = Channel.from('DummyFlag')
 
 }
 
+if (params.runVariantCalling == "y") {
 
-process variantCalling {
-	input:
-		val makeCombinationGraphFlag from makeCombinationGraphStdout
+	process variantCalling {
+		input:
+			val makeCombinationGraphFlag from makeCombinationGraphStdout
 
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
-		"""
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
+			"""
+
+	}
+
+} else {
+
+	makeCombinationGraphStdout = Channel.from('DummyFlag')
 
 }
 

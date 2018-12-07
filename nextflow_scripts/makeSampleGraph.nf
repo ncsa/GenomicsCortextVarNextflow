@@ -5,16 +5,16 @@ sampleListChannel = Channel.from(params.sampleList)
 
 // Prepare folder for sampleGraphs
 
-// Makes supply and product folder
-supplyFolder = new File(params.resultsDir + "/makeSampleGraphInput/")
-supplyFolder.mkdirs()
+// Makes input and product folder
+inputFolder = new File(params.resultsDir + "/makeSampleGraphInput/")
+inputFolder.mkdirs()
 productsFolder = new File(params.resultsDir + "/makeSampleGraphOutput/")
 productsFolder.mkdirs()
 
-// Makes a file in supply folder called the sample name (e.g. Sample_Magellan) and writes the path to sample reads
+// Makes a file in input folder called the sample name (e.g. Sample_Magellan) and writes the path to sample reads
 // e.g "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read1.fq"
 // and "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read2.fq"
-// is written to the file "Sample_Magellan" inside supply folder
+// is written to the file "Sample_Magellan" inside input folder
 
 for (sampleName in params.sampleList) {
 	newFile = new File(params.resultsDir + "/makeSampleGraphInput/" + sampleName)
@@ -29,10 +29,10 @@ process makeSampleDeBruijnGraph {
 
 	publishDir params.logDir
 	executor params.executor
-	maxForks params.makeGraphMaxNodes
 	queue params.makeGraphQueue
-	time params.wallTime
-	cpus params.cpusNeeded
+	maxForks params.makeGraphMaxNodes
+	time params.makeGraphWallTime
+	cpus params.makeGraphCpusNeeded
 
 
 
@@ -41,14 +41,11 @@ process makeSampleDeBruijnGraph {
 
 
 	output:
-		file "makeSampleDeBruijnGraph_${samplePairFileName}.log"
+		file "makeSampleGraph_${samplePairFileName}.log"
 
 
 	script:
-		"""
-		echo ${samplePairFileName}
-		"""
-		//template 'makeSampleGraph.sh'
+		emplate 'makeSampleGraph.sh'
 
 }
 

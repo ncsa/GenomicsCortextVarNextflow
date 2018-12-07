@@ -23,4 +23,3 @@ baseName=\${baseNameTemp%.*}
 # Cortex command
 
 ${params.cortexDirVariantCalling} ${params.cortexConfigVariantCalling} --max_var_len 50000 --multicolour_bin \${comboGraph} --path_divergence_caller \${stringColorsForCaller}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${baseName} --print_colour_coverages > ${params.logDir}/\${baseName}_PD.log
-

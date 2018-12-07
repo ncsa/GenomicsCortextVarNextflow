@@ -1,7 +1,6 @@
 #!/usr/bin/env nextflow
 
-nextflowFolder = params.configDir - "nextflow.config" + "nextflow_scripts"
-
+nextflowFolder = new File("nextflow_scripts").getAbsolutePath()
 
 process preflightCheck {	
 	output:
@@ -15,102 +14,141 @@ process preflightCheck {
 		"""
 }
 
+if (params.runMakeSampleGraph == "y") {
 
-process makeSampleDBGraph {
-	input:
-		val preflightFlag from preflightStdout
+	process makeSampleDBGraph {
+		input:
+			val preflightFlag from preflightStdout
 
-	output:
-		stdout into makeSampleDBGraphStdout
+		output:
+			stdout into makeSampleDBGraphStdout
 
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/makeSampleGraph.nf
 
-		"""
-}
+			"""
+	}
 
+} else {
 
-process poolAndCleanErrors {
-	input:
-		val makeSampleDBGraphFlag from makeSampleDBGraphStdout
-
-	output:
-		stdout into poolAndCleanErrorStdout
-	
-	script:	
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
-		"""
+	makeSampleDBGraphStdout = Channel.from('DummyFlag')
 
 }
 
+if (params.runMakePoolAndCleanError == "y") {
 
-process cleanGraphPerSample {
-	input:
-		val poolCleanStdout from poolAndCleanErrorStdout
+	process poolAndCleanErrors {
+		input:
+			val makeSampleDBGraphFlag from makeSampleDBGraphStdout
 
-	output:
-		stdout into cleanGraphPerSampleStdout
-
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSampleLowCoverage.nf
-		"""
-
-}
-
-
-process makeReferenceGraph {
-	input:
-		val preflightFlag from preflightStdout
-
-	output:
-		stdout into makeReferenceGraphStdout
-
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
-		"""
-
-}
-
-
-process makeCombinationGraph {
-	input:
-		val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
-		val makeRefGraphFlag from makeReferenceGraphStdout
+		output:
+			stdout into poolAndCleanErrorStdout
 		
-	output:
-		stdout into makeCombinationGraphStdout
+		script:	
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/poolAndCleanErrors.nf
+			"""
+
+	}
+
+} else {
+
+	poolAndCleanErrorStdout = Channel.from('DummyFlag')
+
+}
+
+if (params.runCleanSampleGraph == "y") {
+
+	process cleanGraphPerSample {
+		input:
+			val poolCleanStdout from poolAndCleanErrorStdout
+
+		output:
+			stdout into cleanGraphPerSampleStdout
+
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/cleanGraphPerSampleLowCoverage.nf
+			"""
+
+	}
 	
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraphLowCoverage.nf
-		"""
+} else {
+
+	cleanGraphPerSampleStdout = Channel.from('DummyFlag')
 
 }
 
+if (params.runMakeReferenceGraph == "y") {
 
-process variantCalling {
-	input:
-		val makeCombinationGraphFlag from makeCombinationGraphStdout
+	process makeReferenceGraph {
+		input:
+			val preflightFlag from preflightStdout
 
-	script:
-		"""
-		cd ${params.resultsDir}
-		${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
-		"""
+		output:
+			stdout into makeReferenceGraphStdout
+
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/makeReferenceGraph.nf
+			"""
+
+	}
+
+} else {
+
+	makeReferenceGraphStdout == Channel.from('DummyFlag')
 
 }
 
+if (params.runMakeCombinationGraph == "y") {
 
+	process makeCombinationGraph {
+		input:
+			val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
+			val makeRefGraphFlag from makeReferenceGraphStdout
+			
+		output:
+			stdout into makeCombinationGraphStdout
+		
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/makeCombinationGraphLowCoverage.nf
+			"""
 
+	}
+
+} else {
+
+	makeCombinationGraphStdout = Channel.from('DummyFlag')
+
+}
+
+if (params.runVariantCalling == "y") {
+
+	process variantCalling {
+		input:
+			val makeCombinationGraphFlag from makeCombinationGraphStdout
+
+		script:
+			"""
+			cd ${params.resultsDir}
+			${params.nextflowDir} run ${nextflowFolder}/variantCalling.nf
+			"""
+
+	}
+
+} else {
+
+	makeCombinationGraphStdout = Channel.from('DummyFlag')
+
+}
 
 
 

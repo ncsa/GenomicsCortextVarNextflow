@@ -8,7 +8,7 @@ sampleListChannel = Channel.from(params.sampleList)
 cleanGraphPerSampleFolder = new File(params.resultsDir + "/cleanGraphPerSampleFolder/")
 cleanGraphPerSampleFolder.mkdirs()
 
-//Makes a file that contains the path to results of step 2 binary file
+//Makes a file that contains the path to results of pooled de Bruijn Graph file
 
 pathToPooledResultFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "pathToPooledGraph")
 pathToPooledResultFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "pooledAndCleanedGraph.ctx\n")
@@ -17,14 +17,14 @@ pathToPooledResultFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "
 
 for (sampleName in params.sampleList) {
 
-//Makes a file for each sample that contains the path to results of step 1 binary file
+//Makes a file for each sample that contains the path to results of sample de Bruijn Graph file
 
 	pathToSampleCtxFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "pathToSampleBinaryCtxFile" + sampleName)	
 	pathToSampleCtxFile.append(params.resultsDir + "/makeSampleGraphOutput/" + sampleName + ".ctx\n")
 
 //Makes a file that contains:
-// 	Line 1: The path to the file that contains to the path of step 2 binary file
-// 	Line 2: The path to the file that contains the path to results of step 1 binary file (step3PathToStep1CtxFile)	
+// 	Line 1: The path to the file that contains to the path of pooled de Bruijn Graph file
+// 	Line 2: The path to the file that contains the path to results of sample de Bruijn Graph file
 //Cortex requires nested file paths like what's being created here
 
 	filetoSubmitToCortex = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "colorlistFileToSubmit" + sampleName)

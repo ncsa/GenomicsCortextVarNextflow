@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 
-//Makes supply and product folder for step 5
+//Makes input and output folder for making combination graph
 	
 makeCombinationInputFolder = new File(params.resultsDir + "/makeCombinationGraphInput/")
 makeCombinationInputFolder.mkdirs()
@@ -10,7 +10,7 @@ makeCombinationOutputFolder.mkdirs()
 
 
 
-// Make a file that contains the path to reference graph from step 4
+// Make a file that contains the path to reference graph
 
 pathToReferenceGraph = new File(params.resultsDir + "/makeCombinationGraphInput/" + "pathToRefCtxFile")
 
@@ -34,7 +34,7 @@ collatedList = params.sampleList.collate(params.finalCombinationGraphMaxColor - 
 
 for (index in 0..(collatedList.size() - 1)) {
 
-	//Makes a file that will be submitted to Cortex, containing the path to the two files created above
+	//Makes a file that will be submitted to Cortex_var, containing the path to the two files created above
 	fileToSubmitToCortex = new File (params.resultsDir + "/makeCombinationGraphInput/" + "colorlistFileToSubmit" + index)
 
 	//Writes path to ref ctx file
@@ -49,8 +49,7 @@ for (index in 0..(collatedList.size() - 1)) {
 }
 //-------------------------------------------------------------------------------------------------------------------------------
 
-//CONTINUE SCRIPT FOR PROCESS, need to be dy namic
-// Step 5: Combine reference graph with sample graph and cleaned pool
+//Combine reference graph with sample graph 
 makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
 inputListChannel = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
 
@@ -58,8 +57,9 @@ process makeCombinationGraph {
 	
 	executor params.executor
 	queue params.makeCombinationGraphQueue
+	maxForks params.makeCombinationGraphMaxNodes
 	time params.makeCombinationGraphWalltime
-	cpus params.cpusNeeded
+	cpus params.makeCombinationGraphCpusNeeded
 
 	input:
 		each colorList from inputListChannel

@@ -70,7 +70,7 @@ However, cortex_var also supports a pipeline using many low coverage samples fro
  **Figure 1:** Overview of Workflow Design
 
 <p align="center">
-  <img src="https://i.imgur.com/TEBsObp.png" width="40%" title="hover text">
+  <img src="/images/testLayers.png" width="40%" title="hover text">
 </p>
 
 ## Installation

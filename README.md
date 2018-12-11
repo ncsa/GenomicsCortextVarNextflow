@@ -68,6 +68,7 @@ However, cortex_var also supports a pipeline using many low coverage samples fro
 **IMPORTANT NOTE:** Cortex var works chronologically. Which means to conduct one process, the previous processes must be done first. Although it is possible to do each step separately, the output of previous steps must still be present as an input for the next step. For a clear visual which process requires which process input, please refer to diagrams below. An arrow from process a to process b indicates that process b requires all files related to process a (both input and output) to still be present for process b to run successfully.
  
  **Figure 1:** Overview of Workflow Design
+ ![alt text](https://imgur.com/TEBsObp)
  
  
 ## Installation

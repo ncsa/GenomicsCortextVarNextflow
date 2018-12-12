@@ -61,7 +61,7 @@ The standard pipeline for cortex using high coverage is as such:
 </p>
 
 
-Additionally, cortex_var also supports a pipeline using many low coverage samples from the same population, also suggested by section 9.2 of the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+Additionally, cortex_var also supports a pipeline using many low coverage samples from the same population, also suggested by section 9.2 of the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf).
 
  1. Create de Bruijn graph for each sample
  2. **Create pooled de Bruijn graph**
@@ -383,7 +383,7 @@ If the finalCombinationGraphMaxColor is not N+1, then this pipeline will automat
 
 Indicate if user wants to run Path Divergence variant calling method ("y"/"n")
 
-For more information regarding Path Divergence variant calling method, refer to Section 11 of [cortex_var manual (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+For more information regarding Path Divergence variant calling method, refer to Section 11 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
 
 ### Resource Requirements

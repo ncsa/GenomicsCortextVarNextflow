@@ -45,7 +45,7 @@ Files in this repo are organized as follows:
 ## Intended pipeline architecture and function
 This workflow implements [Cortex-var workflow](http://cortexassembler.sourceforge.net/index_cortex_var.html) for structural variant calling in whole genome reads.
 
-Cortex suggests to use high coverage reads, as suggested by section 9.2 of the cortex_var manual, using the principle of ("things which happen rarely are more likely to be errors than real"), and according section 6.2 of the cortex_var manual, the threshold considered as "high" or "low" coverage samples is about above or below 20x coverage for diploid and 10x for above or below 10x for haploid.
+Cortex suggests to use high coverage reads, as suggested by section 9.2 of the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf), using the principle of ("things which happen rarely are more likely to be errors than real"), and according section 6.2 of the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf), the threshold considered as "high" or "low" coverage samples is about above or below 20x coverage for diploid and 10x for above or below 10x for haploid.
 
 The standard pipeline for cortex using high coverage is as such:
  1. Create de Bruijn graph for each sample (paired reads)
@@ -61,7 +61,7 @@ The standard pipeline for cortex using high coverage is as such:
 </p>
 
 
-Additionally, cortex_var also supports a pipeline using many low coverage samples from the same population, also suggested by section 9.2 of the cortex_var manual
+Additionally, cortex_var also supports a pipeline using many low coverage samples from the same population, also suggested by section 9.2 of the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
  1. Create de Bruijn graph for each sample
  2. **Create pooled de Bruijn graph**
@@ -148,9 +148,9 @@ For low coverage, pooled base pipeline:
 
 "Kmer size" in cortex dictates the number of bases to be used to construct the node in the de Bruijn graph made. The Kmer size is required to be consistent throughout the process.
 
-Cortex_var also requires a specific kmer size to be specified by user. To choose the appropriate kmer size, refer to chapter 8 of the cortex_var user manual.
+Cortex_var also requires a specific kmer size to be specified by user. To choose the appropriate kmer size, refer to section 8 of the [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf).
 
-After choosing the kmer and color for each cortex executable each of them much be made and compiled in the cortex bin directory specified, refer to chapter 4 of cortex_var user manual.
+After choosing the kmer and color for each cortex executable each of them much be made and compiled in the cortex bin directory specified, refer to section 4 of [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf).
 
 For example, if color chosen is 1 and kmer size chosen is 63:
 
@@ -341,8 +341,7 @@ Number of cores per node for each process, refer to nextflow cpus [documentation
 
 **INT**
 
-Initial quality filter for making de Bruijn graph, refer to section 6.2 of cortex_var user manual and page 3 in cortex_var user manual
-
+Initial quality filter for making de Bruijn graph, refer to section 6.2 and page 3 of [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
 ###### Clean sample graph specific parameters
 
@@ -352,7 +351,7 @@ Initial quality filter for making de Bruijn graph, refer to section 6.2 of corte
 
 **ONLY FOR STANDARD HIGH COVERAGE PROCESS, WILL NOT BE USED FOR LOW COVERAGE PIPELINE**
 
-How stringent should the cleaning be, (1 or 2) refer to manual chapter 9.1 and supplementary methods 6
+How stringent should the cleaning be, (1 or 2) refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) section 9.1 and supplementary methods 6
 
 
 ###### Make combination graph specific parameters
@@ -409,7 +408,7 @@ With this example, this means that the user should fill `(PROCESSNAME)Queue` wit
 
 The suggested practice to execute nextflow is to place the folder containing binary executable for nextflow in the PATH environment or to use full path to the nextflow executable file.
 
-There are two master scripts available: `runCortexVarHighCoverage.nf` and `runCortexVarLowCoverage.nf`, as its respective names suggest, if the sample read coverage is high, running the standard pipeline `nextflow run runCortexVarHighCoverage` will be appropriate. Respectively, with low sample read coverage, but coming from similar population, running low-coverage pipeline `nextflow run runCortexVarLowCoverage.nf` will be more appropriate. To determine what is a 'high' or 'low' coverage samples, the user can refer to section 6.2 of cortex_var user manual.
+There are two master scripts available: `runCortexVarHighCoverage.nf` and `runCortexVarLowCoverage.nf`, as its respective names suggest, if the sample read coverage is high, running the standard pipeline `nextflow run runCortexVarHighCoverage` will be appropriate. Respectively, with low sample read coverage, but coming from similar population, running low-coverage pipeline `nextflow run runCortexVarLowCoverage.nf` will be more appropriate. To determine what is a 'high' or 'low' coverage samples, the user can refer to section 6.2 of [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) .
 
 Nextflow will create a `work` folder, where all logs and temporary files are kept (refer to [logging functionality](# Logging Functionality), therefore it is suggested (not mandatory) to avoid running the master control scripts `runCortexVarHighCoverage.nf` and/or `runCortexVarLowCoverage.nf` in some other directory, like the resultsDir, to keep the script directory clean.
 

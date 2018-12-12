@@ -53,6 +53,8 @@ process preflightCheck {
 		println ("runVariantCalling must be 'y' or 'n'")
 		System.exit(1)
 	}	
+
+	
 	//Cheks if there are read files provided in the sampleDir according to sample list needed by make sample graph
 
 	if (params.runMakeSampleGraph == "y") {

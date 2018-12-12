@@ -53,9 +53,15 @@ The standard pipeline for cortex using high coverage is as such:
  3. Create reference de Bruijn graph
  4. Create multi-color graph, consisting of reference de Bruijn graph and cleaned sample de Bruijn graphs
  5. Call variants by Bubble Caller and/or Path Divergence
- 
 
-However, cortex_var also supports a pipeline using many low coverage samples from the same population, also suggested by section 9.2 of the cortex_var manual
+**Figure 1:** Cortex_var High-Coverage Pipeline Overview
+
+<p align="center">
+  <img src="/images/Figure1.png" width="40%">
+</p>
+
+
+Additionally, cortex_var also supports a pipeline using many low coverage samples from the same population, also suggested by section 9.2 of the cortex_var manual
 
  1. Create de Bruijn graph for each sample
  2. **Create pooled de Bruijn graph**
@@ -64,14 +70,14 @@ However, cortex_var also supports a pipeline using many low coverage samples fro
  5. Create multi-color graph, consisting of reference de Bruijn graph and cleaned sample de Bruijn graphs
  6. Call variants by Bubble Caller and/or Path Divergence
  
+**Figure 2:** Cortex_var Low-Coverage Pipeline Overview
+
+<p align="center">
+  <img src="/images/Figure2.png" width="40%">
+</p>
  
 **IMPORTANT NOTE:** Cortex var works chronologically. Which means to conduct one process, the previous processes must be done first. Although it is possible to do each step separately, the output of previous steps must still be present as an input for the next step. For a clear visual which process requires which process input, please refer to diagrams below. An arrow from process a to process b indicates that process b requires all files related to process a (both input and output) to still be present for process b to run successfully.
  
- **Figure 1:** Overview of Workflow Design
-
-<p align="center">
-  <img src="/images/testLayers.png" width="40%" title="hover text">
-</p>
 
 ## Installation
 
@@ -99,14 +105,21 @@ Cortex_var requires two types of data input:
 Sample pair reads are required to be placed in the same folder, and the path to this folder will later be the input for sampleDir parameter in nextflow.config.
 
 
-**Figure 2:** sampleDir Recommended Structure
+**Figure 3:** sampleDir Example
+
+<p align="center">
+  <img src="/images/Figure3.png" width="40%">
+</p>
 
 #### Reference Fasta Files
 
 Cortex requires the user to input a list of path to the reference fasta files, separated by chromosomes to make reference de Bruijn graphs and Path Divergence variant calling. The reference fasta files of each chromosome should be listed as paths, separated by line break (\n) that will have its path specified in `pathToReferenceList` parameter in nextflow.config. Example of what the textfile should look like is as follows:
 
 
-**Figure 3:** Example of Reference Fasta List Textfile
+**Figure 4:** Example of Reference Fasta List Textfile
+<p align="center">
+  <img src="/images/Figure4.png" width="40%">
+</p>
 
 ### Cortex_Var Executable Preparation
 This workflow requires the user to have some prior knowledge about cortex_var, so this section will be brief. Cortex_var requires the user to have cortex_var executable already made, specific to color and k-mer. To do this, the user can refer to the [**`INSTALL`**](https://github.com/iqbal-lab/cortex/blob/master/INSTALL) file in the [cortex_var repository](https://github.com/iqbal-lab/cortex).

@@ -425,7 +425,7 @@ The `work` folder for each specific process is located within the resultsDir spe
 
 ### Output Structure
 
-This workflow places the output of each process described in [figure 1](#intended-pipeline-architecture-and-function) and figure 2 in the results directory specified in `resultsDir` parameter in nextflow.config file. Each process will have a folder, named as `(PROCESSNAME)Output` to host the output files of the specific process.
+This workflow places the output of each process described in [figure 1](#Cortex_var-High-Coverage-Pipeline-Overview) and [figure 2](#Cortex_var-Low-Coverage-Pipeline-Overview) in the results directory specified in `resultsDir` parameter in nextflow.config file. Each process will have a folder, named as `(PROCESSNAME)Output` to host the output files of the specific process.
 
 ### Test Environment
 

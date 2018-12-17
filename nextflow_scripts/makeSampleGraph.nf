@@ -37,7 +37,7 @@ process makeSampleDeBruijnGraph {
 
 
 	input:
-		each samplePairFileName from batchSampleList
+		each samplePairFileName from sampleListChannel
 
 
 	output:
@@ -45,7 +45,7 @@ process makeSampleDeBruijnGraph {
 
 
 	script:
-		emplate 'makeSampleGraph.sh'
+		template 'makeSampleGraph.sh'
 
 }
 

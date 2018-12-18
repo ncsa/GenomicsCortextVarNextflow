@@ -11,6 +11,6 @@ fileIndex=\${colorListFile#*\${prefix}}
 
 # Cortex command
 
-${params.cortexDirMakeCombinationGraph} ${params.cortexConfigMakeCombinationGraph} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/finalCombinationGraph\${fileIndex}.ctx --colour_list ${colorList} > ${params.logDir}/makeCombinationGraph\${fileIndex}.log
+${params.cortexDirMakeCombinationGraph} ${params.cortexConfig} --dump_binary ${params.resultsDir}/makeCombinationGraphOutput/combinationGraph\${fileIndex}.ctx --colour_list ${colorList} > ${params.logDir}/combinationGraphLogs/makeCombinationGraph\${fileIndex}.log
 
 

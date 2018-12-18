@@ -9,7 +9,7 @@ process preflightCheck {
 	//------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//Checks for Nextflow Directory and Cortex Bin Directory
-	nextflowExec = new File(parans.nextflowDir)
+	nextflowExec = new File(params.nextflowDir)
 	cortexBinDirFile = new File(params.cortexBinDir)
 
 	if (!nextflowExec.exists()) {

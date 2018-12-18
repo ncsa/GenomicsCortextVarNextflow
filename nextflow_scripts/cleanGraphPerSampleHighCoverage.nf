@@ -8,12 +8,16 @@ sampleListChannel = Channel.from(params.sampleList)
 cleanGraphPerSampleFolder = new File(params.resultsDir + "/cleanGraphPerSampleFolder/")
 cleanGraphPerSampleFolder.mkdirs()
 
+//Makes log folder
+cleanGraphLogDir = params.logDir + "/cleanGraphLogs"
+cleanGraphLogFolder = new File(cleanGraphLogDir)
+cleanGraphLogFolder.mkdirs()
 
 // Clean graph per sample using pooled graph
 
 process cleanGraphPerSampleHighCoverage {
 
-	publishDir params.logDir	
+	publishDir cleanGraphLogDir
 	executor params.executor
 	queue params.cleanGraphPerSampleQueue
 	maxForks params.cleanGraphPerSampleMaxNodes

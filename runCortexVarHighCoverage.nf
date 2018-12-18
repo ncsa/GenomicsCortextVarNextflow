@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-nextflowFolder = new File("nextflow_scripts").getAbsolutePath()
+nextflowFolder = params.cloneDir + "/nextflow_scripts"
 
 process preflightCheck {	
 	output:
@@ -42,6 +42,7 @@ if (params.runCleanSampleGraph == "y") {
 
 	process cleanGraphPerSample {
 		input:
+			val preflightFlag from preflightStdout
 			val makeSampleDBGraphFlag from makeSampleDBGraphStdout
 
 		output:
@@ -80,7 +81,7 @@ if (params.runMakeReferenceGraph == "y") {
 
 } else {
 
-	makeReferenceGraphStdout == Channel.from('DummyFlag')
+	makeReferenceGraphStdout = Channel.from('DummyFlag')
 
 }
 
@@ -88,6 +89,7 @@ if (params.runMakeCombinationGraph == "y") {
 
 	process makeCombinationGraph {
 		input:
+			val preflightFlag from preflightStdout
 			val cleanGraphPerSampleFlag from cleanGraphPerSampleStdout
 			val makeRefGraphFlag from makeReferenceGraphStdout
 			
@@ -112,6 +114,7 @@ if (params.runVariantCalling == "y") {
 
 	process variantCalling {
 		input:
+			val preflightFlag from preflightStdout
 			val makeCombinationGraphFlag from makeCombinationGraphStdout
 
 		script:

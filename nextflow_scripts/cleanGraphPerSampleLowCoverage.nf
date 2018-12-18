@@ -13,6 +13,10 @@ cleanGraphPerSampleFolder.mkdirs()
 pathToPooledResultFile = new File(params.resultsDir + "/cleanGraphPerSampleFolder/" + "pathToPooledGraph")
 pathToPooledResultFile.write(params.resultsDir + "/poolAndCleanErrorOutput/" + "pooledAndCleanedGraph.ctx\n")
 		
+//Makes log folder
+cleanGraphLogDir = params.logDir + "/cleanGraphLogs"
+cleanGraphLogFolder = new File(cleanGraphLogDir)
+cleanGraphLogFolder.mkdirs()
 
 
 for (sampleName in params.sampleList) {
@@ -42,12 +46,12 @@ for (sampleName in params.sampleList) {
 
 process cleanGraphPerSampleLowCoverage {
 
-	publishDir params.logDir	
+	publishDir cleanGraphLogDir
 	executor params.executor
-	queue params.cleanGraphPerErrorQueue
+	queue params.cleanGraphPerSampleQueue
 	maxForks params.cleanGraphPerErrorMaxNodes
-	time params.wallTime
-	cpus params.cpusNeeded
+	time params.cleanGraphPerSampleWalltime
+	cpus params.cleanGraphPerSampleCpusNeeded
 
 	input:
 		each samplePairFileName from sampleListChannel		

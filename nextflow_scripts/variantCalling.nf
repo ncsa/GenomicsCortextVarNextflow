@@ -2,8 +2,13 @@
 
 //Products folder for Variant Calling
 			
-productsFolder = new File (params.resultsDir + "/variantCallingOutput/")
+productsFolder = new File (params.resultsDir + "/variantCallingOutput")
 productsFolder.mkdirs()
+
+//Make log folder
+variantCallingLogDir = params.logDir + "/variantCallingLogs"
+variantCallingLogFolder = new File(variantCallingLogDir)
+variantCallingLogFolder.mkdirs()
 
 //-----------------------------------------------------------------------------------------------------------------------
 
@@ -18,14 +23,17 @@ colorListAndComboGraph = combinationGraphColorListChannel.merge(combinationGraph
 
 if (params.PD == "y") {
 
+	//Makes PD Variant Calling logs
+	PDLogFolder = new File(variantCallingLogDir + "/PDLogs")
+	
 	process PDVariantCalling {
 
-		publishDir params.logDir
+		publishDir PDLogFolder
 		executor params.executor
 		queue params.variantCallingQueue
 		maxForks params.variantCallingMaxNodes
 		time params.variantCallingWalltime
-		cpus params.cpusNeeded
+		cpus params.variatnCallingCpusNeeded
 
 
 		input:

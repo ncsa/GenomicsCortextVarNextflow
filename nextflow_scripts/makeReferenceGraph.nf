@@ -7,12 +7,15 @@
 productsFolder = new File(params.resultsDir + "/makeReferenceGraphOutput")
 productsFolder.mkdirs()
 
+// Makes log folder
+refLogFolder = new File(params.logDir + "/makeReferenceGraphLogs")
+refLogFolder.mkdris()
 
 // Make reference de Bruijn Graph
 
 process makeReferenceGraph {
 
-	publishDir params.logDir
+	publishDir refLogFolder
 	executor params.executor
 	queue params.makeReferenceGraphQueue
 	time params.makeReferenceGraphWalltime

@@ -11,6 +11,12 @@ inputFolder.mkdirs()
 productsFolder = new File(params.resultsDir + "/makeSampleGraphOutput/")
 productsFolder.mkdirs()
 
+// Makes logFolder
+makeGraphLogDir = params.logDir + "/makeGraphLogs"
+makeGraphLogFolder = new File(makeGraphLogDir)
+makeGraphLogFolder.mkdirs()
+
+
 // Makes a file in input folder called the sample name (e.g. Sample_Magellan) and writes the path to sample reads
 // e.g "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read1.fq"
 // and "/projects/bioinformatics/DaveStuff/nextFlowUltimateFolder/smallerSamples/shortSamplesMagMavFqReads/Sample_Magellan_read2.fq"
@@ -27,11 +33,11 @@ for (sampleName in params.sampleList) {
 
 process makeSampleDeBruijnGraph {
 
-	publishDir params.logDir
+	publishDir makeGraphLogDir
 	executor params.executor
 	queue params.makeGraphQueue
 	maxForks params.makeGraphMaxNodes
-	time params.makeGraphWallTime
+	time params.makeGraphWalltime
 	cpus params.makeGraphCpusNeeded
 
 
@@ -41,7 +47,7 @@ process makeSampleDeBruijnGraph {
 
 
 	output:
-		file "makeSampleGraph_${samplePairFileName}.log"
+		file "makeSampleGraph${samplePairFileName}.log"
 
 
 	script:

@@ -200,6 +200,12 @@ Path to directory where results of each process will be dumped.
 
 Path to directory where logs of each process will be dumped, default is inside the resultsDir
 
+**`cloneDir`**
+
+**STRING**
+
+Path to where this repository is cloned (path/to/GenomicsCortexVarNextflow)
+
 #### Sample Management
 
 All samples are organized as referred to figure 2, the fastq filenames should be organized as: "(sampleName)(sampleReadPattern)(readNumber)(sampleReadExtension)"
@@ -270,19 +276,7 @@ The type of executor that will be used by user. refer to nextflow executors [doc
 
 kmerSize chosen for the whole cortex_var process, refer to [Cortex_Var Executable Preparation](#Cortex_Var Executable Preparation)
 
-**`run(PROCESSNAME)`**
-
-**STRING**
-
-Indicate if user is willing to run that specific process. ("y"/"n")
-
-**`cortexBin(PROCESSNAME)`**
-
-**STRING**
-
-Executable to where the executable will be used for the process. Default is in the bin directory specificied by `cortexBinDir`
-
-**`cortexConfig(PROCESSNAME)`**
+**`cortexConfig`**
 
 **STRING**
 
@@ -304,6 +298,17 @@ mem_width = 18
 If the `kmer_size` is 63 combined with the example above, the input for `cortexConfig(PROCESSNAME)` should be:
 `"--kmer_size " + kmerSize + " --mem_height 27 --mem_width 18"`
 
+**`run(PROCESSNAME)`**
+
+**STRING**
+
+Indicate if user is willing to run that specific process. ("y"/"n")
+
+**`cortexBin(PROCESSNAME)`**
+
+**STRING**
+
+Executable to where the executable will be used for the process. Default is in the bin directory specificied by `cortexBinDir`
 
 **`(PROCESSNAME)Queue`**
 

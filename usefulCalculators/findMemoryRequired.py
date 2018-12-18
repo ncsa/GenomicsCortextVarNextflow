@@ -37,10 +37,11 @@ def findRightQueue ( height, width, kmerSize, numberOfSamples):
 	return 	
 
 
+
+inputKmerSize = int(input("enter kmer size: "))
 inputHeight = int(input("Enter height: "))
 inputWidth = int(input("Enter width: "))
-inputKmerSize = int(input("enter kmer size: "))
-inputNumberOfSamples = int(input("enter number of samples: "))
+inputNumberOfSamples = int(input("enter number of colors: "))
 
 
 findRightQueue(inputHeight, inputWidth, inputKmerSize, inputNumberOfSamples)

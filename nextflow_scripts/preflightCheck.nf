@@ -7,109 +7,89 @@ process preflightCheck {
 	//------------------------------------------------------------------------------------------------------------------------------------------------------
 	//PREFLIGHT CHECKS -------------------------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//Checks for Nextflow Directory and Cortex Bin Directory
+	nextflowExec = new File(params.nextflowDir)
+	cortexBinDirFile = new File(params.cortexBinDir)
 
-	//Checks if at least one of Path Divergence or Bubble Caller is selected, if neither is selected, this script is terminated
-
-	if (params.PD == "n" && params.BC == "n" ) {
-		println "At least one of PD or BC have to be selected"
+	if (!nextflowExec.exists()) {
+		println ("Nextflow executable cannot be found at specified nextflowDir path")
 		System.exit(1)
 	}
 
-	if (params.PD == "y") {
-		println "Path divergence variant calling method is selected"
-	} else {
-		println "Path divergence variant calling method is not selected"
+	if (!cortexBinDirFile.exists()) {
+		println ("Cortex bin directory does not exist in specified cortexBinDir path")
+		System.exit(1)
 	}
 
-	if (params.BC == "y") {
-		println "Bubble caller variant calling method is selected"
-	} else {
-		println "Bubble caller variant calling method is not selected"
+	//Check for user input for each run(PROCESSNAME) parameter
+
+	if (params.runMakeSampleGraph != "y" && params.runMakeSampleGraph != "n") {
+		println ("runMakeSampleGraph must be 'y' or 'n'")
+		System.exit(1)
 	}
+
+	if (params.runMakePoolAndCleanError != "y" && params.runMakePoolAndCleanError != "n") {
+		println ("runMakePoolAndCleanError must be 'y' or 'n'")
+		System.exit(1)
+	}
+
+	if (params.runCleanSampleGraph != "y" && params.runCleanSampleGraph != "n") {
+		println ("runCleanSampleGraph must be 'y' or 'n'")
+		System.exit(1)
+	}
+
+	if (params.runMakeReferenceGraph != "y" && params.runMakeReferenceGraph != "n") {
+		println ("runMakeReferenceGraph must be 'y' or 'n'")
+		System.exit(1)
+	}
+
+	if (params.runMakeCombinationGraph != "y" && params.runMakeCombinationGraph != "n") {
+		println ("runMakeCombinationGraph must be 'y' or 'n'")
+		System.exit(1)
+	}
+
+	if (params.runVariantCalling != "y" && params.runVariantCalling != "n") {
+		println ("runVariantCalling must be 'y' or 'n'")
+		System.exit(1)
+	}	
+
 	
-	//Checks if referenceReadsProvided, if it is not provided and user tries to run PD, script will exit
+	//Cheks if there are read files provided in the sampleDir according to sample list needed by make sample graph
 
-	if (params.referenceReadsProvided == "y") {
-		println "Reference reads provided!"
+	if (params.runMakeSampleGraph == "y") {
+		for (eachSample in params.sampleList) {
+			sampleRead1 = new File(params.sampleDir + "/" + eachSample + params.sampleReadPattern + "1" + params.sampleReadExtension)
+			sampleRead2 = new File(params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension)
+			if (!sampleRead1.exists()) {
+				println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "1" + params.sampleReadExtension + " does not exist!")
+				System.exit(1)	
+			} else {
+				println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "1" + params.sampleReadExtension + " exists!")
+
+			}		
 		
-		//Then checks existence of reference read directory
-		checkRefGivenExists = new File(params.pathToReferenceList)
-		if (checkRefGivenExists.exists()) {
-			println "Path to reference given exists!"
-			
-		} else {
-			println "Path to reference reads given does not exist!"
-			System.exit(1)
-		}
-	} else {
-		println "Reference reads not provided!"
+			if (!sampleRead2.exists()) {    
+					println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " does not exist!")
+					System.exit(1)
+			} else {
+					println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " exists!")
 
-		if (params.PD == "y") {
-			println "Path Divergence cannot be called without reference reads!"
-			System.exit(1)
-		} else if (params.runStep4 == "y") {
-			println "Running step 4 cannot be done without reference reads!"
+			}
+
+		}
+	}
+
+	// Check for Reference fasta list if make reference graph is called or Path divergence is called
+
+	if (params.runMakeReferenceGraph == "y" || params.PD == "y") {
+		referenceListFile = new File(params.pathToReferenceList)
+		if (!referenceListFile.exists()) {
+			println ("pathToReferenceList provided is not valid!")
 			System.exit(1)
 		}
 	}
-	
-
-	
-	//Assigns path to reference genome de Bruijn graph, depending on whether or not step 4 is selected
-
-	if (params.runStep4 == "y") {
-
-		pathToRefBinary = params.resultsDir + "/productsOfStep4/" + "ref.ctx\n"
-
-	} else if (params.runStep4 == "n") {
-
-
-		//Checks if params.pathToRefCtx given by user exists
-
-		givenPathToRefCtxCheck = new File(params.pathToRefCtx)
-		if (givenPathToRefCtxCheck.exists()) {
-
-			println "Path to reference binary file given exists!"
-
-
-		} else {
-
-			println "Path to reference binary file given does not exist!"
-			System.exit(1)
-
-		}
-
-
-	} else {
-
-		println "runStep4 parameter in nextflow.config needs to be either \"y\" or \"n\""
-		println "Terminating script..."
-		System.exit(1);
-
-	}
-
-	//Cheks if there are read files provided in the sampleDir according to sample list
-
-	for (eachSample in params.sampleList) {
-		sampleRead1 = new File(params.sampleDir + "/" + eachSample + params.sampleReadPattern + "1" + params.sampleReadExtension)
-		sampleRead2 = new File(params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension)
-		if (!sampleRead1.exists()) {
-			println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "1" + params.sampleReadExtension + " does not exist!")
-			System.exit(1)	
-		} else {
-			println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "1" + params.sampleReadExtension + " exists!")
-
-		}		
-	
-              	if (!sampleRead2.exists()) {    
-                        println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " does not exist!")
-                        System.exit(1)
-                } else {
-                       println ("File " + params.sampleDir + "/" + eachSample + params.sampleReadPattern + "2" + params.sampleReadExtension + " exists!")
-
-                }
-
-}
 		
+	
 }
 

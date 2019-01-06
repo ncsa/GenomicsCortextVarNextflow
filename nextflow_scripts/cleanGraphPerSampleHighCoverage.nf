@@ -62,19 +62,19 @@ process getFirstMinimumCoverage {
 // Clean graph per sample individually
 
 process cleanGraphPerSampleHighCoverage {
-	/**
+	
 	publishDir cleanGraphLogDir
 	executor params.executor
 	queue params.cleanGraphPerSampleQueue
 	maxForks params.cleanGraphPerSampleMaxNodes
 	time params.cleanGraphPerSampleWalltime
 	cpus params.cleanGraphPerSampleCpusNeeded
-	*/
+	
 	input:
 		val firstMinPair from firstMinPairChannel 		
 	
 	output:
-	//	file "cleanGraphPerSample${samplePairFileName}.log"
+		file "cleanGraphPerSample${samplePairFileName}.log"
 		stdout into stdoutChannel
 	script:
 		template 'cleanGraphPerSampleHighCoverage.sh'	

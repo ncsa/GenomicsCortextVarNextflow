@@ -31,32 +31,8 @@ process getFirstMinimumCoverage {
 		stdout into firstMinPairChannel 
 
 	script:
-		"""
-		#!/usr/bin/env python
-		sampleName = "$coverageInfo".replace(".ctx.covg","")
-
-		fh = open("$coverageInfo", "r")
-		
-		pairsList = []
-		
-		for line in fh:
-			line = line.strip()
-			pairsList.append(line.split("\t"))
-		fh.close()	
-
-		
-		firstMinPair = pairsList[2]
-		for i in range(2,len(pairsList) - 2):
-			if int(pairsList[i][1]) < int(pairsList[i+1][1]):
-				firstMinPair = pairsList[i]
-				break
-		pairString = sampleName + "," + firstMinPair[0]
-		print(pairString, end='')	
-		"""
+		template 'getFirstMinimumCoverage.py'
 }
-
-
-
 
 
 // Clean graph per sample individually
@@ -75,7 +51,6 @@ process cleanGraphPerSampleHighCoverage {
 	
 	output:
 		file "cleanGraphPerSample${samplePairFileName}.log"
-		stdout into stdoutChannel
 	script:
 		template 'cleanGraphPerSampleHighCoverage.sh'	
 

@@ -9,12 +9,17 @@ inputFolder.mkdirs()
 productsFolder = new File (params.resultsDir + "/conversionToVCFOutput")
 productsFolder.mkdirs()
 
-//Make log folder
+//Make VCF log folder
 conversionLogDir = params.logDir + "/conversionToVCFLogs"
 conversionLogFolder = new File(conversionLogDir)
 conversionLogFolder.mkdirs()
 
+//Variant calling output folder
+variantCallingOutputDir = params.resultsDir + "/variantCallingOutput"
+variantCallingOutputFileChannel = Channel.fromPath(variantCallingOutputDir + "/*")
 
+//Variant calling log folder
+variantCallingLogDir = params.logDir + "/variantCallingLogs"
 
 //Grab colorlist from combinationGraphInput and convert them to samplelist for vcf conversion
 makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
@@ -29,42 +34,38 @@ process makeSampleList {
 	input:
 		file colorList from combinationGraphColorListChannel
 
-	stdout:
+	output:
 		stdout into makeSampleListFlag
 	script:
-		"""
-		prefix=colorlistFileToSubmit
-		colorListFile=${colorList}
-		fileIndex=\${colorListFile#*\${prefix}}
-	
-		sampleListFile=${sampleListsDir}/sampleList\${fileIndex}
-		touch \$sampleListFile
+		template 'makeSampleList.sh'	
 
-		declare -a sampleArray
-		prefix="pathToCleaned"
-		index=0
-		while read pathToSample
-		do
-			if ((\$index==0))
-			then
-				echo "REF" >> \$sampleListFile	
-			else
-				echo \${pathToSample#*\$prefix} >> \$sampleListFile
-			fi
-
-			index=\$((\$index+1))
-		done < ${colorList}
-
-		"""
 
 }
 
+makeVCFStartFlag = makeSampleListFlag.first()
 
+processCallsExecutable = params.cortexScriptDir + "/analyse_variants/process_calls.pl"
 
-processCallsExecutable = params.cortexScriptDir + "/process_calls.pl"
+process makeVCF {
+	
+	executor params.executor
+	queue params.runConversionToVCFQueue
+	maxForks params.runConversionToVCFMaxNodes
+	time params.runConversionToVCFWalltime
+	cpus params.runConversionToVCFCpusNeeded
 
+	input:
+		val flag from makeVCFStartFlag
+		file varOutFile from variantCallingOutputFileChannel
 
+	output:
+		stdout into stdoutChannel
 
+	script:
+		template 'makeVCF.sh'
+	
+}
+stdoutChannel.subscribe{println it}
 
 
 	

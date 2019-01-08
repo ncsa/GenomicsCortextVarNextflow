@@ -62,14 +62,14 @@ if (params.PD == "y") {
 
 		regularList = 1..(params.finalCombinationGraphMaxColor-1)
 
-
-		sampleOnLastGraph = 1..(params.sampleList.size() % (params.finalCombinationGraphMaxColor-1))
-
+		if (params.sampleList.size() % (params.finalCombinationGraphMaxColor-1) > 0) {
+			sampleOnLastGraph = 1..(params.sampleList.size() % (params.finalCombinationGraphMaxColor-1))
+		} else {
+			sampleOnLastGraph = 1..1
+		}
 
 
 		colorListAndComboGraphInd.toList().subscribe{ asList = it}
-
-	
 		finalList = []
 		if (asList.size() > 1) {
 			for (i = 0; i < asList.size(); i++) {

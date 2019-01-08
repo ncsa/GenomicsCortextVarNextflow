@@ -25,9 +25,8 @@ removeLowCovgInput=\${dataArray[1]}
 
 
 
-
 # Cortex command
-${params.cortexBinCleanGraphPerSampleHighCoverage} ${params.cortexConfig} --multicolour_bin ${params.resultsDir}/makeSampleGraphOutput/\${sampleName}.ctx --remove_low_coverage_supernodes \${removeLowCovgInput} --dump_binary ${params.resultsDir}/cleanGraphPerSampleFolder/\${sampleName}_cleanedIndividually.ctx --dump_covg_distribution ${params.resultsDir}/cleanGraphPerSampleFolder/\${sampleName}_cleanedIndividually.ctx.covg > cleanGraphPerSample\${sampleName}.log
+${params.cortexBinCleanGraphPerSampleHighCoverage} ${params.cortexConfig} --multicolour_bin ${params.resultsDir}/makeSampleGraphOutput/\${sampleName}.ctx --remove_low_coverage_supernodes \${removeLowCovgInput} --dump_binary ${params.resultsDir}/cleanGraphPerSampleFolder/\${sampleName}_cleanedIndividually.ctx --dump_covg_distribution ${params.resultsDir}/cleanGraphPerSampleFolder/\${sampleName}_cleanedIndividually.ctx.covg > ${cleanGraphLogDir}/\${sampleName}.log
 
 
 

@@ -48,11 +48,12 @@ process cleanGraphPerSampleHighCoverage {
 	
 	input:
 		val firstMinPair from firstMinPairChannel 		
-	
+
 	output:
-		file "cleanGraphPerSample${samplePairFileName}.log"
+		stdout into stdoutChannel	
 	script:
 		template 'cleanGraphPerSampleHighCoverage.sh'	
 
 }
+
 

@@ -53,6 +53,7 @@ The standard pipeline for cortex using high coverage is as such:
  3. Create reference de Bruijn graph
  4. Create multi-color graph, consisting of reference de Bruijn graph and cleaned sample de Bruijn graphs
  5. Call variants by Bubble Caller and/or Path Divergence
+ 6. Convert cortex calls to VCF
 
 **Figure 1:** Cortex_var High-Coverage Pipeline Overview
 
@@ -69,6 +70,7 @@ Additionally, cortex_var also supports a pipeline using many low coverage sample
  4. Create reference de Bruijn graph
  5. Create multi-color graph, consisting of reference de Bruijn graph and cleaned sample de Bruijn graphs
  6. Call variants by Bubble Caller and/or Path Divergence
+ 7. Convert cortex calls to VCF
  
 **Figure 2:** Cortex_var Low-Coverage Pipeline Overview
 
@@ -268,7 +270,7 @@ The type of executor that will be used by user. refer to nextflow executors [doc
 
 #### Cortex_var Individual Process Parameters
 
-##### Generic process parameters
+##### Generic process parameters (excluding conversion to VCF)
 
 **`kmerSize`**
 
@@ -348,16 +350,6 @@ Number of cores per node for each process, refer to nextflow cpus [documentation
 
 Initial quality filter for making de Bruijn graph, refer to section 6.2 and page 3 of [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
-###### Clean sample graph specific parameters
-
-**`remove_low_coverage_supernodes`**
-
-**INT**
-
-**ONLY FOR STANDARD HIGH COVERAGE PROCESS, WILL NOT BE USED FOR LOW COVERAGE PIPELINE**
-
-How stringent should the cleaning be, (1 or 2) refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) section 9.1 and supplementary methods 6
-
 
 ###### Make combination graph specific parameters
 
@@ -373,7 +365,7 @@ Path to reference de Bruijn graph, usually having .ctx extension (default is pat
 
 The largest number of colors of graph to run the node can handle, given kmer size, memory height and memory width.
 
-This process creates multi-colored deBruijn graph, stacking reference de Bruijn graph with one or more cleaned sample de Bruijn graph(s). Thus, the number can range from 2 to N+1 (total number of samples), depending on the memory capability of the node. 
+This process creates multi-colored deBruijn graph, stacking reference de Bruijn graph with one or more cleaned sample de Bruijn graph(s). Thus, the number ranges from 2 to N+1 (total number of samples), depending on the memory capability of the node. 
 
 To identify how much memory the process needs, the user can refer to [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf) page 8. However, this repository also provides a script to calculate memory required, `/usefulCalculators/findMemoryRequired.py`. For more information, refer to Resource Requirement section [below](#Resource Requirement)
 
@@ -389,6 +381,66 @@ If the finalCombinationGraphMaxColor is not N+1, then this pipeline will automat
 Indicate if user wants to run Path Divergence variant calling method ("y"/"n")
 
 For more information regarding Path Divergence variant calling method, refer to Section 11 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+
+**Parameters used only if PD is selected**
+
+**`populationPD`**
+
+**STRING**
+
+Indicate if user wants to run combined Path Divergence variant calling in the same combination graph consecutively ("y"/"n")
+
+After the vcf conversion process, variant calls of every sample in the same combination graph will be available in a single VCF file, one per combination graph.
+
+For more information, refer to page 12, or section 11.2 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+**`individualPD`**
+
+**STRING**
+
+Indicate if user wants to run path divergence on one of one sample for each process ("y"/"n")
+
+After the vcf conversion process, variant calls of each individual sample will be available in individual vcf files.
+
+For more information refer to page 12, or section 11.1 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+
+###### Variant Calling specific parameters
+
+**`stampyBin`**
+
+**STRING**
+
+Full path to stampy.py.
+
+For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+**`stampyHashProducts`**
+
+**STRING**
+
+For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+**`VCFToolsDir`**
+
+**STRING**
+
+For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+**`samplePloidy`**
+
+**INT**
+
+Ploidy of sample.
+
+Example: if sample is diploid, samplePloidy should be 2
+
+**`referenceFasta`**
+
+Path to reference fasta file. Note: this is different from `pathToReferenceList`.
+
+For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
 
 ### Resource Requirements

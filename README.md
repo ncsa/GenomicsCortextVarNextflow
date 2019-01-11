@@ -339,6 +339,12 @@ Walltime for individual process runs, refer to nextflow walltime [documentation]
 
 Number of cores per node for each process, refer to nextflow cpus [documentation](https://www.nextflow.io/docs/latest/process.html#cpus)
 
+**`(PROCESSNAME)ErrorStrategy`**
+
+**STRING**
+
+For what is the action taken when process encounters error(s) [documentation](https://www.nextflow.io/docs/latest/process.html#errorstrategy)
+
 
 ##### Specific process parameters
 

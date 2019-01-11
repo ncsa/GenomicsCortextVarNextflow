@@ -14,15 +14,27 @@ variantCallingLogFolder.mkdirs()
 //Channel Preparation for population variant calling
 //-----------------------------------------------------------------------------------------------------------------------
 
-combinationGraphChannelPop = Channel.fromPath(params.resultsDir + '/makeCombinationGraphOutput/combinationGraph*.ctx')
-combinationGraphChannelInd = Channel.fromPath(params.resultsDir + '/makeCombinationGraphOutput/combinationGraph*.ctx')
+combinationGraphFolderPath = params.resultsDir + '/makeCombinationGraphOutput'
+combinationGraphFolderDirectory = new File(combinationGraphFolderPath)
+combinationGraphList = []
+combinationGraphFolderDirectory.eachFile() { file -> combinationGraphList.add(file) }
+
+
 
 makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
-combinationGraphColorListChannelPop = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
-combinationGraphColorListChannelInd = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
+combinationGraphColorListChannelInd = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*').toSortedList().subscribe{ colorListList = it}
 
-colorListAndComboGraphPop = combinationGraphColorListChannelPop.merge(combinationGraphChannelPop)
-colorListAndComboGraphInd = combinationGraphColorListChannelInd.merge(combinationGraphChannelInd)
+mergedSortedList = combinationGraphList.sort()
+for (i = 0; i < mergedSortedList.size(); i++) {
+	mergedSortedList[i] = [mergedSortedList[i]]
+	mergedSortedList[i].add(colorListList[i])
+
+}
+
+
+
+colorListAndComboGraphPop = Channel.from(mergedSortedList)
+colorListAndComboGraphInd = Channel.from(mergedSortedList)
 
 //Path Divergence Variant Calling : When selected, cortex will use path divergence caller algorithm to identify variants.
 
@@ -41,7 +53,7 @@ if (params.PD == "y") {
 			maxForks params.variantCallingMaxNodes
 			time params.variantCallingWalltime
 			cpus params.variantCallingCpusNeeded
-
+			errorStrategy params.variantCallingErrorStrategy
 
 			input:
 				val colorListGraph from colorListAndComboGraphPop
@@ -69,7 +81,7 @@ if (params.PD == "y") {
 		}
 
 
-		colorListAndComboGraphInd.toList().subscribe{ asList = it}
+		asList = combinationGraphList
 		finalList = []
 		if (asList.size() > 1) {
 			for (i = 0; i < asList.size(); i++) {
@@ -111,13 +123,13 @@ if (params.PD == "y") {
 
 
 		process PDVariantCallingIndividual {
-
+			
 			executor params.executor
 			queue params.variantCallingQueue
 			maxForks params.variantCallingMaxNodes
 			time params.variantCallingWalltime
 			cpus params.variantCallingCpusNeeded
-
+			errorStrategy params.variantCallingErrorStrategy
 
 	
 			input:

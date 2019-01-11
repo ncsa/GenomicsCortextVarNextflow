@@ -45,6 +45,7 @@ process cleanGraphPerSampleHighCoverage {
 	maxForks params.cleanGraphPerSampleMaxNodes
 	time params.cleanGraphPerSampleWalltime
 	cpus params.cleanGraphPerSampleCpusNeeded
+	errorStrategy params.cleanGraphPerSampleErrorStrategy	
 	
 	input:
 		val firstMinPair from firstMinPairChannel 		

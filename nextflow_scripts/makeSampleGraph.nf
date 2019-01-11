@@ -39,7 +39,7 @@ process makeSampleDeBruijnGraph {
 	maxForks params.makeGraphMaxNodes
 	time params.makeGraphWalltime
 	cpus params.makeGraphCpusNeeded
-
+	errorStrategy params.makeGraphErrorStrategy
 
 
 	input:

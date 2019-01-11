@@ -20,6 +20,7 @@ process makeReferenceGraph {
 	queue params.makeReferenceGraphQueue
 	time params.makeReferenceGraphWalltime
 	cpus params.makeReferenceGraphCpusNeeded
+	errorStrategy params.makeReferenceGraphErrorStrategy 
 
 	output:
 		file "makeReferenceGraph.log"

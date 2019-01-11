@@ -62,6 +62,7 @@ process makeCombinationGraph {
 	maxForks params.makeCombinationGraphMaxNodes
 	time params.makeCombinationGraphWalltime
 	cpus params.makeCombinationGraphCpusNeeded
+	errorStrategy params.makeCombinationGraphErrorStrategy
 
 	input:
 		each colorList from inputListChannel

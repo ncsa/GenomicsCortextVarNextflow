@@ -31,8 +31,6 @@ for (i = 0; i < mergedSortedList.size(); i++) {
 
 }
 
-
-
 colorListAndComboGraphPop = Channel.from(mergedSortedList)
 colorListAndComboGraphInd = Channel.from(mergedSortedList)
 
@@ -81,20 +79,23 @@ if (params.PD == "y") {
 		}
 
 
-		asList = combinationGraphList
+
 		finalList = []
-		if (asList.size() > 1) {
-			for (i = 0; i < asList.size(); i++) {
-				temp = asList[i]
-				if (i != (asList.size() - 1)) {
+		if (combinationGraphList.size() > 1) {
+			for (i = 0; i < combinationGraphList.size(); i++) {
+				temp = combinationGraphList[i]
+				colorListFile = new File(combinationGraphList[i][1].toString())
+				colorListFileBaseName = colorListFile.getName().toString()
+
+	
+				if (!colorListFileBaseName.contains((combinationGraphList.size() - 1).toString())) {
 					for (j in regularList) {
 						temp2 = temp.clone()
 						temp2.add(j)
 						finalList.add(temp2)
-
+						println(temp2)
 					}
 				} else {
-
 					for (j in sampleOnLastGraph) {
 						temp2 = temp.clone()
 						temp2.add(j)
@@ -104,8 +105,8 @@ if (params.PD == "y") {
 			}
 
 		} else {
-			for (i = 0; i < asList.size(); i++) {
-				temp = asList[i]
+			for (i = 0; i < combinationGraphList.size(); i++) {
+				temp = combinationGraphList[i]
 				for (j in regularList) {
 					temp2 = temp.clone()
 					temp2.add(j)
@@ -115,6 +116,7 @@ if (params.PD == "y") {
 			}
 
 		}
+
 
 
 		//Append finalList with sorted sample names 

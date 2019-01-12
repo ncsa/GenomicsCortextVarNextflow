@@ -36,5 +36,5 @@ prefix="pathToCleaned"
 sampleName=\${sampleNameMedium#*\$prefix}
 
 # Cortex command
-#${params.cortexDirVariantCalling} ${params.cortexConfig} --max_var_len 50000 --multicolour_bin \${combinationGraph} --path_divergence_caller \${sampleIndex}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${sampleName} --print_colour_coverages > ${PDLogDir}/\${sampleName}_PD.log
+${params.cortexDirVariantCalling} ${params.cortexConfig} --max_var_len 50000 --multicolour_bin \${combinationGraph} --path_divergence_caller \${sampleIndex}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${sampleName} --print_colour_coverages > ${PDLogDir}/\${sampleName}_PD.log
 

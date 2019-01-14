@@ -93,7 +93,6 @@ if (params.PD == "y") {
 						temp2 = temp.clone()
 						temp2.add(j)
 						finalList.add(temp2)
-						println(temp2)
 					}
 				} else {
 					for (j in sampleOnLastGraph) {

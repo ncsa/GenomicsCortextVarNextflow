@@ -21,4 +21,4 @@ if int(firstMinPair[0]) > 8:
 	firstMinPair[0] = 1
 pairString = sampleName + "," + str(firstMinPair[0])
 
-
+print(pairString)

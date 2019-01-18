@@ -1,7 +1,5 @@
 #!/bin/bash
 
-module load python-2.7.9
-
 varOutFileBash=$varOutFile
 sampleNameVarCallMethod=\${varOutFileBash%_*}
 sampleName=\${sampleNameVarCallMethod%_*}

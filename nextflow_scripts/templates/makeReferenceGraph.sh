@@ -6,7 +6,7 @@
 
 # Cortex command
 
-${params.cortexDirMakeReferenceGraph} ${params.cortexConfig} --sample_id reference --se_list ${params.pathToReferenceList} --dump_binary ${params.resultsDir}/makeReferenceGraphOutput/ref.ctx > makeReferenceGraph.log
+${params.cortexDirMakeReferenceGraph} ${params.makeReferenceGraphCortexConfig} --sample_id reference --se_list ${params.pathToReferenceList} --dump_binary ${params.resultsDir}/makeReferenceGraphOutput/ref.ctx > makeReferenceGraph.log
 
 
 

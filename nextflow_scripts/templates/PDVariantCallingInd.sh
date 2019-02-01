@@ -41,6 +41,6 @@ echo "using \${sampleIndex}" >> ${PDLogDir}/\${sampleName}_PD.log
 echo "Now running PD variant calling on \${sampleName}" >> ${PDLogDir}/\${sampleName}_PD.log
 
 # Cortex command
-${params.cortexDirVariantCalling} ${params.variantCallingCortexConfig} --max_var_len 50000 --multicolour_bin \${combinationGraph} --path_divergence_caller \${sampleIndex}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${sampleName} --print_colour_coverages >> ${PDLogDir}/\${sampleName}_PD.log
+${params.cortexDirVariantCalling} ${params.variantCallingCortexConfig} --max_var_len ${params.maxVarLength} --multicolour_bin \${combinationGraph} --path_divergence_caller \${sampleIndex}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${sampleName} --print_colour_coverages >> ${PDLogDir}/\${sampleName}_PD.log
 
 

@@ -411,8 +411,15 @@ After the vcf conversion process, variant calls of each individual sample will b
 
 For more information refer to page 12, or section 11.1 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
+**`maxVarLength`**
 
-###### Variant Calling specific parameters
+**INT**
+
+Maximum variant length to look for, default is 40000 base pairs
+
+For more information refer to page 18 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
+
+###### VCF Caller specific parameters
 
 **`stampyBin`**
 

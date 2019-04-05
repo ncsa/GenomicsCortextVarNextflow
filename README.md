@@ -94,6 +94,23 @@ Refer to [cortex_var github page](https://github.com/iqbal-lab/cortex)
 
 Clone this repository
 
+### Modifying process_calls.pl
+
+To run conversion VCF, it is needed to change the perl script `process_calls.pl` within `/cortex/scripts/analyse_variants` in the cortex directory. Lines 2273 - 2283 should be changed into:
+```
+if ( $two_alleles =~ /^([ACGTRYKMSWBDHVN]+)_([ACGTRYKMSWBDHVN]+)$/ )
+                       {
+                               $this_indel_ref_allele = $1;
+                               $this_indel_alt_allele = $2;
+                       }
+                       elsif ( $two_alleles =~ /^_([ACGTRYKMSWBDHVN]+)$/ )
+                       {
+                               $this_indel_ref_allele = "";
+                               $this_indel_alt_allele = $1;
+                       }
+                       elsif ( $two_alleles =~ /^([ACGTRYKMSWBDHVN]+)_$/ )
+```
+
 ## User Guide
 
 ### Data Preparation

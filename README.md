@@ -110,6 +110,9 @@ if ( $two_alleles =~ /^([ACGTRYKMSWBDHVN]+)_([ACGTRYKMSWBDHVN]+)$/ )
                        }
                        elsif ( $two_alleles =~ /^([ACGTRYKMSWBDHVN]+)_$/ )
 ```
+### Creating symlink for perl folder in vcftools
+
+Cortex_var was created before the /perl folder in vcftools were gone. So when the vcftools install is new, cortex_var cannot convert cortex calls to vcf files, as it is looking for `/perl/vcf-sort` within the vcftools folder. Thus, it is necessary to create a symlink in the vcftools variable specified in nextflow.config file that has the name `/perl` but leads to the `/bin` directory of vcftools.
 
 ## User Guide
 

@@ -41,7 +41,7 @@ process poolAndCleanErrors {
 	maxForks params.poolAndCleanErrorMaxNodes
 	time params.wallTime
 	cpus params.cpusNeeded
-
+	errorStrategy params.poolAndCleanErrorErrorStrategy
 
 	output:
 		file "poolAndCleanErrors.log"

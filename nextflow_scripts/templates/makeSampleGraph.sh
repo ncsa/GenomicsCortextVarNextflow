@@ -8,7 +8,7 @@
 
 # Cortex command
 
-${params.cortexBinMakeGraph} ${params.cortexConfig} --sample_id ${samplePairFileName} --dump_binary ${params.resultsDir}/makeSampleGraphOutput/${samplePairFileName}.ctx --dump_covg_distribution ${params.resultsDir}/makeSampleGraphOutput/${samplePairFileName}.ctx.covg --se_list ${params.resultsDir}/makeSampleGraphInput/${samplePairFileName} --quality_score_threshold ${params.quality_score_threshold} > makeSampleGraph${samplePairFileName}.log
+${params.cortexBinMakeGraph} ${params.makeGraphCortexConfig} --sample_id ${samplePairFileName} --dump_binary ${params.resultsDir}/makeSampleGraphOutput/${samplePairFileName}.ctx --dump_covg_distribution ${params.resultsDir}/makeSampleGraphOutput/${samplePairFileName}.ctx.covg --se_list ${params.resultsDir}/makeSampleGraphInput/${samplePairFileName} --quality_score_threshold ${params.quality_score_threshold} > makeSampleGraph${samplePairFileName}.log
 
 
 

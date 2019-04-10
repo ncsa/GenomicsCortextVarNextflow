@@ -139,7 +139,9 @@ if (params.runVariantCalling == "y") {
 		input:
 			val preflightFlag from preflightStdout
 			val makeCombinationGraphFlag from makeCombinationGraphStdout
-
+		
+		output:
+			stdout into runVariantCallingStdout
 		script:
 			"""
 			cd ${params.resultsDir}
@@ -150,12 +152,29 @@ if (params.runVariantCalling == "y") {
 
 } else {
 
-	makeCombinationGraphStdout = Channel.from('DummyFlag')
+	runVariantCallingStdout = Channel.from('DummyFlag')
 
 }
 
 
+if (params.runConversionToVCF == "y") {
 
+        process convertToVCF {
+                input:
+                        val preflightFlag from preflightStdout
+                        val variantCallingFlag from runVariantCallingStdout
+                script:
+                        """
+                        cd ${params.resultsDir}
+                        ${params.nextflowDir} run ${nextflowFolder}/convertToVCF.nf
+                        """
+        }
+
+} else {
+
+        runConversionToVCFStdout = Channel.from('DummyFlag')
+
+}
 
 
 

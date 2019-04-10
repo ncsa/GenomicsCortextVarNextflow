@@ -1,25 +1,26 @@
 #!/usr/bin/env nextflow
 
 
-
 //Prepare for referenceDBGraph folder
-
-productsFolder = new File(params.resultsDir + "/makeReferenceGraphOutput")
+productsFolderPath = params.resultsDir + "/makeReferenceGraphOutput"
+productsFolder = new File(productsFolderPath)
 productsFolder.mkdirs()
 
 // Makes log folder
-refLogFolder = new File(params.logDir + "/makeReferenceGraphLogs")
-refLogFolder.mkdris()
+refLogFolderPath = params.logDir + "/makeReferenceGraphLogs"
+refLogFolder = new File(refLogFolderPath)
+refLogFolder.mkdirs()
 
 // Make reference de Bruijn Graph
 
 process makeReferenceGraph {
 
-	publishDir refLogFolder
+	publishDir refLogFolderPath
 	executor params.executor
 	queue params.makeReferenceGraphQueue
 	time params.makeReferenceGraphWalltime
 	cpus params.makeReferenceGraphCpusNeeded
+	errorStrategy params.makeReferenceGraphErrorStrategy 
 
 	output:
 		file "makeReferenceGraph.log"

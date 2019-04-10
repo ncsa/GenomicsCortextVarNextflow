@@ -13,24 +13,48 @@ cleanGraphLogDir = params.logDir + "/cleanGraphLogs"
 cleanGraphLogFolder = new File(cleanGraphLogDir)
 cleanGraphLogFolder.mkdirs()
 
-// Clean graph per sample using pooled graph
+
+//Sample graph output dir
+sampleGraphOutputDir = params.resultsDir + "/makeSampleGraphOutput"
+coverageFileChannel = Channel.fromPath(sampleGraphOutputDir + '/*.covg')
+
+
+
+// Get first minimum of kmer covg from coverage file in makeSampleGraph process
+
+process getFirstMinimumCoverage {
+
+	input:
+		file coverageInfo from coverageFileChannel
+
+	output:
+		stdout into firstMinPairChannel 
+
+	script:
+		template 'getFirstMinimumCoverage.py'
+}
+
+
+// Clean graph per sample individually
 
 process cleanGraphPerSampleHighCoverage {
-
+	
 	publishDir cleanGraphLogDir
 	executor params.executor
 	queue params.cleanGraphPerSampleQueue
 	maxForks params.cleanGraphPerSampleMaxNodes
 	time params.cleanGraphPerSampleWalltime
 	cpus params.cleanGraphPerSampleCpusNeeded
-
-	input:
-		each samplePairFileName from sampleListChannel		
+	errorStrategy params.cleanGraphPerSampleErrorStrategy	
 	
-	output:
-		file "cleanGraphPerSample${samplePairFileName}.log"
+	input:
+		val firstMinPair from firstMinPairChannel 		
 
+	output:
+		stdout into stdoutChannel	
 	script:
 		template 'cleanGraphPerSampleHighCoverage.sh'	
 
 }
+
+

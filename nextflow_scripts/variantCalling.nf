@@ -11,39 +11,140 @@ variantCallingLogFolder = new File(variantCallingLogDir)
 variantCallingLogFolder.mkdirs()
 
 //-----------------------------------------------------------------------------------------------------------------------
+//Channel Preparation for population variant calling
+//-----------------------------------------------------------------------------------------------------------------------
+
+combinationGraphFolderPath = params.resultsDir + '/makeCombinationGraphOutput'
+combinationGraphFolderDirectory = new File(combinationGraphFolderPath)
+combinationGraphList = []
+combinationGraphFolderDirectory.eachFile() { file -> combinationGraphList.add(file) }
 
 
-combinationGraphChannel = Channel.fromPath(params.resultsDir + '/makeCombinationGraphOutput/finalCombinationGraph*.ctx')
+
 makeCombinationGraphInputDir = params.resultsDir + '/makeCombinationGraphInput'
-combinationGraphColorListChannel = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*')
-colorListAndComboGraph = combinationGraphColorListChannel.merge(combinationGraphChannel)
+combinationGraphColorListChannelInd = Channel.fromPath(makeCombinationGraphInputDir + '/colorlistFileToSubmit*').toSortedList().subscribe{ colorListList = it}
+
+mergedSortedList = combinationGraphList.sort()
+for (i = 0; i < mergedSortedList.size(); i++) {
+	mergedSortedList[i] = [mergedSortedList[i]]
+	mergedSortedList[i].add(colorListList[i])
+
+}
+
+colorListAndComboGraphPop = Channel.from(mergedSortedList)
+colorListAndComboGraphInd = Channel.from(mergedSortedList)
 
 //Path Divergence Variant Calling : When selected, cortex will use path divergence caller algorithm to identify variants.
-
 
 if (params.PD == "y") {
 
 	//Makes PD Variant Calling logs
-	PDLogFolder = new File(variantCallingLogDir + "/PDLogs")
+	PDLogDir = variantCallingLogDir + "/PDLogs"
+	PDLogFolder = new File(PDLogDir)
+	PDLogFolder.mkdirs()
+
+	if (params.populationPD == "y") {	
+		process PDVariantCallingPopulation {
+
+			executor params.executor
+			queue params.variantCallingQueue
+			maxForks params.variantCallingMaxNodes
+			time params.variantCallingWalltime
+			cpus params.variantCallingCpusNeeded
+			errorStrategy params.variantCallingErrorStrategy
+
+			input:
+				val colorListGraph from colorListAndComboGraphPop
+
+			script:
+				template 'PDVariantCallingPop.sh'	
+
+
+		}	
+	} 
+
+	if (params.individualPD == "y") {
+
+		//-----------------------------------------------------------------------------------------------------------------------
+		//Channel Preparation for individual variant calling
+		//-----------------------------------------------------------------------------------------------------------------------
+
+
+		regularList = 1..(params.finalCombinationGraphMaxColor-1)
+
+		if (params.sampleList.size() % (params.finalCombinationGraphMaxColor-1) > 0) {
+			sampleOnLastGraph = 1..(params.sampleList.size() % (params.finalCombinationGraphMaxColor-1))
+		} else {
+			sampleOnLastGraph = 1..1
+		}
+
+
+
+		finalList = []
+		if (combinationGraphList.size() > 1) {
+			for (i = 0; i < combinationGraphList.size(); i++) {
+				temp = combinationGraphList[i]
+				colorListFile = new File(combinationGraphList[i][1].toString())
+				colorListFileBaseName = colorListFile.getName().toString()
+
 	
-	process PDVariantCalling {
+				if (!colorListFileBaseName.contains((combinationGraphList.size() - 1).toString())) {
+					for (j in regularList) {
+						temp2 = temp.clone()
+						temp2.add(j)
+						finalList.add(temp2)
+					}
+				} else {
+					for (j in sampleOnLastGraph) {
+						temp2 = temp.clone()
+						temp2.add(j)
+						finalList.add(temp2)
+					}
+				}
+			}
 
-		publishDir PDLogFolder
-		executor params.executor
-		queue params.variantCallingQueue
-		maxForks params.variantCallingMaxNodes
-		time params.variantCallingWalltime
-		cpus params.variatnCallingCpusNeeded
+		} else {
+			for (i = 0; i < combinationGraphList.size(); i++) {
+				temp = combinationGraphList[i]
+				for (j in regularList) {
+					temp2 = temp.clone()
+					temp2.add(j)
+					finalList.add(temp2)
+                                        }
+
+			}
+
+		}
 
 
-		input:
-			val colorListGraph from colorListAndComboGraph
 
-		script:
-			template 'PDVariantCalling.sh'	
+		//Append finalList with sorted sample names 
+		finalChannel = Channel.from(finalList)
 
 
-	}	
+
+		process PDVariantCallingIndividual {
+			
+			executor params.executor
+			queue params.variantCallingQueue
+			maxForks params.variantCallingMaxNodes
+			time params.variantCallingWalltime
+			cpus params.variantCallingCpusNeeded
+			errorStrategy params.variantCallingErrorStrategy
+
+	
+			input:
+				val color from finalChannel
+			
+			script:
+				template 'PDVariantCallingInd.sh'				
+
+
+
+		}
+
+
+	}
 
 }
 

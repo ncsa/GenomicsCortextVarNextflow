@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ######################################################################################################################################################################################
-# Script to run step 6 PATH DIVERGENCE Cortex #
+# Script to run PATH DIVERGENCE Cortex #
 ######################################################################################################################################################################################
 
 colorListBash="${colorListGraph}"
@@ -22,4 +22,4 @@ baseName=\${baseNameTemp%.*}
 
 # Cortex command
 
-${params.cortexDirVariantCalling} ${params.cortexConfig} --max_var_len 50000 --multicolour_bin \${comboGraph} --path_divergence_caller \${stringColorsForCaller}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${baseName} --print_colour_coverages > ${params.logDir}/\${baseName}_PD.log
+${params.cortexDirVariantCalling} ${params.variantCallingCortexConfig} --max_var_len ${params.maxVarLength} --multicolour_bin \${comboGraph} --path_divergence_caller \${stringColorsForCaller}  --ref_colour 0 --list_ref_fasta ${params.pathToReferenceList} --path_divergence_caller_output ${params.resultsDir}/variantCallingOutput/\${baseName} --print_colour_coverages > ${PDLogDir}/\${baseName}_PD.log

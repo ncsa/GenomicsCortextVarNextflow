@@ -52,7 +52,7 @@ process cleanGraphPerSampleLowCoverage {
 	maxForks params.cleanGraphPerErrorMaxNodes
 	time params.cleanGraphPerSampleWalltime
 	cpus params.cleanGraphPerSampleCpusNeeded
-
+	errorStrategy params.cleanGraphPerSampleErrorStrategy
 	input:
 		each samplePairFileName from sampleListChannel		
 	

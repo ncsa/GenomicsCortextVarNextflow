@@ -21,21 +21,21 @@ Files in this repo are organized as follows:
    - [Intended pipeline architecture and function](#intended-pipeline-architecture-and-function)
      * [Installation](#installation)
        - [Dependencies](#dependencies)
-       - [Cortex_var Installation](#Cortex_var-installation)
+       - [Cortex_var Installation](#cortex_var-installation)
        - [Workflow Installation](#workflow-installation)
    - [User Guide](#user-guide)
      * [Data Preparation](#data-preparation)
        - [Sample Pair Reads](#sample-pair-reads)
        - [Reference Fasta Files](#reference-fasta-files)
-     * [Cortex_Var Executable Preparation](#cortex_var-Executable-Preparation)
-     * [Nextflow config Parameters](#nextflow-config-Parameters)
+     * [Cortex_Var Executable Preparation](#cortex_var-executable-preparation)
+     * [Nextflow config Parameters](#nextflow-config-parameters)
        - [Executables](#executables)
        - [Sample, Result, and Config Directory](#sample-result-and-config-directory)
-       - [Sample Management](#Sample-Management)
+       - [Sample Management](#sample-management)
        - [Executor](#executor)
-       - [Cortex_var Individual Process Parameters](#Cortex_var-Individual-Process-Parameters)
-         * [Generic process parameters](#Generic-process-parameters)
-         * [Specific process parameters](#Specific-process-parameters)
+       - [Cortex_var Individual Process Parameters](#cortex_var-individual-process-parameters)
+         * [Generic process parameters](#generic-process-parameters)
+         * [Specific process parameters](#specific-process-parameters)
      * [Resource Requirements](#resource-requirements)
      * [Executing nextflow application](#executing-nextflow-application)
      * [Logging functionality](#logging-functionality)
@@ -290,7 +290,8 @@ The type of executor that will be used by user. refer to nextflow executors [doc
 
 #### Cortex_var Individual Process Parameters
 
-##### Generic process parameters (excluding conversion to VCF)
+##### Generic process parameters 
+**note**: excluding conversion to VCF
 
 **`kmerSize`**
 

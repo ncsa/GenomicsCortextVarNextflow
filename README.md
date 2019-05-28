@@ -190,41 +190,29 @@ The workflow is controlled by modifying nextflow.config file.
 
 #### Executables
 
-**`nextflowDir`**
-
-**STRING** 
+**nextflowDir** - STRING
 
 Path to nextflow executable
 
-**`cortexBinDir`**
-
-**STRING**
+**cortexBinDir** - STRING
 
 Path to bin directory of cortex, where executables for each process is located.
 
 #### Sample, Result, and Config Directory
 
-**`sampleDir`**
-
-**STRING**
+**sampleDir** - STRING
 
 Path to directory where samples are located.
 
-**`resultsDir`**
-
-**STRING**
+**resultsDir** - STRING
 
 Path to directory where results of each process will be dumped.
 
-**`logDir`**
-
-**STRING**
+**logDir** - STRING
 
 Path to directory where logs of each process will be dumped, default is inside the resultsDir
 
-**`cloneDir`**
-
-**STRING**
+**cloneDir** - STRING
 
 Path to where this repository is cloned (path/to/GenomicsCortexVarNextflow)
 
@@ -243,9 +231,7 @@ sampleReadPattern is \_read
 readNumber is 1 and 2 for each sample
 sampleReadExtension is .fq.gz
 
-**`sampleList`**
-
-**ARRAYLIST OF STRING**
+**sampleList** - ARRAYLIST OF STRING
 
 ArrayList containing the sample names enclosed within quotation marks and separated by comma, all enclosed within `[]`
 
@@ -253,27 +239,21 @@ With examples given, the `sampleList` should be filled with: `["Sample_1", "Samp
 
 **Note:** Quotation marks are required to indicate that the element is a string.
 
-**`sampleReadPattern`**
-
-**STRING**
+**sampleReadPattern** - STRING
 
 The string after the sample name, but before the read number.
 
 With examples given, the `sampleReadPattern` should be filled with: "\_read"
 
 
-**`sampleReadExtension`**
-
-**STRING**
+**sampleReadExtension** - STRING
 
 The string after the read number, cortex supports both raw .fq and gzipped .fq.gz
 
 In example given, `sampleReadExtension` should be filled with ".fq.gz"
 
 
-**`pathToReferenceList`**
-
-**STRING**
+**pathToReferenceList** - STRING
 
 Path to where the file containing reference fasta files paths.
 Example: `"/PATH/TO/REFERENCELIST.TXT"`.
@@ -282,9 +262,7 @@ Refer to [Reference Fasta Files](#reference-fasta-files)
 
 #### Executor
 
-**`executor`**
-
-**STRING**
+**executor** - STRING
 
 The type of executor that will be used by user. refer to nextflow executors [documentation](https://www.nextflow.io/docs/latest/executor.html)
 
@@ -293,15 +271,11 @@ The type of executor that will be used by user. refer to nextflow executors [doc
 ##### Generic process parameters 
 **note**: excluding conversion to VCF
 
-**`kmerSize`**
-
-**STRING**
+**kmerSize** - STRING
 
 kmerSize chosen for the whole cortex_var process, refer to [Cortex_Var Executable Preparation](#Cortex_Var Executable Preparation)
 
-**`cortexConfig`**
-
-**STRING**
+**cortexConfig** - STRING
 
 Cortex_var requires flags `--kmer_size` `--mem_height` and `--mem_width` for each step. `kmer_size` indicates the length of each k-mer (nodes in the graph) and is required to be consistent with the cortex binary executables.
 
@@ -321,48 +295,33 @@ mem_width = 18
 If the `kmer_size` is 63 combined with the example above, the input for `cortexConfig(PROCESSNAME)` should be:
 `"--kmer_size " + kmerSize + " --mem_height 27 --mem_width 18"`
 
-**`run(PROCESSNAME)`**
-
-**STRING**
+**run(PROCESSNAME)** - STRING
 
 Indicate if user is willing to run that specific process. ("y"/"n")
 
-**`cortexBin(PROCESSNAME)`**
-
-**STRING**
+**cortexBin(PROCESSNAME)** - STRING
 
 Executable to where the executable will be used for the process. Default is in the bin directory specificied by `cortexBinDir`
 
-**`(PROCESSNAME)Queue`**
-
-**STRING**
+**(PROCESSNAME)Queue** - STRING
 
 Queue name in the cluster, refer to nextflow executor [documentation](https://www.nextflow.io/docs/latest/executor.html)
 
-
-**`(PROCESSNAME)MaxNodes`**
-
-**INT**
+**(PROCESSNAME)MaxNodes** - INT
 
 Maximum number of nodes to be used in parallel, refer to nextflow maxForks [documentation]('https://www.nextflow.io/docs/latest/process.html?highlight=maxforks#maxforks')
 
 
-**`(PROCESSNAME)Walltime`**
-
-**STRING**
+**(PROCESSNAME)Walltime** - STRING
 
 Walltime for individual process runs, refer to nextflow walltime [documentation](https://www.nextflow.io/docs/latest/process.html#process-time)
 
 
-**`(PROCESSNAME)CpusNeeded`**
-
-**STRING**
+**(PROCESSNAME)CpusNeeded** - STRING
 
 Number of cores per node for each process, refer to nextflow cpus [documentation](https://www.nextflow.io/docs/latest/process.html#cpus)
 
-**`(PROCESSNAME)ErrorStrategy`**
-
-**STRING**
+**(PROCESSNAME)ErrorStrategy** - STRING
 
 For what is the action taken when process encounters error(s) [documentation](https://www.nextflow.io/docs/latest/process.html#errorstrategy)
 
@@ -371,24 +330,18 @@ For what is the action taken when process encounters error(s) [documentation](ht
 
 ###### Make sample de Bruijn graph specific parameters
 
-**`quality_score_threshold`**
-
-**INT**
+**quality_score_threshold** - INT
 
 Initial quality filter for making de Bruijn graph, refer to section 6.2 and page 3 of [cortex_var manual](http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
 
 ###### Make combination graph specific parameters
 
-**`pathToRefCtx`**
-
-**STRING**
+**pathToRefCtx** - STRING
 
 Path to reference de Bruijn graph, usually having .ctx extension (default is path to where it would be made by makeReferenceGraph)
 
-**`finalCombinationGraphMaxColor`**
-
-**INT**
+**finalCombinationGraphMaxColor** - INT
 
 The largest number of colors of graph to run the node can handle, given kmer size, memory height and memory width.
 
@@ -401,9 +354,7 @@ If the finalCombinationGraphMaxColor is not N+1, then this pipeline will automat
 
 ###### Variant Calling specific parameters
  
-**`PD`**
-
-**STRING**
+**PD** - STRING
 
 Indicate if user wants to run Path Divergence variant calling method ("y"/"n")
 
@@ -412,9 +363,7 @@ For more information regarding Path Divergence variant calling method, refer to 
 
 **Parameters used only if PD is selected**
 
-**`populationPD`**
-
-**STRING**
+**populationPD** - STRING
 
 Indicate if user wants to run combined Path Divergence variant calling in the same combination graph consecutively ("y"/"n")
 
@@ -422,9 +371,7 @@ After the vcf conversion process, variant calls of every sample in the same comb
 
 For more information, refer to page 12, or section 11.2 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
-**`individualPD`**
-
-**STRING**
+**individualPD** - STRING
 
 Indicate if user wants to run path divergence on one of one sample for each process ("y"/"n")
 
@@ -432,9 +379,7 @@ After the vcf conversion process, variant calls of each individual sample will b
 
 For more information refer to page 12, or section 11.1 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
-**`maxVarLength`**
-
-**INT**
+**maxVarLength** - INT
 
 Maximum variant length to look for, default is 40000 base pairs
 
@@ -442,35 +387,27 @@ For more information refer to page 18 of [cortex_var manual] (http://cortexassem
 
 ###### VCF Caller specific parameters
 
-**`stampyBin`**
-
-**STRING**
+**stampyBin** - STRING
 
 Full path to stampy.py.
 
 For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
-**`stampyHashProducts`**
-
-**STRING**
+**stampyHashProducts** - STRING
 
 For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
-**`VCFToolsDir`**
-
-**STRING**
+**VCFToolsDir** - STRING
 
 For more information refer to page 15 of [cortex_var manual] (http://cortexassembler.sourceforge.net/cortex_var_user_manual.pdf)
 
-**`samplePloidy`**
-
-**INT**
+**samplePloidy** - INT
 
 Ploidy of sample.
 
 Example: if sample is diploid, samplePloidy should be 2
 
-**`referenceFasta`**
+**referenceFasta**
 
 Path to reference fasta file. Note: this is different from `pathToReferenceList`.
 
